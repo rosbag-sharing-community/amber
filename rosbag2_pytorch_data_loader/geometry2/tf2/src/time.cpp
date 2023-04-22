@@ -74,3 +74,8 @@ double tf2::timeToSec(const tf2::TimePoint & timepoint)
 {
   return durationToSec(tf2::Duration(timepoint.time_since_epoch()));
 }
+
+std::string tf2::displayTimePoint(const TimePoint & stamp)
+{
+  return std::to_string(tf2::timeToSec(stamp));
+}
