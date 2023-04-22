@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.22)
+project(hello)
+find_package(PythonExtensions REQUIRED)
+
+add_library(rosbag2_pytorch_data_loader rosbag2_pytorch_data_loader/_hello.cxx)
+python_extension_module(rosbag2_pytorch_data_loader)
+install(TARGETS rosbag2_pytorch_data_loader LIBRARY DESTINATION rosbag2_pytorch_data_loader)

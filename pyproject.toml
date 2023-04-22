@@ -1,0 +1,51 @@
+[tool.poetry]
+name = "rosbag2_pytorch_data_loader"
+version = "0.0.1"
+description = "PyTorch data loader for rosbag2 (mcap format)"
+authors = ["Masaya Kataoka <ms.kataoka@gmail.com>"]
+license = "Apache 2.0"
+
+include = [
+    # Source files for C extensions must be included in the source distribution.
+    { path = "CMakeLists.txt", format = "sdist" },
+    { path = "rosbag2_pytorch_data_loader/**/*.cpp", format = "sdist" },
+    # C extensions must be included in the wheel distribution.
+    { path = "rosbag2_pytorch_data_loader/**/*.pyd", format = "wheel" },
+    { path = "rosbag2_pytorch_data_loader/**/*.so", format = "wheel" },
+]
+exclude = [
+    "rosbag2_pytorch_data_loader/**/*.cpp",
+    "rosbag2_pytorch_data_loader/**/*.pyd",
+    "rosbag2_pytorch_data_loader/**/*.so",
+]
+
+[tool.poetry.build]
+generate-setup-file = false
+script = "build.py"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+black = "^23.3.0"
+torch = "^2.0.0"
+
+[tool.poetry.dev-dependencies]
+cmake = "^3.22.5"
+scikit-build = "^0.15.0"
+taskipy = "^1.10.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0", "scikit-build", "cmake", "ninja"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.taskipy.tasks]
+#prepare.cmd = "pre-commit install && pre-commit install --hook-type commit-msg"
+#prepare.help = "sets up a development environment"
+
+#lint.cmd = "pre-commit run --all-files"
+#lint.help = "runs linters (+ fix)"
+
+#test.cmd  = "task build_ext && pytest"
+#test.help = "runs tests"
+
+build_ext.cmd = "python build.py"
+build_ext.help = "builds C extensions"
