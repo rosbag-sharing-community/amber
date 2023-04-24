@@ -1,0 +1,44 @@
+name: pytest
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+  schedule:
+    - cron: 0 0 * * *
+  release:
+    types: [published]
+
+jobs:
+  ci:
+    name: ci
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.8"]
+        poetry-version: ["1.2.1"]
+        os: [ubuntu-22.04]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - uses: abatilo/actions-poetry@v2
+        with:
+          poetry-version: ${{ matrix.poetry-version }}
+      - name: install
+        run: poetry install
+      - name: test
+        run: poetry run pytest
+      - name: build
+        run: poetry build
+      - uses: actions/upload-artifact@v3
+        with:
+          name: onnx_files
+          path: "*.onnx"
+      - uses: actions/upload-artifact@v3
+        with:
+          name: package
+          path: "dist/*"
