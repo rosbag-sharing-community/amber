@@ -37,7 +37,7 @@ from rpyutils import add_dll_directories_from_env
 # Since Python 3.8, on Windows we should ensure DLL directories are explicitly added
 # to the search path.
 # See https://docs.python.org/3/whatsnew/3.8.html#bpo-36085-whatsnew
-with add_dll_directories_from_env('PATH'):
+with add_dll_directories_from_env("PATH"):
     from test_tf2_py._tf2_py import BufferCore
     from test_tf2_py._tf2_py import LookupException
 
@@ -58,7 +58,6 @@ def build_transform(target_frame, source_frame, stamp):
 
 
 class TestBufferClient(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         pass
@@ -73,172 +72,148 @@ class TestBufferClient(unittest.TestCase):
     def test_all_frames_as_yaml(self):
         buffer_core = BufferCore()
 
-        transform = build_transform('bar', 'foo', rclpy.time.Time().to_msg())
-        buffer_core.set_transform(transform, 'unittest')
+        transform = build_transform("bar", "foo", rclpy.time.Time().to_msg())
+        buffer_core.set_transform(transform, "unittest")
 
         self.assertTrue(type(buffer_core.all_frames_as_yaml()) == str)
-        self.assertTrue('foo' in buffer_core.all_frames_as_yaml())
-        self.assertTrue('bar' in buffer_core.all_frames_as_yaml())
+        self.assertTrue("foo" in buffer_core.all_frames_as_yaml())
+        self.assertTrue("bar" in buffer_core.all_frames_as_yaml())
 
     def test_all_frames_as_string(self):
         buffer_core = BufferCore()
 
-        transform = build_transform('bar', 'foo', rclpy.time.Time().to_msg())
-        buffer_core.set_transform(transform, 'unittest')
+        transform = build_transform("bar", "foo", rclpy.time.Time().to_msg())
+        buffer_core.set_transform(transform, "unittest")
 
         self.assertTrue(type(buffer_core.all_frames_as_string()) == str)
-        self.assertTrue('foo' in buffer_core.all_frames_as_string())
-        self.assertTrue('bar' in buffer_core.all_frames_as_string())
+        self.assertTrue("foo" in buffer_core.all_frames_as_string())
+        self.assertTrue("bar" in buffer_core.all_frames_as_string())
 
     def test_set_transform(self):
         buffer_core = BufferCore()
-        transform = build_transform('bar', 'foo', rclpy.time.Time().to_msg())
+        transform = build_transform("bar", "foo", rclpy.time.Time().to_msg())
 
-        result = buffer_core.set_transform(transform, 'unittest')
+        result = buffer_core.set_transform(transform, "unittest")
         self.assertEqual(result, None)
 
         result, _ = buffer_core.can_transform_core(
-            target_frame='bar',
-            source_frame='foo',
-            time=rclpy.time.Time(seconds=0.5)
+            target_frame="bar", source_frame="foo", time=rclpy.time.Time(seconds=0.5)
         )
         self.assertEqual(result, 0)
 
     def test_set_transform_static(self):
         buffer_core = BufferCore()
 
-        transform = build_transform('bar', 'foo', rclpy.time.Time().to_msg())
+        transform = build_transform("bar", "foo", rclpy.time.Time().to_msg())
 
-        result = buffer_core.set_transform_static(transform, 'unittest')
+        result = buffer_core.set_transform_static(transform, "unittest")
         self.assertEqual(result, None)
 
         result, _ = buffer_core.can_transform_core(
-            target_frame='bar',
-            source_frame='foo',
-            time=rclpy.time.Time(seconds=0.5)
+            target_frame="bar", source_frame="foo", time=rclpy.time.Time(seconds=0.5)
         )
         self.assertEqual(result, 1)
 
     def test_can_transform_core_pass(self):
         buffer_core = BufferCore()
 
-        transform = build_transform('bar', 'foo', rclpy.time.Time().to_msg())
+        transform = build_transform("bar", "foo", rclpy.time.Time().to_msg())
 
-        buffer_core.set_transform(transform, 'unittest')
+        buffer_core.set_transform(transform, "unittest")
 
-        transform = build_transform(
-            'bar', 'foo', rclpy.time.Time(seconds=1).to_msg())
+        transform = build_transform("bar", "foo", rclpy.time.Time(seconds=1).to_msg())
 
-        buffer_core.set_transform(transform, 'unittest')
+        buffer_core.set_transform(transform, "unittest")
 
         result, error_msg = buffer_core.can_transform_core(
-            target_frame='foo',
-            source_frame='bar',
-            time=rclpy.time.Time(seconds=0.5)
+            target_frame="foo", source_frame="bar", time=rclpy.time.Time(seconds=0.5)
         )
         self.assertEqual(result, 1)
-        self.assertEqual(error_msg, '')
+        self.assertEqual(error_msg, "")
 
     def test_can_transform_core_fail(self):
         buffer_core = BufferCore()
 
-        transform = build_transform(
-            'bar', 'foo', rclpy.time.Time(seconds=1).to_msg())
-        buffer_core.set_transform(transform, 'unittest')
+        transform = build_transform("bar", "foo", rclpy.time.Time(seconds=1).to_msg())
+        buffer_core.set_transform(transform, "unittest")
 
-        transform = build_transform(
-            'bar', 'foo', rclpy.time.Time(seconds=2).to_msg())
-        buffer_core.set_transform(transform, 'unittest')
+        transform = build_transform("bar", "foo", rclpy.time.Time(seconds=2).to_msg())
+        buffer_core.set_transform(transform, "unittest")
 
         result, error_msg = buffer_core.can_transform_core(
-            target_frame='foo',
-            source_frame='bar',
-            time=rclpy.time.Time(seconds=2.5)
+            target_frame="foo", source_frame="bar", time=rclpy.time.Time(seconds=2.5)
         )
         self.assertEqual(result, 0)
-        self.assertIn('extrapolation into the future', error_msg)
+        self.assertIn("extrapolation into the future", error_msg)
 
         result, error_msg = buffer_core.can_transform_core(
-            target_frame='foo',
-            source_frame='bar',
-            time=rclpy.time.Time(seconds=0.5)
+            target_frame="foo", source_frame="bar", time=rclpy.time.Time(seconds=0.5)
         )
         self.assertEqual(result, 0)
-        self.assertIn('extrapolation into the past', error_msg)
+        self.assertIn("extrapolation into the past", error_msg)
 
     def test_can_transform_full_core(self):
         buffer_core = BufferCore()
 
-        transform = build_transform('bar', 'foo', rclpy.time.Time().to_msg())
-        buffer_core.set_transform(transform, 'unittest')
+        transform = build_transform("bar", "foo", rclpy.time.Time().to_msg())
+        buffer_core.set_transform(transform, "unittest")
 
-        transform = build_transform('foo', 'baz', rclpy.time.Time().to_msg())
-        buffer_core.set_transform(transform, 'unittest')
+        transform = build_transform("foo", "baz", rclpy.time.Time().to_msg())
+        buffer_core.set_transform(transform, "unittest")
 
         result, error_msg = buffer_core.can_transform_full_core(
-            target_frame='foo',
+            target_frame="foo",
             target_time=rclpy.time.Time(),
-            source_frame='baz',
+            source_frame="baz",
             source_time=rclpy.time.Time(),
-            fixed_frame='bar'
+            fixed_frame="bar",
         )
 
         self.assertEqual(result, 1)
-        self.assertEqual(error_msg, '')
+        self.assertEqual(error_msg, "")
 
     def test_get_latest_common_time(self):
         buffer_core = BufferCore()
 
-        transform = build_transform(
-            'bar', 'foo', rclpy.time.Time(seconds=0).to_msg())
-        buffer_core.set_transform(transform, 'unittest')
+        transform = build_transform("bar", "foo", rclpy.time.Time(seconds=0).to_msg())
+        buffer_core.set_transform(transform, "unittest")
 
-        transform = build_transform(
-            'bar', 'foo', rclpy.time.Time(seconds=1).to_msg())
-        buffer_core.set_transform(transform, 'unittest')
+        transform = build_transform("bar", "foo", rclpy.time.Time(seconds=1).to_msg())
+        buffer_core.set_transform(transform, "unittest")
 
-        transform = build_transform(
-            'bar', 'foo', rclpy.time.Time(seconds=0.5).to_msg())
-        buffer_core.set_transform(transform, 'unittest')
+        transform = build_transform("bar", "foo", rclpy.time.Time(seconds=0.5).to_msg())
+        buffer_core.set_transform(transform, "unittest")
 
-        latest_common_time = buffer_core.get_latest_common_time('bar', 'foo')
+        latest_common_time = buffer_core.get_latest_common_time("bar", "foo")
 
         self.assertEqual(latest_common_time, rclpy.time.Time(seconds=1))
 
     def test_clear(self):
         buffer_core = BufferCore()
 
-        transform = build_transform(
-            'bar', 'foo', rclpy.time.Time(seconds=0).to_msg())
-        buffer_core.set_transform(transform, 'unittest')
+        transform = build_transform("bar", "foo", rclpy.time.Time(seconds=0).to_msg())
+        buffer_core.set_transform(transform, "unittest")
 
         result, _ = buffer_core.can_transform_core(
-            target_frame='foo',
-            source_frame='bar',
-            time=rclpy.time.Time()
+            target_frame="foo", source_frame="bar", time=rclpy.time.Time()
         )
         self.assertTrue(result)
 
         buffer_core.clear()
 
         result, _ = buffer_core.can_transform_core(
-            target_frame='foo',
-            source_frame='bar',
-            time=rclpy.time.Time()
+            target_frame="foo", source_frame="bar", time=rclpy.time.Time()
         )
         self.assertFalse(result)
 
     def test_lookup_transform_core_pass(self):
         buffer_core = BufferCore()
 
-        transform = build_transform(
-            'bar', 'foo', rclpy.time.Time(seconds=0).to_msg())
-        buffer_core.set_transform(transform, 'unittest')
+        transform = build_transform("bar", "foo", rclpy.time.Time(seconds=0).to_msg())
+        buffer_core.set_transform(transform, "unittest")
 
         lookup_transform = buffer_core.lookup_transform_core(
-            target_frame='bar',
-            source_frame='foo',
-            time=rclpy.time.Time()
+            target_frame="bar", source_frame="foo", time=rclpy.time.Time()
         )
 
         self.assertEqual(transform, lookup_transform)
@@ -246,19 +221,16 @@ class TestBufferClient(unittest.TestCase):
     def test_lookup_transform_core_fail(self):
         buffer_core = BufferCore()
 
-        transform = build_transform(
-            'bar', 'foo', rclpy.time.Time(seconds=0).to_msg())
-        buffer_core.set_transform(transform, 'unittest')
+        transform = build_transform("bar", "foo", rclpy.time.Time(seconds=0).to_msg())
+        buffer_core.set_transform(transform, "unittest")
 
         with self.assertRaises(LookupException) as ex:
             buffer_core.lookup_transform_core(
-                target_frame='bar',
-                source_frame='baz',
-                time=rclpy.time.Time()
+                target_frame="bar", source_frame="baz", time=rclpy.time.Time()
             )
 
         self.assertEqual(LookupException, type(ex.exception))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

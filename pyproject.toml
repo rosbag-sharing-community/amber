@@ -44,8 +44,8 @@ build-backend = "poetry.core.masonry.api"
 #lint.cmd = "pre-commit run --all-files"
 #lint.help = "runs linters (+ fix)"
 
-#test.cmd  = "task build_ext && pytest"
-#test.help = "runs tests"
+test.cmd  = "task build_ext && python run_gtests.py" # && pytest"
+test.help = "runs tests"
 
 build_ext.cmd = "python build.py"
 build_ext.help = "builds C extensions"

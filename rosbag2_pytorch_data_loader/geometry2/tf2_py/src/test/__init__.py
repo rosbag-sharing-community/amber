@@ -30,4 +30,6 @@
 
 import sys
 
-assert 'tf2_py' not in sys.modules, 'tf2_py should not have been imported before running tests'
+assert (
+    "tf2_py" not in sys.modules
+), "tf2_py should not have been imported before running tests"
