@@ -50,22 +50,25 @@ target_include_directories(tf2_py
 install(TARGETS tf2 LIBRARY DESTINATION tf2)
 install(TARGETS tf2_py LIBRARY DESTINATION tf2_py)
 
+
 # test settings
-find_package(GTest REQUIRED)
+find_package(GTest)
 
-function(tf2_unittest test_name)
-  add_executable(${test_name} ${tf2_dir}/test/${test_name}.cpp)
-  target_include_directories(${test_name}
-    PUBLIC
-      ${tf2_dir}/include
-      ${rosidl_runtime_cpp_dir}/include
-      ${console_bridge_dir}/include
-      ${messages_dir}
-  )
-  target_link_libraries(${test_name} GTest::GTest GTest::Main tf2)
-endfunction()
+if(GTest_FOUND)
+  function(tf2_unittest test_name)
+    add_executable(${test_name} ${tf2_dir}/test/${test_name}.cpp)
+    target_include_directories(${test_name}
+      PUBLIC
+        ${tf2_dir}/include
+        ${rosidl_runtime_cpp_dir}/include
+        ${console_bridge_dir}/include
+        ${messages_dir}
+    )
+    target_link_libraries(${test_name} GTest::GTest GTest::Main tf2)
+  endfunction()
 
-tf2_unittest(cache_unittest)
-tf2_unittest(simple_tf2_core)
-tf2_unittest(static_cache_test)
-tf2_unittest(test_time)
+  tf2_unittest(cache_unittest)
+  tf2_unittest(simple_tf2_core)
+  tf2_unittest(static_cache_test)
+  tf2_unittest(test_time)
+endif()
