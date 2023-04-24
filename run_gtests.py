@@ -14,5 +14,6 @@ def run_tests(test_cases : []):
 
 if __name__ == "__main__":
     run_tests(
+		# Please check all the test case in CMakeLists.txt was defined.
         ["cache_unittest", "simple_tf2_core", "static_cache_test", "test_time"]
     )
