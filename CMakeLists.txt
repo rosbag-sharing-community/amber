@@ -65,6 +65,17 @@ if(GTest_FOUND)
         ${messages_dir}
     )
     target_link_libraries(${test_name} GTest::GTest GTest::Main tf2)
+
+    execute_process(
+      COMMAND ./${test_name}
+      WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+      RESULT_VARIABLE ret
+    )
+    if(ret EQUAL "0")
+      message(STATUS "Test case" ${test_name} " passed.")
+    else()
+      message(FATAL_ERROR "Bad exit status")
+    endif()
   endfunction()
 
   tf2_unittest(cache_unittest)
