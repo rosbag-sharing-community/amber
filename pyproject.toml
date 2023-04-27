@@ -26,6 +26,7 @@ script = "build.py"
 [tool.poetry.dependencies]
 python = "^3.10"
 torch = "^2.0.0"
+mcap-ros2-support= "^0.3.0"
 
 [tool.poetry.dev-dependencies]
 cmake = "^3.22.5"
@@ -65,6 +66,7 @@ pretty = true
 show_error_codes = true
 strict = true
 warn_unreachable = true
+disallow_subclassing_any = true
 
 [tool.pytest.ini_options]
 addopts = [
