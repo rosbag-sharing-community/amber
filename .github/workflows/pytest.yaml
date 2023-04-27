@@ -22,8 +22,6 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
-        with:
-          lfs: true
       - name: install google test
         run: sudo apt update & sudo apt install -y googletest
       - uses: actions/setup-python@v4
