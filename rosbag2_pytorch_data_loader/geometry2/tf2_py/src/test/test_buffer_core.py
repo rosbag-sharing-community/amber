@@ -31,6 +31,7 @@
 import unittest
 
 from geometry_msgs.msg import TransformStamped
+from builtin_interfaces.msg import Time
 import rclpy
 from rpyutils import add_dll_directories_from_env
 
@@ -42,7 +43,9 @@ with add_dll_directories_from_env("PATH"):
     from test_tf2_py._tf2_py import LookupException
 
 
-def build_transform(target_frame, source_frame, stamp):
+def build_transform(
+    target_frame: str, source_frame: str, stamp: Time
+) -> TransformStamped:
     transform = TransformStamped()
     transform.header.frame_id = target_frame
     transform.child_frame_id = source_frame
@@ -59,17 +62,17 @@ def build_transform(target_frame, source_frame, stamp):
 
 class TestBufferClient(unittest.TestCase):
     @classmethod
-    def setUpClass(cls):
+    def setUpClass(cls) -> None:
         pass
 
     @classmethod
-    def tearDownClass(cls):
+    def tearDownClass(cls) -> None:
         pass
 
-    def setUp(self):
+    def setUp(self) -> None:
         pass
 
-    def test_all_frames_as_yaml(self):
+    def test_all_frames_as_yaml(self) -> None:
         buffer_core = BufferCore()
 
         transform = build_transform("bar", "foo", rclpy.time.Time().to_msg())
@@ -79,7 +82,7 @@ class TestBufferClient(unittest.TestCase):
         self.assertTrue("foo" in buffer_core.all_frames_as_yaml())
         self.assertTrue("bar" in buffer_core.all_frames_as_yaml())
 
-    def test_all_frames_as_string(self):
+    def test_all_frames_as_string(self) -> None:
         buffer_core = BufferCore()
 
         transform = build_transform("bar", "foo", rclpy.time.Time().to_msg())
@@ -89,7 +92,7 @@ class TestBufferClient(unittest.TestCase):
         self.assertTrue("foo" in buffer_core.all_frames_as_string())
         self.assertTrue("bar" in buffer_core.all_frames_as_string())
 
-    def test_set_transform(self):
+    def test_set_transform(self) -> None:
         buffer_core = BufferCore()
         transform = build_transform("bar", "foo", rclpy.time.Time().to_msg())
 
@@ -101,7 +104,7 @@ class TestBufferClient(unittest.TestCase):
         )
         self.assertEqual(result, 0)
 
-    def test_set_transform_static(self):
+    def test_set_transform_static(self) -> None:
         buffer_core = BufferCore()
 
         transform = build_transform("bar", "foo", rclpy.time.Time().to_msg())
@@ -114,7 +117,7 @@ class TestBufferClient(unittest.TestCase):
         )
         self.assertEqual(result, 1)
 
-    def test_can_transform_core_pass(self):
+    def test_can_transform_core_pass(self) -> None:
         buffer_core = BufferCore()
 
         transform = build_transform("bar", "foo", rclpy.time.Time().to_msg())
@@ -131,7 +134,7 @@ class TestBufferClient(unittest.TestCase):
         self.assertEqual(result, 1)
         self.assertEqual(error_msg, "")
 
-    def test_can_transform_core_fail(self):
+    def test_can_transform_core_fail(self) -> None:
         buffer_core = BufferCore()
 
         transform = build_transform("bar", "foo", rclpy.time.Time(seconds=1).to_msg())
@@ -152,7 +155,7 @@ class TestBufferClient(unittest.TestCase):
         self.assertEqual(result, 0)
         self.assertIn("extrapolation into the past", error_msg)
 
-    def test_can_transform_full_core(self):
+    def test_can_transform_full_core(self) -> None:
         buffer_core = BufferCore()
 
         transform = build_transform("bar", "foo", rclpy.time.Time().to_msg())
@@ -172,7 +175,7 @@ class TestBufferClient(unittest.TestCase):
         self.assertEqual(result, 1)
         self.assertEqual(error_msg, "")
 
-    def test_get_latest_common_time(self):
+    def test_get_latest_common_time(self) -> None:
         buffer_core = BufferCore()
 
         transform = build_transform("bar", "foo", rclpy.time.Time(seconds=0).to_msg())
@@ -188,7 +191,7 @@ class TestBufferClient(unittest.TestCase):
 
         self.assertEqual(latest_common_time, rclpy.time.Time(seconds=1))
 
-    def test_clear(self):
+    def test_clear(self) -> None:
         buffer_core = BufferCore()
 
         transform = build_transform("bar", "foo", rclpy.time.Time(seconds=0).to_msg())
@@ -206,7 +209,7 @@ class TestBufferClient(unittest.TestCase):
         )
         self.assertFalse(result)
 
-    def test_lookup_transform_core_pass(self):
+    def test_lookup_transform_core_pass(self) -> None:
         buffer_core = BufferCore()
 
         transform = build_transform("bar", "foo", rclpy.time.Time(seconds=0).to_msg())
@@ -218,7 +221,7 @@ class TestBufferClient(unittest.TestCase):
 
         self.assertEqual(transform, lookup_transform)
 
-    def test_lookup_transform_core_fail(self):
+    def test_lookup_transform_core_fail(self) -> None:
         buffer_core = BufferCore()
 
         transform = build_transform("bar", "foo", rclpy.time.Time(seconds=0).to_msg())
