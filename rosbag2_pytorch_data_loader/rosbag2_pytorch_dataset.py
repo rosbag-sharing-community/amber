@@ -17,21 +17,26 @@ class Rosbag2Dataset(Dataset):  # type: ignore
         self.transform = transform
         self.target_transform = target_transform
         self.reader = NonSeekingReader(rosbag_path)
-        with open(task_description_yaml_path, "rb") as file:
+        self.task_description_yaml_path = task_description_yaml_path
+        self.dispatch(self.read_images)
+
+    def dispatch(self, image_only_function: Any) -> None:
+        with open(self.task_description_yaml_path, "rb") as file:
             obj = yaml.safe_load(file)
-            print(obj)
             if obj["dataset_type"] == "image_only":
-                self.read_images(obj["image_topics"])
+                image_only_function(obj)
             else:
                 raise DatasetTypeError(
                     "Dataset type should be image_only, please check the "
-                    + task_description_yaml_path
+                    + self.task_description_yaml_path
                 )
 
-    def read_images(self, image_topics: list[str]) -> None:
+    def read_images(self, obj: Any) -> None:
+        image_topics = obj["image_topics"]
+        self.image_messages = []
         for schema, channel, message in self.reader.iter_messages():
             if channel.topic in image_topics:
-                print(message)
+                self.image_messages.append(message)
         pass
 
     def __len__(self) -> int:
