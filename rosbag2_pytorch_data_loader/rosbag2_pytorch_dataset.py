@@ -7,7 +7,7 @@ class Rosbag2Dataset(Dataset):  # type: ignore
     def __init__(
         self,
         rosbag_path: str,
-        dataset_yaml_path: str,
+        task_description_yaml_path: str,
         transform: Any = None,
         target_transform: Any = None,
     ) -> None:

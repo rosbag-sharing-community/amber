@@ -34,6 +34,8 @@ scikit-build = "^0.15.0"
 taskipy = "^1.10.2"
 pre-commit = "^2.17.0"  # 2.18.0 blocked by pytohn 3.6.1
 pytest = "^7.0.1"  # 7.1.0 blocked by pytohn 3.6.1
+lark = "*"
+coverage = "*"
 pytest-cov = "^3.0.0"
 
 [build-system]
@@ -70,11 +72,13 @@ strict = true
 addopts = [
     "--cov-report=html",
     "--cov-report=term",
-    "--cov=hello",
+    "--cov=rosbag2_pytorch_data_loader",
     "--doctest-modules",
     "--ignore=_skbuild",
     "--ignore=build.py",
+    "--import-mode=importlib",
 ]
+testpaths = ["tests",]
 
 [tool.taskipy.tasks]
 prepare.cmd = "pre-commit install && pre-commit install --hook-type commit-msg"
@@ -83,5 +87,5 @@ prepare.help = "sets up a development environment"
 lint.cmd = "pre-commit run --all-files"
 lint.help = "runs linters (+ fix)"
 
-test.cmd  = "python run_gtests.py" # && pytest"
+test.cmd  = "python run_gtests.py && pytest"
 test.help = "runs tests"
