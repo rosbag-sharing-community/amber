@@ -25,6 +25,7 @@ script = "build.py"
 
 [tool.poetry.dependencies]
 python = "^3.10"
+pyyaml = "*"
 torch = "^2.0.0"
 mcap-ros2-support= "^0.3.0"
 
