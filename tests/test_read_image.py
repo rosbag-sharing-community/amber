@@ -8,4 +8,4 @@ def test_read_images() -> None:
         os.path.join(os.path.dirname(tests.__file__), "rosbag/vrx.mcap"),
         os.path.join(os.path.dirname(tests.__file__), "read_image.yaml"),
     )
-    assert True
+    assert len(dataset) == 2

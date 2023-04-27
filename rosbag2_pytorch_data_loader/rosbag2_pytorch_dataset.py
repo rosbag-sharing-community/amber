@@ -18,13 +18,13 @@ class Rosbag2Dataset(Dataset):  # type: ignore
         self.target_transform = target_transform
         self.reader = NonSeekingReader(rosbag_path)
         self.task_description_yaml_path = task_description_yaml_path
-        self.dispatch(self.read_images)
+        self.dispatch(lambda obj: self.read_images(obj))
 
-    def dispatch(self, image_only_function: Any) -> None:
+    def dispatch(self, image_only_function: Any) -> Any:
         with open(self.task_description_yaml_path, "rb") as file:
             obj = yaml.safe_load(file)
             if obj["dataset_type"] == "image_only":
-                image_only_function(obj)
+                return image_only_function(obj)
             else:
                 raise DatasetTypeError(
                     "Dataset type should be image_only, please check the "
@@ -40,7 +40,7 @@ class Rosbag2Dataset(Dataset):  # type: ignore
         pass
 
     def __len__(self) -> int:
-        return 1
+        return self.dispatch(lambda obj: len(self.image_messages))  # type: ignore
 
     def __getitem__(self, idx: int) -> Any:
         return []
