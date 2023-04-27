@@ -3,7 +3,7 @@ from torch.utils.data import Dataset
 from typing import Any
 
 
-class CustomImageDataset(Dataset):  # type: ignore
+class Rosbag2Dataset(Dataset):  # type: ignore
     def __init__(
         self,
         rosbag_path: str,

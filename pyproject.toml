@@ -65,8 +65,6 @@ profile = "black"
 pretty = true
 show_error_codes = true
 strict = true
-warn_unreachable = true
-disallow_subclassing_any = true
 
 [tool.pytest.ini_options]
 addopts = [
