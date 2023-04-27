@@ -1,7 +1,7 @@
 import os
 from torch.utils.data import Dataset
 from typing import Any
-from mcap_ros2.reader import read_ros2_messages
+from mcap.reader import NonSeekingReader
 
 
 class Rosbag2Dataset(Dataset):  # type: ignore
@@ -14,9 +14,11 @@ class Rosbag2Dataset(Dataset):  # type: ignore
     ) -> None:
         self.transform = transform
         self.target_transform = target_transform
-        for msg in read_ros2_messages(rosbag_path):
-            print(msg)
-            # print(f"{msg.topic}: f{msg.ros_msg}")
+        with open("rosbag/vrx.mcap", "rb") as f:
+            self.reader = NonSeekingReader(rosbag_path)
+        for schema, channel, message in self.reader.iter_messages():
+            print(schema)
+            print(channel.topic)
 
     def __len__(self) -> int:
         return 1
