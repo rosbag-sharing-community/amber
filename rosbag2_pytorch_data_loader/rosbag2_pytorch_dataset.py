@@ -14,7 +14,7 @@ class Rosbag2Dataset(Dataset):  # type: ignore
     ) -> None:
         self.transform = transform
         self.target_transform = target_transform
-        with open("rosbag/vrx.mcap", "rb") as f:
+        with open(rosbag_path, "rb") as f:
             self.reader = NonSeekingReader(rosbag_path)
         for schema, channel, message in self.reader.iter_messages():
             print(schema)
