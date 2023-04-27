@@ -23,7 +23,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: install google test
-        run: sudo apt update & apt install -y googletest
+        run: sudo apt update & sudo apt install -y googletest
       - uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
