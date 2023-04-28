@@ -6,6 +6,7 @@ from pyzstd import decompress
 from rosbag2_pytorch_data_loader.exception import ImageDecodingError
 import numpy as np
 import torch
+import torchvision.transforms as transforms
 
 
 def decompress_message(message: Message) -> Message:
@@ -28,9 +29,7 @@ def ros_message_to_image(ros_message: DecodedMessage) -> Image:
 
 
 def image_to_tensor(image: Image) -> torch.Tensor:
-    return torch.from_numpy(
-        np.array(image).astype(np.float32).transpose(2, 1, 0)
-    ).clone()
+    return transforms.Compose([transforms.PILToTensor()])(image)
 
 
 def decode_image_message(

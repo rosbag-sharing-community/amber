@@ -1,8 +1,11 @@
 from rosbag2_pytorch_data_loader.rosbag2_pytorch_dataset import Rosbag2Dataset
+from rosbag2_pytorch_data_loader.conversion import image_to_tensor
 from torch.utils.data import DataLoader
+import torch
 import tests
 import os
-import torchvision.transforms as T
+import torchvision.transforms as transforms
+from PIL import Image
 
 
 def test_read_images() -> None:
@@ -12,10 +15,20 @@ def test_read_images() -> None:
     )
     assert len(dataset) == 2
     dataloader = DataLoader(dataset, batch_size=1, shuffle=False, num_workers=0)
-    transform = T.ToPILImage()
+    transform = transforms.ToPILImage()
     count = 0
     for i_batch, sample_batched in enumerate(dataloader):
         for sample in sample_batched:
-            # transform(sample_batched[0]).save(str(count) + ".png", quality=100)
-            print(count)
+            assert torch.equal(
+                sample,
+                image_to_tensor(
+                    Image.open(
+                        os.path.join(
+                            os.path.dirname(tests.__file__),
+                            "images",
+                            str(count) + ".png",
+                        )
+                    )
+                ),
+            )
             count = count + 1
