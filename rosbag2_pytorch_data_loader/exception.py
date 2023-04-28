@@ -1,4 +1,4 @@
-class DatasetTypeError(Exception):
+class TaskDescriptionError(Exception):
     pass
 
 

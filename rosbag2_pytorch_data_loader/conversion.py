@@ -33,10 +33,10 @@ def image_to_tensor(image: Image) -> torch.Tensor:
 
 
 def decode_image_message(
-    message: Message, schema: Schema, decompressed: bool = True
+    message: Message, schema: Schema, decompress: bool
 ) -> torch.Tensor:
     decoder = Decoder()
-    if decompressed:
+    if decompress:
         ros_message = decoder.decode(schema, decompress_message(message))
     else:
         ros_message = decoder.decode(schema, message)

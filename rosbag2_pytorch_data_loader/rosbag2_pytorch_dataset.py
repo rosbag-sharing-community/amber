@@ -3,8 +3,37 @@ from torch.utils.data import Dataset
 from typing import Any
 from mcap.reader import NonSeekingReader
 from yaml import safe_load  # type: ignore
-from rosbag2_pytorch_data_loader.exception import DatasetTypeError
+from rosbag2_pytorch_data_loader.exception import TaskDescriptionError
 from rosbag2_pytorch_data_loader.conversion import decode_image_message
+
+from dataclasses import dataclass, field
+from dataclass_wizard import YAMLWizard
+
+
+@dataclass
+class ImageTopicConfig(YAMLWizard):  # type: ignore
+    topic_name: str = ""
+    compressed: bool = True
+
+
+@dataclass
+class ImageOnlyConfig(YAMLWizard):  # type: ignore
+    dataset_type: str = "image_only"
+    image_topics: list[ImageTopicConfig] = field(default_factory=list)
+
+    def get_image_topics(self) -> list[str]:
+        topics: list[str] = []
+        for topic in self.image_topics:
+            topics.append(topic.topic_name)
+        return topics
+
+    def compressed(self, name: str) -> bool:
+        for topic in self.image_topics:
+            if topic.topic_name == name:
+                return topic.compressed
+        raise TaskDescriptionError(
+            "Topic : " + name + " does not exist in task description"
+        )
 
 
 class Rosbag2Dataset(Dataset):  # type: ignore
@@ -26,22 +55,26 @@ class Rosbag2Dataset(Dataset):  # type: ignore
             obj = safe_load(file)
             match obj["dataset_type"]:
                 case "image_only":
-                    return image_only_function(obj)
+                    return image_only_function(self.task_description_yaml_path)
                 case _:
-                    raise DatasetTypeError(
+                    raise TaskDescriptionError(
                         "Dataset type should be image_only, please check the "
                         + self.task_description_yaml_path
                     )
 
-    def read_images(self, obj: Any) -> None:
-        image_topics = obj["image_topics"]
+    def read_images(self, yaml_path: str) -> None:
+        config = ImageOnlyConfig.from_yaml_file(yaml_path)
         self.images = []
         for schema, channel, message in self.reader.iter_messages():
-            if channel.topic in image_topics:
-                self.images.append(decode_image_message(message, schema))
+            if channel.topic in config.get_image_topics():
+                self.images.append(
+                    decode_image_message(
+                        message, schema, config.compressed(channel.topic)
+                    )
+                )
 
     def __len__(self) -> int:
-        return self.dispatch(lambda obj: len(self.images))  # type: ignore
+        return self.dispatch(lambda yaml_path: len(self.images))  # type: ignore
 
     def __getitem__(self, index: int) -> Any:
-        return self.dispatch(lambda obj: self.images[index])
+        return self.dispatch(lambda yaml_path: self.images[index])
