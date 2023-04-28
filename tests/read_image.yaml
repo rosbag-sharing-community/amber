@@ -1,0 +1,4 @@
+dataset_type: image_only
+image_topics:
+  - /wamv/sensors/cameras/front_left_camera_sensor/image_raw
+  - /wamv/sensors/cameras/front_right_camera_sensor/image_raw
