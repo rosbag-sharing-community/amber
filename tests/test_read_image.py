@@ -2,6 +2,7 @@ from rosbag2_pytorch_data_loader.rosbag2_pytorch_dataset import Rosbag2Dataset
 from torch.utils.data import DataLoader
 import tests
 import os
+import torchvision.transforms as T
 
 
 def test_read_images() -> None:
@@ -11,5 +12,10 @@ def test_read_images() -> None:
     )
     assert len(dataset) == 2
     dataloader = DataLoader(dataset, batch_size=1, shuffle=False, num_workers=0)
+    transform = T.ToPILImage()
+    count = 0
     for i_batch, sample_batched in enumerate(dataloader):
-        print(i_batch)
+        for sample in sample_batched:
+            # transform(sample_batched[0]).save(str(count) + ".png", quality=100)
+            print(count)
+            count = count + 1
