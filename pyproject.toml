@@ -30,6 +30,7 @@ torch = "^2.0.0"
 mcap-ros2-support= "^0.3.0"
 Pillow = "^9.5.0"
 pyzstd = "^0.15.7"
+numpy = "^1.24.0"
 
 [tool.poetry.dev-dependencies]
 cmake = "^3.22.5"

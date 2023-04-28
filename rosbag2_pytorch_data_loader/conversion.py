@@ -4,6 +4,7 @@ from mcap_ros2.decoder import Decoder
 from mcap_ros2._dynamic import DecodedMessage
 from pyzstd import decompress
 from rosbag2_pytorch_data_loader.exception import ImageDecodingError
+import numpy as np
 
 
 def decompress_message(message: Message) -> Message:
@@ -11,7 +12,7 @@ def decompress_message(message: Message) -> Message:
     return message
 
 
-def to_image(ros_message: DecodedMessage) -> Image:
+def ros_message_to_image(ros_message: DecodedMessage) -> Image:
     match ros_message.encoding:
         case "rgb8":
             return Image.frombytes(
@@ -25,12 +26,16 @@ def to_image(ros_message: DecodedMessage) -> Image:
             )
 
 
+def image_to_tensor(image: Image) -> np.array:
+    return np.array(image).astype(np.float32).transpose(2, 1, 0)
+
+
 def decode_image_message(
     message: Message, schema: Schema, decompressed: bool = True
-) -> Image:
+) -> np.array:
     decoder = Decoder()
     if decompressed:
         ros_message = decoder.decode(schema, decompress_message(message))
     else:
         ros_message = decoder.decode(schema, message)
-    return to_image(ros_message)
+    return image_to_tensor(ros_message_to_image(ros_message))

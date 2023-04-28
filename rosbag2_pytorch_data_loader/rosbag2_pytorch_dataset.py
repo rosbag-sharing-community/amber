@@ -39,10 +39,9 @@ class Rosbag2Dataset(Dataset):  # type: ignore
         for schema, channel, message in self.reader.iter_messages():
             if channel.topic in image_topics:
                 self.images.append(decode_image_message(message, schema))
-        pass
 
     def __len__(self) -> int:
         return self.dispatch(lambda obj: len(self.images))  # type: ignore
 
-    def __getitem__(self, idx: int) -> Any:
-        return []
+    def __getitem__(self, index: int) -> Any:
+        return self.dispatch(lambda obj: self.images[index])
