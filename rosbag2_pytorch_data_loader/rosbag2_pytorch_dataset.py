@@ -24,13 +24,14 @@ class Rosbag2Dataset(Dataset):  # type: ignore
     def dispatch(self, image_only_function: Any) -> Any:
         with open(self.task_description_yaml_path, "rb") as file:
             obj = safe_load(file)
-            if obj["dataset_type"] == "image_only":
-                return image_only_function(obj)
-            else:
-                raise DatasetTypeError(
-                    "Dataset type should be image_only, please check the "
-                    + self.task_description_yaml_path
-                )
+            match obj["dataset_type"]:
+                case "image_only":
+                    return image_only_function(obj)
+                case _:
+                    raise DatasetTypeError(
+                        "Dataset type should be image_only, please check the "
+                        + self.task_description_yaml_path
+                    )
 
     def read_images(self, obj: Any) -> None:
         image_topics = obj["image_topics"]
