@@ -2,8 +2,9 @@ import os
 from torch.utils.data import Dataset
 from typing import Any
 from mcap.reader import NonSeekingReader
-import yaml  # type: ignore
+from yaml import safe_load  # type: ignore
 from rosbag2_pytorch_data_loader.exception import DatasetTypeError
+from rosbag2_pytorch_data_loader.conversion import image_to_torch
 
 
 class Rosbag2Dataset(Dataset):  # type: ignore
@@ -22,7 +23,7 @@ class Rosbag2Dataset(Dataset):  # type: ignore
 
     def dispatch(self, image_only_function: Any) -> Any:
         with open(self.task_description_yaml_path, "rb") as file:
-            obj = yaml.safe_load(file)
+            obj = safe_load(file)
             if obj["dataset_type"] == "image_only":
                 return image_only_function(obj)
             else:
@@ -33,14 +34,14 @@ class Rosbag2Dataset(Dataset):  # type: ignore
 
     def read_images(self, obj: Any) -> None:
         image_topics = obj["image_topics"]
-        self.image_messages = []
+        self.images = []
         for schema, channel, message in self.reader.iter_messages():
             if channel.topic in image_topics:
-                self.image_messages.append(message)
+                self.images.append(image_to_torch(message, schema))
         pass
 
     def __len__(self) -> int:
-        return self.dispatch(lambda obj: len(self.image_messages))  # type: ignore
+        return self.dispatch(lambda obj: len(self.images))  # type: ignore
 
     def __getitem__(self, idx: int) -> Any:
         return []
