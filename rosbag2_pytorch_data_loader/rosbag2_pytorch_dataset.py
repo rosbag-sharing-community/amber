@@ -4,7 +4,7 @@ from typing import Any
 from mcap.reader import NonSeekingReader
 from yaml import safe_load  # type: ignore
 from rosbag2_pytorch_data_loader.exception import DatasetTypeError
-from rosbag2_pytorch_data_loader.conversion import image_to_torch
+from rosbag2_pytorch_data_loader.conversion import decode_image_message
 
 
 class Rosbag2Dataset(Dataset):  # type: ignore
@@ -37,7 +37,7 @@ class Rosbag2Dataset(Dataset):  # type: ignore
         self.images = []
         for schema, channel, message in self.reader.iter_messages():
             if channel.topic in image_topics:
-                self.images.append(image_to_torch(message, schema))
+                self.images.append(decode_image_message(message, schema))
         pass
 
     def __len__(self) -> int:
