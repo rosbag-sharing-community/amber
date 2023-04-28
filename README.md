@@ -1,5 +1,7 @@
 # rosbag2_pytorch_data_loader
 
+[![pytest](https://github.com/OUXT-Polaris/rosbag2_pytorch_data_loader/actions/workflows/pytest.yaml/badge.svg)](https://github.com/OUXT-Polaris/rosbag2_pytorch_data_loader/actions/workflows/pytest.yaml)
+
 ROS2 friendly ML tools.
 Your rosbag2 become dataset!
 
