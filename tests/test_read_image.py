@@ -6,12 +6,14 @@ import tests
 import os
 import torchvision.transforms as transforms
 from PIL import Image
+from pathlib import Path
 
 
 def test_read_images() -> None:
+    current_path = Path(os.path.dirname(os.path.realpath(__file__)))
     dataset = Rosbag2Dataset(
-        os.path.join(os.path.dirname(tests.__file__), "rosbag/vrx.mcap"),
-        os.path.join(os.path.dirname(tests.__file__), "read_image.yaml"),
+        str(current_path / "rosbag" / "vrx.mcap"),
+        str(current_path / "read_image.yaml"),
     )
     assert len(dataset) == 2
     dataloader = DataLoader(dataset, batch_size=1, shuffle=False, num_workers=0)
@@ -19,15 +21,12 @@ def test_read_images() -> None:
     count = 0
     for i_batch, sample_batched in enumerate(dataloader):
         for sample in sample_batched:
+            image = str(count) + ".png"
             assert torch.equal(
                 sample,
                 image_to_tensor(
                     Image.open(
-                        os.path.join(
-                            os.path.dirname(tests.__file__),
-                            "images",
-                            str(count) + ".png",
-                        )
+                        str(current_path / "images" / image),
                     )
                 ),
             )
