@@ -32,6 +32,7 @@ Pillow = "^9.5.0"
 pyzstd = "^0.15.7"
 numpy = "^1.24.0"
 torchvision = "^0.15.1"
+dataclass-wizard = "^0.22.2"
 
 [tool.poetry.dev-dependencies]
 cmake = "^3.22.5"
