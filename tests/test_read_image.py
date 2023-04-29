@@ -12,7 +12,7 @@ from pathlib import Path
 def test_read_images() -> None:
     current_path = Path(os.path.dirname(os.path.realpath(__file__)))
     dataset = Rosbag2Dataset(
-        str(current_path / "rosbag" / "vrx.mcap"),
+        str(current_path / "rosbag" / "vrx" / "vrx.mcap"),
         str(current_path / "read_image.yaml"),
     )
     assert len(dataset) == 2
