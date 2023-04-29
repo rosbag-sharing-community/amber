@@ -4,7 +4,6 @@ from torch.utils.data import DataLoader
 import torch
 import tests
 import os
-import torchvision.transforms as transforms
 from PIL import Image
 from pathlib import Path
 
@@ -40,7 +39,6 @@ def test_read_image_ford() -> None:
     )
     assert len(dataset) == 39
     dataloader = DataLoader(dataset, batch_size=1, shuffle=False, num_workers=0)
-    transform = transforms.ToPILImage()
     count = 0
     for i_batch, sample_batched in enumerate(dataloader):
         for sample in sample_batched:
