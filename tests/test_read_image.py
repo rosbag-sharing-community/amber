@@ -9,11 +9,11 @@ from PIL import Image
 from pathlib import Path
 
 
-def test_read_images() -> None:
+def test_read_image_vrx() -> None:
     current_path = Path(os.path.dirname(os.path.realpath(__file__)))
     dataset = Rosbag2Dataset(
         str(current_path / "rosbag" / "vrx" / "vrx.mcap"),
-        str(current_path / "read_image.yaml"),
+        str(current_path / "read_image_vrx.yaml"),
     )
     assert len(dataset) == 2
     dataloader = DataLoader(dataset, batch_size=1, shuffle=False, num_workers=0)
@@ -31,3 +31,14 @@ def test_read_images() -> None:
                 ),
             )
             count = count + 1
+
+
+def test_read_image_ford() -> None:
+    current_path = Path(os.path.dirname(os.path.realpath(__file__)))
+    dataset = Rosbag2Dataset(
+        str(current_path / "rosbag" / "ford" / "ford.mcap"),
+        str(current_path / "read_image_ford.yaml"),
+    )
+    assert len(dataset) == 2
+    dataloader = DataLoader(dataset, batch_size=1, shuffle=False, num_workers=0)
+    transform = transforms.ToPILImage()

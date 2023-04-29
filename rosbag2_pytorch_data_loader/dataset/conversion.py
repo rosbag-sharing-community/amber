@@ -20,6 +20,10 @@ def ros_message_to_image(ros_message: DecodedMessage) -> Image:
             return Image.frombytes(
                 "RGB", (ros_message.width, ros_message.height), ros_message.data
             )
+        case "8UC3":
+            return Image.frombytes(
+                "RGB", (ros_message.width, ros_message.height), ros_message.data
+            )
         case _:
             raise ImageDecodingError(
                 "image_encodings in sensor_msgs/msg/Image is "
