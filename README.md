@@ -8,7 +8,6 @@ Your rosbag2 become dataset!
 ## How it works
 
 1. Prepare rosbag2 with mcap format.
-    - If you do not have rosbag2 data, I recomend
 2. Prepare task description yaml file.
 3. Enjyo your ML life with Robots!
 
