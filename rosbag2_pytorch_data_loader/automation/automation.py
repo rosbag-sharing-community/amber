@@ -1,6 +1,8 @@
-from typing import Protocol, Any
+from typing import Any
+from abc import ABC, abstractmethod
 
 
-class Automation(Protocol):
+class Automation(ABC):
+    @abstractmethod
     def inference(self) -> Any:
-        ...
+        pass
