@@ -39,6 +39,6 @@ def test_read_image_ford() -> None:
         str(current_path / "rosbag" / "ford" / "ford.mcap"),
         str(current_path / "read_image_ford.yaml"),
     )
-    assert len(dataset) == 2
+    assert len(dataset) == 39
     dataloader = DataLoader(dataset, batch_size=1, shuffle=False, num_workers=0)
     transform = transforms.ToPILImage()
