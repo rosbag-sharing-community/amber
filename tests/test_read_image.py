@@ -17,7 +17,6 @@ def test_read_image_vrx() -> None:
     )
     assert len(dataset) == 2
     dataloader = DataLoader(dataset, batch_size=1, shuffle=False, num_workers=0)
-    transform = transforms.ToPILImage()
     count = 0
     for i_batch, sample_batched in enumerate(dataloader):
         for sample in sample_batched:
@@ -26,7 +25,7 @@ def test_read_image_vrx() -> None:
                 sample,
                 image_to_tensor(
                     Image.open(
-                        str(current_path / "images" / image),
+                        str(current_path / "images" / "vrx" / image),
                     )
                 ),
             )
@@ -42,3 +41,16 @@ def test_read_image_ford() -> None:
     assert len(dataset) == 39
     dataloader = DataLoader(dataset, batch_size=1, shuffle=False, num_workers=0)
     transform = transforms.ToPILImage()
+    count = 0
+    for i_batch, sample_batched in enumerate(dataloader):
+        for sample in sample_batched:
+            image = str(count) + ".png"
+            assert torch.equal(
+                sample,
+                image_to_tensor(
+                    Image.open(
+                        str(current_path / "images" / "ford" / image),
+                    )
+                ),
+            )
+            count = count + 1
