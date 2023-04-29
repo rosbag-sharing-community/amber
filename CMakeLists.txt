@@ -14,11 +14,11 @@ endif()
 
 find_package(PythonExtensions REQUIRED)
 
-set(MESSAGES_DIR rosbag2_pytorch_data_loader/messages)
-set(ROSIDL_RUNTIME_CPP_DIR rosbag2_pytorch_data_loader/rosidl_runtime_cpp)
-set(CONSOLE_BRIDGE_DIR rosbag2_pytorch_data_loader/console_bridge)
-set(TF2_DIR rosbag2_pytorch_data_loader/geometry2/tf2)
-set(TF2_PY_DIR rosbag2_pytorch_data_loader/geometry2/tf2_py)
+set(MESSAGES_DIR rosbag2_pytorch_data_loader/tf2/messages)
+set(ROSIDL_RUNTIME_CPP_DIR rosbag2_pytorch_data_loader/tf2/rosidl_runtime_cpp)
+set(CONSOLE_BRIDGE_DIR rosbag2_pytorch_data_loader/tf2/console_bridge)
+set(TF2_DIR rosbag2_pytorch_data_loader/tf2/geometry2/tf2)
+set(TF2_PY_DIR rosbag2_pytorch_data_loader/tf2/geometry2/tf2_py)
 
 add_library(
   tf2
