@@ -4,8 +4,8 @@ from typing import Any
 from mcap.reader import NonSeekingReader
 from yaml import safe_load  # type: ignore
 from rosbag2_pytorch_data_loader.exception import TaskDescriptionError
-from rosbag2_pytorch_data_loader.conversion import decode_image_message
-from rosbag2_pytorch_data_loader.task_description import ImageOnlyConfig
+from rosbag2_pytorch_data_loader.dataset.conversion import decode_image_message
+from rosbag2_pytorch_data_loader.dataset.task_description import ImageOnlyConfig
 
 
 class Rosbag2Dataset(Dataset):  # type: ignore

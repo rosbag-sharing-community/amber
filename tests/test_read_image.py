@@ -1,5 +1,5 @@
-from rosbag2_pytorch_data_loader.rosbag2_pytorch_dataset import Rosbag2Dataset
-from rosbag2_pytorch_data_loader.conversion import image_to_tensor
+from rosbag2_pytorch_data_loader.dataset.rosbag2_pytorch_dataset import Rosbag2Dataset
+from rosbag2_pytorch_data_loader.dataset.conversion import image_to_tensor
 from torch.utils.data import DataLoader
 import torch
 import tests
