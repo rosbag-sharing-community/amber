@@ -8,6 +8,7 @@ from rosbag2_pytorch_data_loader.automation.task_description import (
     ClipImageFilterConfig,
 )
 import torchvision.transforms as transforms
+from torch.utils.data import DataLoader
 
 
 class ClipImageFilter(Automation):  # type: ignore
@@ -20,6 +21,5 @@ class ClipImageFilter(Automation):  # type: ignore
         self.transform = transforms.ToPILImage()
 
     def inference(self, dataset: Rosbag2Dataset) -> Any:
-        pass
-        # for index, image in enumerate(dataset.read_images()):
-        #     image = self.preprocess(self.transform(image)).unsqueeze(0).to(self.device)
+        for index, image in enumerate(dataset):
+            image = self.preprocess(self.transform(image)).unsqueeze(0).to(self.device)

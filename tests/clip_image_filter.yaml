@@ -1,2 +1,3 @@
 task_type: clip_image_filter
 model: ViT-B/32
+target_objects: ["bus"]
