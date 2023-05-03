@@ -23,3 +23,5 @@ class ClipImageFilter(Automation):  # type: ignore
     def inference(self, dataset: Rosbag2Dataset) -> Any:
         for index, image in enumerate(dataset):
             image = self.preprocess(self.transform(image)).unsqueeze(0).to(self.device)
+            for prompt in self.config.get_prompts():
+                text = clip.tokenize([prompt[0], prompt[1]]).to(self.device)

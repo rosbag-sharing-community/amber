@@ -20,7 +20,7 @@ class ClipModelType(Enum):
 class ClipImageFilterConfig(YAMLWizard):  # type: ignore
     dataset_type: str = "clip_image_filter"
     clip_model_type: ClipModelType = "ViT-B/32"  # type: ignore
-    target_objects: list[str] = []
+    target_objects: list[str] = field(default_factory=list)
 
     def get_positive_prompt(self, object_name: str) -> str:
         return "A photo of " + object_name
