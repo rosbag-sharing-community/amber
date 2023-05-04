@@ -1,3 +1,5 @@
 task_type: clip_image_filter
 model: ViT-B/32
-target_objects: ["bus"]
+target_objects:
+  - label: "building under construction"
+    threshold: 0.94
