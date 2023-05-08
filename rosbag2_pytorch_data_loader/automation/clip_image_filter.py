@@ -6,6 +6,7 @@ from typing import Any
 from rosbag2_pytorch_data_loader.dataset.rosbag2_pytorch_dataset import Rosbag2Dataset
 from rosbag2_pytorch_data_loader.automation.task_description import (
     ClipImageFilterConfig,
+    ImageClassificationAnnotation,
 )
 import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
@@ -21,7 +22,8 @@ class ClipImageFilter(Automation):  # type: ignore
         )
         self.transform = transforms.ToPILImage()
 
-    def inference(self, dataset: Rosbag2Dataset) -> Any:
+    def inference(self, dataset: Rosbag2Dataset) -> ImageClassificationAnnotation:
+        annotation = ImageClassificationAnnotation.from_dict({})
         for index, image in enumerate(dataset):
             image = self.preprocess(self.transform(image)).unsqueeze(0).to(self.device)
             for object_index, prompt in enumerate(self.config.get_prompts()):
@@ -33,3 +35,4 @@ class ClipImageFilter(Automation):  # type: ignore
                     probs = logits_per_image.softmax(dim=-1).cpu().numpy()
                 if probs[0][0] >= self.config.target_objects[object_index].threshold:
                     print("Index : " + str(index) + " , Score : " + str(probs[0][0]))
+        return annotation
