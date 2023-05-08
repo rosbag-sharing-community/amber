@@ -13,6 +13,10 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 
 find_package(PythonExtensions REQUIRED)
+include(FindProtobuf REQUIRED)
+
+set(PROTO_FILES "rosbag2_pytorch_data_loader/proto/annotation.proto")
+protobuf_generate_python(PROTO_PY ${PROTO_FILES})
 
 set(MESSAGES_DIR rosbag2_pytorch_data_loader/tf2/messages)
 set(ROSIDL_RUNTIME_CPP_DIR rosbag2_pytorch_data_loader/tf2/rosidl_runtime_cpp)
@@ -38,6 +42,16 @@ target_include_directories(
 
 install(TARGETS tf2 LIBRARY DESTINATION tf2)
 install(TARGETS tf2_py LIBRARY DESTINATION tf2_py)
+python_extension_module(tf2)
+python_extension_module(tf2_py)
+
+# Generate python files from .proto
+add_custom_target(
+  generate_proto ALL
+  DEPENDS ${PROTO_PY}
+  COMMENT ${PROTO_PY}" was generated")
+file(COPY ${PROTO_PY}
+     DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/rosbag2_pytorch_data_loader/proto)
 
 # test settings
 find_package(GTest)
