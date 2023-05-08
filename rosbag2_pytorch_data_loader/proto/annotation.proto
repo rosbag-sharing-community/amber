@@ -1,9 +1,0 @@
-syntax = "proto3";
-
-package annotation;
-
-message ImageClassfication {
-  string topic = 1;
-  int32 image_index = 2;
-  repeated string objects = 3;
-}

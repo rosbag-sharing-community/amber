@@ -45,14 +45,6 @@ install(TARGETS tf2_py LIBRARY DESTINATION tf2_py)
 python_extension_module(tf2)
 python_extension_module(tf2_py)
 
-# Generate python files from .proto
-add_custom_target(
-  generate_proto ALL
-  DEPENDS ${PROTO_PY}
-  COMMENT ${PROTO_PY}" was generated")
-file(COPY ${PROTO_PY}
-     DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/rosbag2_pytorch_data_loader/proto)
-
 # test settings
 find_package(GTest)
 
