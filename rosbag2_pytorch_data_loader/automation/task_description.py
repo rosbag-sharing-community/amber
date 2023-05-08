@@ -45,8 +45,8 @@ class ClipImageFilterConfig(YAMLWizard):  # type: ignore
 
 @dataclass
 class ImageClassification(JSONWizard):  # type: ignore
-    index: int = 0
-    label: list[str] = field(default_factory=list)
+    sequence: int = 0
+    labels: list[str] = field(default_factory=list)
 
 
 @dataclass

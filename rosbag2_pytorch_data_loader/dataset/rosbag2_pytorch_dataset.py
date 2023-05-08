@@ -29,7 +29,6 @@ class Rosbag2Dataset(Dataset):  # type: ignore
         self.reader = NonSeekingReader(rosbag_path)
         self.task_description_yaml_path = task_description_yaml_path
         self.dispatch(lambda obj: self.read_images(obj))
-        self.message_metadata: list[MessageMetaData] = []
 
     def dispatch(self, image_only_function: Any) -> Any:
         with open(self.task_description_yaml_path, "rb") as file:
@@ -67,4 +66,4 @@ class Rosbag2Dataset(Dataset):  # type: ignore
         return self.dispatch(lambda yaml_path: self.images[index])
 
     def get_metadata(self, index: int) -> MessageMetaData:
-        return self.message_metadata[index]
+        return self.message_metadata[index]  # type: ignore

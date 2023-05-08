@@ -26,6 +26,7 @@ class ClipImageFilter(Automation):  # type: ignore
         annotation = ImageClassificationAnnotation.from_dict({})
         for index, image in enumerate(dataset):
             image = self.preprocess(self.transform(image)).unsqueeze(0).to(self.device)
+            labels = []
             for object_index, prompt in enumerate(self.config.get_prompts()):
                 text = clip.tokenize([prompt[0], prompt[1]]).to(self.device)
                 with torch.no_grad():
@@ -34,5 +35,11 @@ class ClipImageFilter(Automation):  # type: ignore
                     logits_per_image, logits_per_text = self.model(image, text)
                     probs = logits_per_image.softmax(dim=-1).cpu().numpy()
                 if probs[0][0] >= self.config.target_objects[object_index].threshold:
-                    print("Index : " + str(index) + " , Score : " + str(probs[0][0]))
+                    labels.append(self.config.target_objects[object_index])
+            metadata = dataset.get_metadata(index)
+            # annotation[metadata.topic].append(
+            #     ImageClassification.from_dict(
+            #         {"sequence": metadata.sequence, "labels": labels}
+            #     )
+            # )
         return annotation
