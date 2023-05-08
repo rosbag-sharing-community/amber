@@ -1,7 +1,8 @@
 from dataclasses import dataclass, field
-from dataclass_wizard import YAMLWizard
+from dataclass_wizard import YAMLWizard, JSONWizard
 from rosbag2_pytorch_data_loader.exception import TaskDescriptionError
 from enum import Enum
+from typing import Dict
 
 
 class ClipModelType(Enum):
@@ -40,3 +41,14 @@ class ClipImageFilterConfig(YAMLWizard):  # type: ignore
                 )
             )
         return prompts
+
+
+@dataclass
+class ImageClassification(JSONWizard):  # type: ignore
+    index: int = 0
+    label: list[str] = []
+
+
+@dataclass
+class ImageClassificationAnnotation(JSONWizard):  # type: ignore
+    image_classification: Dict[str, ImageClassification]
