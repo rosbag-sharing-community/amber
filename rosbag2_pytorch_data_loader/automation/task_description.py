@@ -51,4 +51,6 @@ class ImageClassification(JSONWizard):  # type: ignore
 
 @dataclass
 class ImageClassificationAnnotation(JSONWizard):  # type: ignore
-    image_classification: Dict[str, ImageClassification] = field(default_factory=dict)
+    image_classification: Dict[str, list[ImageClassification]] = field(
+        default_factory=dict
+    )
