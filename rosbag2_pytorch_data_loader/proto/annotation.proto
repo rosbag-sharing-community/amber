@@ -1,7 +1,9 @@
 syntax = "proto3";
 
-message Person {
-  string name = 1;
-  int32 id = 2;
-  string email = 3;
+package annotation;
+
+message ImageClassfication {
+  string topic = 1;
+  int32 image_index = 2;
+  repeated string objects = 3;
 }
