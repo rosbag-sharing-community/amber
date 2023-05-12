@@ -26,17 +26,23 @@ script = "build.py"
 [tool.poetry.dependencies]
 python = "^3.10"
 pyyaml = "*"
-torch = "^2.0.0"
+torch = { version = "^2.0.0", source="torch"}
+torchvision = { version = "^0.15.1", source="torch"}
 mcap-ros2-support= "^0.3.0"
 Pillow = "^9.5.0"
 pyzstd = "^0.15.7"
 numpy = "^1.24.0"
-torchvision = "^0.15.1"
 dataclass-wizard = "^0.22.2"
 clip = {git = "https://github.com/openai/CLIP.git", rev = "a9b1bf5920416aaeaec965c25dd9e8f98c864f16"} # commit hash for 2023/1/21
 ftfy = "^6.1.1"
 regex = "^2023.3.23"
 tqdm = "^4.65.0"
+
+[[tool.poetry.source]]
+name = "torch"
+url = "https://download.pytorch.org/whl/cu118"
+default = false
+secondary = true
 
 [tool.poetry.dev-dependencies]
 cmake = "^3.22.5"
