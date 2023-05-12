@@ -51,26 +51,5 @@ class Automation(ABC):
             message={"annotations": annotation_data},
             sequence=0,
         )
-        # shutil.copyfile(dataset.rosbag_path, output_rosbag_path)
-        # rosbag_file = open(output_rosbag_path, "w+b")
-        # writer = Writer(rosbag_file, compression=CompressionType.NONE)
-        # writer.start("ros2", "rosbag2_pytorch_data_loader")
-        # annotation_json = {"annotations": []}
-        # for annotation in annotation_data:
-        #     annotation_json["annotations"].append(annotation.to_json())
-        # schema_id = writer.register_schema(
-        #     name=topic, encoding="text/plain", data="text".encode()
-        # )
-        # channel_id = writer.register_channel(
-        #     schema_id=schema_id,
-        #     topic=topic,
-        #     message_encoding="text/plain",
-        # )
-        # writer.add_message(
-        #     channel_id=channel_id,
-        #     log_time=0,
-        #     data=json.dumps(annotation_json).encode("utf-8"),
-        #     publish_time=0,
-        # )
         writer.finish()
         rosbag_file.close()
