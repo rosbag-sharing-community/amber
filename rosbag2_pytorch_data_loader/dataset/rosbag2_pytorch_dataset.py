@@ -24,6 +24,7 @@ class Rosbag2Dataset(Dataset):  # type: ignore
         transform: Any = None,
         target_transform: Any = None,
     ) -> None:
+        self.rosbag_path = rosbag_path
         self.transform = transform
         self.target_transform = target_transform
         self.reader = NonSeekingReader(rosbag_path)

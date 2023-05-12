@@ -11,4 +11,5 @@ def test_clip_image_filter() -> None:
         str(current_path / "rosbag" / "ford" / "ford.mcap"),
         str(current_path / "read_image_ford.yaml"),
     )
-    filter.inference(dataset)
+    annotation = filter.inference(dataset)
+    filter.write(dataset, "clip_image_filter", annotation, "output.mcap")
