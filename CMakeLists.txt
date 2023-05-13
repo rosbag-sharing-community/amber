@@ -13,12 +13,16 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 
 find_package(PythonExtensions REQUIRED)
+include(FindProtobuf REQUIRED)
 
-set(MESSAGES_DIR rosbag2_pytorch_data_loader/messages)
-set(ROSIDL_RUNTIME_CPP_DIR rosbag2_pytorch_data_loader/rosidl_runtime_cpp)
-set(CONSOLE_BRIDGE_DIR rosbag2_pytorch_data_loader/console_bridge)
-set(TF2_DIR rosbag2_pytorch_data_loader/geometry2/tf2)
-set(TF2_PY_DIR rosbag2_pytorch_data_loader/geometry2/tf2_py)
+set(PROTO_FILES "rosbag2_pytorch_data_loader/proto/annotation.proto")
+protobuf_generate_python(PROTO_PY ${PROTO_FILES})
+
+set(MESSAGES_DIR rosbag2_pytorch_data_loader/tf2/messages)
+set(ROSIDL_RUNTIME_CPP_DIR rosbag2_pytorch_data_loader/tf2/rosidl_runtime_cpp)
+set(CONSOLE_BRIDGE_DIR rosbag2_pytorch_data_loader/tf2/console_bridge)
+set(TF2_DIR rosbag2_pytorch_data_loader/tf2/geometry2/tf2)
+set(TF2_PY_DIR rosbag2_pytorch_data_loader/tf2/geometry2/tf2_py)
 
 add_library(
   tf2
@@ -38,6 +42,8 @@ target_include_directories(
 
 install(TARGETS tf2 LIBRARY DESTINATION tf2)
 install(TARGETS tf2_py LIBRARY DESTINATION tf2_py)
+python_extension_module(tf2)
+python_extension_module(tf2_py)
 
 # test settings
 find_package(GTest)

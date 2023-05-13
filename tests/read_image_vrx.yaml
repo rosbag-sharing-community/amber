@@ -1,0 +1,5 @@
+dataset_type: image_only
+image_topics:
+  - topic_name: /wamv/sensors/cameras/front_left_camera_sensor/image_raw
+    compressed: true
+  - topic_name: /wamv/sensors/cameras/front_right_camera_sensor/image_raw
