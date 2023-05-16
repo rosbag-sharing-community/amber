@@ -13,3 +13,4 @@ def test_clip_image_filter() -> None:
     )
     annotation = filter.inference(dataset)
     filter.write(dataset, "clip_image_filter", annotation, "output.mcap")
+    os.remove("output.mcap")
