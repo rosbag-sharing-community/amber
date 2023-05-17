@@ -34,6 +34,7 @@ numpy = "^1.24.0"
 torchvision = {url = "https://download.pytorch.org/whl/cu118/torchvision-0.15.1%2Bcu118-cp310-cp310-linux_x86_64.whl" }
 dataclass-wizard = "^0.22.2"
 clip = {git = "https://github.com/openai/CLIP.git", rev = "a9b1bf5920416aaeaec965c25dd9e8f98c864f16"} # commit hash for 2023/1/21
+detic = {git = "https://github.com/OUXT-Polaris/Detic.git", rev="main"} # original detic does not support poetry.
 ftfy = "^6.1.1"
 regex = "^2023.3.23"
 tqdm = "^4.65.0"
@@ -48,6 +49,7 @@ lark = "*"
 coverage = "*"
 pytest-cov = "^3.0.0"
 black = "^23.3.0"
+pip = "^23.1.2"
 
 [build-system]
 requires = ["poetry-core>=1.0.0", "scikit-build", "cmake", "ninja"]
