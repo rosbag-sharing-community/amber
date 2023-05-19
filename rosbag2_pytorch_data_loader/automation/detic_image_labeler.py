@@ -41,6 +41,9 @@ class DeticImageLabeler(Automation):  # type: ignore
             "url": "https://dl.fbaipublicfiles.com/detic/Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size.pth",
         }
     }
+    download_directory = os.path.join(
+        rosbag2_pytorch_data_loader.__path__[0], "automation", "models", "detic"
+    )
 
     def __init__(self, yaml_path: str) -> None:
         self.config = DeticImageLabalerConfig.from_yaml_file(yaml_path)
@@ -50,39 +53,38 @@ class DeticImageLabeler(Automation):  # type: ignore
         pass
 
     def get_model_url(
-        self, weight: str = "Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size"
+        self, model: str = "Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size"
     ) -> str:
-        if weight in self.models:
-            return self.models[weight]["url"]
+        if model in self.models:
+            return self.models[model]["url"]
         else:
             raise Exception(
-                "weight name "
-                + weight
+                "model name "
+                + model
                 + " does not existing on rosbag2_pytorch_data_loader."
             )
 
     def get_model_filename(
-        self, weight: str = "Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size"
+        self, model: str = "Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size"
     ) -> str:
-        if weight in self.models:
-            return self.models[weight]["filename"]
+        if model in self.models:
+            return self.models[model]["filename"]
         else:
             raise Exception(
-                "weight name "
-                + weight
+                "model name "
+                + model
                 + " does not existing on rosbag2_pytorch_data_loader."
             )
 
+    def get_model_path(
+        self, model: str = "Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size"
+    ) -> str:
+        return os.path.join(self.download_directory, self.get_model_filename(model))
+
     def download_model(
-        self,
-        weight: str = "Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size",
-        base_directory: str = os.path.join(
-            rosbag2_pytorch_data_loader.__path__[0], "automation", "models", "detic"
-        ),
+        self, model: str = "Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size"
     ) -> None:
-        path = os.path.join(base_directory, self.get_model_filename(weight))
-        if not os.path.exists(path):
+        if not os.path.exists(self.get_model_path(model)):
             urllib.request.urlretrieve(
-                self.get_model_url(weight),
-                os.path.join(base_directory, self.get_model_filename(weight)),
+                self.get_model_url(model), self.get_model_path(model)
             )
