@@ -26,20 +26,25 @@ from rosbag2_pytorch_data_loader.automation.automation import Automation
 
 import urllib.request
 
+import rosbag2_pytorch_data_loader
 from rosbag2_pytorch_data_loader.automation.task_description import (
     DeticImageLabalerConfig,
 )
 
+import os
+
 
 class DeticImageLabeler(Automation):  # type: ignore
+    models = {
+        "Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size": {
+            "filename": "Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size.pth",
+            "url": "https://dl.fbaipublicfiles.com/detic/Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size.pth",
+        }
+    }
+
     def __init__(self, yaml_path: str) -> None:
         self.config = DeticImageLabalerConfig.from_yaml_file(yaml_path)
-        self.models = {
-            "Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size": {
-                "filename": "Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size.pth",
-                "url": "https://dl.fbaipublicfiles.com/detic/Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size.pth",
-            }
-        }
+        self.download_model(self.config.model.value)
 
     def inference(self, dataset: Rosbag2Dataset) -> None:
         pass
@@ -69,8 +74,15 @@ class DeticImageLabeler(Automation):  # type: ignore
             )
 
     def download_model(
-        self, weight: str = "Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size"
+        self,
+        weight: str = "Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size",
+        base_directory: str = os.path.join(
+            rosbag2_pytorch_data_loader.__path__[0], "automation", "models", "detic"
+        ),
     ) -> None:
-        urllib.request.urlretrieve(
-            self.get_model_url(weight), self.get_model_filename(weight)
-        )
+        path = os.path.join(base_directory, self.get_model_filename(weight))
+        if not os.path.exists(path):
+            urllib.request.urlretrieve(
+                self.get_model_url(weight),
+                os.path.join(base_directory, self.get_model_filename(weight)),
+            )
