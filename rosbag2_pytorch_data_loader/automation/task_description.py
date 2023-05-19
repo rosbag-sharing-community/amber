@@ -27,8 +27,8 @@ class TargetObjectsConfig(YAMLWizard):  # type: ignore
 
 @dataclass
 class ClipImageFilterConfig(YAMLWizard):  # type: ignore
-    dataset_type: str = "clip_image_filter"
-    clip_model_type: ClipModelType = "ViT-B/32"  # type: ignore
+    task_type: str = "clip_image_filter"
+    model: ClipModelType = "ViT-B/32"  # type: ignore
     target_objects: list[TargetObjectsConfig] = field(default_factory=list)
 
     def get_prompts(self) -> list[tuple[str, str]]:
@@ -48,3 +48,14 @@ class ImageClassification(JSONWizard):  # type: ignore
     topic: str = ""
     sequence: int = 0
     labels: list[str] = field(default_factory=list)
+
+
+class DeticModelType(Enum):
+    Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max_size = (
+        "Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size"
+    )
+
+
+@dataclass
+class DeticImageLabalerConfig(YAMLWizard):  # type: ignore
+    task_type: str = "detic_image_labaler"

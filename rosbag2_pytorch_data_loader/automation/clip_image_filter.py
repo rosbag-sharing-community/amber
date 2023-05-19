@@ -15,10 +15,9 @@ from torch.utils.data import DataLoader
 class ClipImageFilter(Automation):  # type: ignore
     def __init__(self, yaml_path: str) -> None:
         self.config = ClipImageFilterConfig.from_yaml_file(yaml_path)
-        print(self.config)
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.model, self.preprocess = clip.load(
-            self.config.clip_model_type, device=self.device
+            self.config.model.value, device=self.device
         )
         self.transform = transforms.ToPILImage()
 

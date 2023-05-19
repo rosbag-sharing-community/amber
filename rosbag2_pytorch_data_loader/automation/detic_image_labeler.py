@@ -24,17 +24,48 @@ from detic.predictor import VisualizationDemo
 from rosbag2_pytorch_data_loader.dataset.rosbag2_pytorch_dataset import Rosbag2Dataset
 from rosbag2_pytorch_data_loader.automation.automation import Automation
 
+import urllib.request
+
 
 class DeticImageLabeler(Automation):  # type: ignore
     def __init__(self, yaml_path: str) -> None:
-        pass
+        self.weights = {
+            "Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size": {
+                "filename": "Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size.pth",
+                "url": "https://dl.fbaipublicfiles.com/detic/Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size.pth",
+            }
+        }
 
     def inference(self, dataset: Rosbag2Dataset) -> None:
         pass
 
+    def get_model_url(
+        self, weight: str = "Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size"
+    ) -> str:
+        if weight in self.weights:
+            return self.weights[weight]["url"]
+        else:
+            raise Exception(
+                "weight name "
+                + weight
+                + " does not existing on rosbag2_pytorch_data_loader."
+            )
+
+    def get_model_filename(
+        self, weight: str = "Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size"
+    ) -> str:
+        if weight in self.weights:
+            return self.weights[weight]["filename"]
+        else:
+            raise Exception(
+                "weight name "
+                + weight
+                + " does not existing on rosbag2_pytorch_data_loader."
+            )
+
     def download_model(
-        self, weight: str = "Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size.pth"
+        self, weight: str = "Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size"
     ) -> None:
-        weights = {
-            "Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size.pth": "https://dl.fbaipublicfiles.com/detic/Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size.pth"
-        }
+        urllib.request.urlretrieve(
+            self.get_model_url(weight), self.get_model_filename(weight)
+        )

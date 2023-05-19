@@ -1,0 +1,2 @@
+task_type: detic_image_labeler
+model: Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size
