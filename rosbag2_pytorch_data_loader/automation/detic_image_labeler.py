@@ -33,6 +33,8 @@ from rosbag2_pytorch_data_loader.automation.task_description import (
 
 import os
 
+from fvcore.common.config import CfgNode
+
 
 class DeticImageLabeler(Automation):  # type: ignore
     models = {
@@ -44,10 +46,14 @@ class DeticImageLabeler(Automation):  # type: ignore
     download_directory = os.path.join(
         rosbag2_pytorch_data_loader.__path__[0], "automation", "models", "detic"
     )
+    config_directory = os.path.join(
+        rosbag2_pytorch_data_loader.__path__[0], "automation", "config", "detic"
+    )
 
     def __init__(self, yaml_path: str) -> None:
         self.config = DeticImageLabalerConfig.from_yaml_file(yaml_path)
         self.download_model(self.config.model.value)
+        self.setup_detectron2_cfg()
 
     def inference(self, dataset: Rosbag2Dataset) -> None:
         pass
@@ -88,3 +94,25 @@ class DeticImageLabeler(Automation):  # type: ignore
             urllib.request.urlretrieve(
                 self.get_model_url(model), self.get_model_path(model)
             )
+
+    def setup_detectron2_cfg(self) -> CfgNode:
+        detectron2_config = get_cfg()
+        add_centernet_config(detectron2_config)
+        add_detic_config(detectron2_config)
+        detectron2_config.merge_from_file(
+            os.path.join(self.config_directory, self.config.config_file)
+        )
+        # Set score_threshold for builtin models
+        detectron2_config.MODEL.RETINANET.SCORE_THRESH_TEST = (
+            self.config.confidence_threshold
+        )
+        detectron2_config.MODEL.ROI_HEADS.SCORE_THRESH_TEST = (
+            self.config.confidence_threshold
+        )
+        detectron2_config.MODEL.PANOPTIC_FPN.COMBINE.INSTANCES_CONFIDENCE_THRESH = (
+            self.config.confidence_threshold
+        )
+        detectron2_config.MODEL.ROI_BOX_HEAD.ZEROSHOT_WEIGHT_PATH = "rand"  # load later
+        detectron2_config.MODEL.ROI_HEADS.ONE_CLASS_PER_PROPOSAL = True
+        detectron2_config.freeze()
+        return detectron2_config
