@@ -26,10 +26,15 @@ from rosbag2_pytorch_data_loader.automation.automation import Automation
 
 import urllib.request
 
+from rosbag2_pytorch_data_loader.automation.task_description import (
+    DeticImageLabalerConfig,
+)
+
 
 class DeticImageLabeler(Automation):  # type: ignore
     def __init__(self, yaml_path: str) -> None:
-        self.weights = {
+        self.config = DeticImageLabalerConfig.from_yaml_file(yaml_path)
+        self.models = {
             "Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size": {
                 "filename": "Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size.pth",
                 "url": "https://dl.fbaipublicfiles.com/detic/Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size.pth",
@@ -42,8 +47,8 @@ class DeticImageLabeler(Automation):  # type: ignore
     def get_model_url(
         self, weight: str = "Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size"
     ) -> str:
-        if weight in self.weights:
-            return self.weights[weight]["url"]
+        if weight in self.models:
+            return self.models[weight]["url"]
         else:
             raise Exception(
                 "weight name "
@@ -54,8 +59,8 @@ class DeticImageLabeler(Automation):  # type: ignore
     def get_model_filename(
         self, weight: str = "Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size"
     ) -> str:
-        if weight in self.weights:
-            return self.weights[weight]["filename"]
+        if weight in self.models:
+            return self.models[weight]["filename"]
         else:
             raise Exception(
                 "weight name "

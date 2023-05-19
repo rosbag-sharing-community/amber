@@ -28,7 +28,7 @@ class TargetObjectsConfig(YAMLWizard):  # type: ignore
 @dataclass
 class ClipImageFilterConfig(YAMLWizard):  # type: ignore
     task_type: str = "clip_image_filter"
-    model: ClipModelType = "ViT-B/32"  # type: ignore
+    model: ClipModelType = ClipModelType.ViT_B_32
     target_objects: list[TargetObjectsConfig] = field(default_factory=list)
 
     def get_prompts(self) -> list[tuple[str, str]]:
@@ -59,3 +59,6 @@ class DeticModelType(Enum):
 @dataclass
 class DeticImageLabalerConfig(YAMLWizard):  # type: ignore
     task_type: str = "detic_image_labaler"
+    model: DeticModelType = (
+        DeticModelType.Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max_size
+    )
