@@ -6,7 +6,7 @@ MODEL:
   ROI_BOX_HEAD:
     USE_ZEROSHOT_CLS: True
     IMAGE_LABEL_LOSS: 'max_size'
-    ZEROSHOT_WEIGHT_PATH: 'datasets/metadata/lvis-21k_clip_a+cname.npy'
+    # ZEROSHOT_WEIGHT_PATH: 'datasets/metadata/lvis-21k_clip_a+cname.npy'
     USE_FED_LOSS: False # Federated loss is enabled when DYNAMIC_CLASSIFIER is on
   ROI_HEADS:
     NUM_CLASSES: 22047

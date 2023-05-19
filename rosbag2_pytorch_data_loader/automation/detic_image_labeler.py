@@ -34,6 +34,13 @@ from rosbag2_pytorch_data_loader.automation.task_description import (
 import os
 
 from fvcore.common.config import CfgNode
+from typing import Any
+
+
+class DemoArguments:
+    def __init__(self, config: DeticImageLabalerConfig) -> None:
+        self.vocabulary = config.vocabulary.value
+        self.custom_vocabulary = ",".join(config.custom_vocabulary)
 
 
 class DeticImageLabeler(Automation):  # type: ignore
@@ -49,11 +56,20 @@ class DeticImageLabeler(Automation):  # type: ignore
     config_directory = os.path.join(
         rosbag2_pytorch_data_loader.__path__[0], "automation", "config", "detic"
     )
+    metadata_directory = os.path.join(
+        rosbag2_pytorch_data_loader.__path__[0],
+        "automation",
+        "datasets",
+        "detic",
+        "metadata",
+    )
 
     def __init__(self, yaml_path: str) -> None:
         self.config = DeticImageLabalerConfig.from_yaml_file(yaml_path)
         self.download_model(self.config.model.value)
-        self.setup_detectron2_cfg()
+        self.demo = VisualizationDemo(
+            self.setup_detectron2_cfg(), self.setup_demo_arguments()
+        )
 
     def inference(self, dataset: Rosbag2Dataset) -> None:
         pass
@@ -112,7 +128,15 @@ class DeticImageLabeler(Automation):  # type: ignore
         detectron2_config.MODEL.PANOPTIC_FPN.COMBINE.INSTANCES_CONFIDENCE_THRESH = (
             self.config.confidence_threshold
         )
-        detectron2_config.MODEL.ROI_BOX_HEAD.ZEROSHOT_WEIGHT_PATH = "rand"  # load later
+        detectron2_config.MODEL.ROI_BOX_HEAD.CAT_FREQ_PATH = os.path.join(
+            self.metadata_directory, "lvis_v1_train_cat_info.json"
+        )
+        detectron2_config.MODEL.ROI_BOX_HEAD.ZEROSHOT_WEIGHT_PATH = os.path.join(
+            self.metadata_directory, "lvis_v1_clip_a+cname.npy"
+        )
         detectron2_config.MODEL.ROI_HEADS.ONE_CLASS_PER_PROPOSAL = True
         detectron2_config.freeze()
         return detectron2_config
+
+    def setup_demo_arguments(self) -> Any:
+        return DemoArguments(self.config)
