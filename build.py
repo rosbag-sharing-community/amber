@@ -57,9 +57,11 @@ def copy_files(src_dir: Path, dest_dir: Path, pattern: str) -> None:
 def install_detectron2() -> None:
     subprocess.call(
         [
+            "poetry",
+            "run",
             "pip3",
             "install",
-            "git+https://github.com/facebookresearch/detectron2.git@v0.6",
+            "git+https://github.com/facebookresearch/detectron2.git@main",
         ]
     )
 
