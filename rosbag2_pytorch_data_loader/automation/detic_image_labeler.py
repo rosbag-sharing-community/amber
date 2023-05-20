@@ -67,8 +67,10 @@ class DeticImageLabeler(Automation):  # type: ignore
     def __init__(self, yaml_path: str) -> None:
         self.config = DeticImageLabalerConfig.from_yaml_file(yaml_path)
         self.download_model(self.config.model.value)
+        print(self.setup_detectron2_cfg())
         self.demo = VisualizationDemo(
-            self.setup_detectron2_cfg(), self.setup_demo_arguments()
+            self.setup_detectron2_cfg(),
+            self.setup_demo_arguments(),
         )
 
     def inference(self, dataset: Rosbag2Dataset) -> None:
@@ -135,6 +137,7 @@ class DeticImageLabeler(Automation):  # type: ignore
             self.metadata_directory, "lvis_v1_clip_a+cname.npy"
         )
         detectron2_config.MODEL.ROI_HEADS.ONE_CLASS_PER_PROPOSAL = True
+        detectron2_config.MODEL.WEIGHTS = self.get_model_path(self.config.model.value)
         detectron2_config.freeze()
         return detectron2_config
 
