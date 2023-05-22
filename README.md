@@ -5,6 +5,12 @@
 ROS2 friendly ML tools.
 Your rosbag2 become dataset!
 
+## Dependencies
+### Poetry
+Setup environment and dependencies in python.
+### Docker
+Run some automation algorithums.
+
 ## How it works
 
 1. Prepare rosbag2 with mcap format.

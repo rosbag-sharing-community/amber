@@ -1,16 +1,7 @@
 # Copyright (c) Facebook, Inc. and its affiliates.
 import argparse
-import glob
-import multiprocessing as mp
-import numpy as np
 import os
-import tempfile
-import time
-import warnings
-import cv2
-import tqdm
 import sys
-import mss
 
 from rosbag2_pytorch_data_loader.dataset.rosbag2_pytorch_dataset import Rosbag2Dataset
 from rosbag2_pytorch_data_loader.automation.automation import Automation
@@ -23,8 +14,9 @@ from rosbag2_pytorch_data_loader.automation.task_description import (
 )
 
 import os
-
-from typing import Any
+import docker
+import socket
+from torchvision import transforms
 
 
 class DemoArguments:
@@ -42,7 +34,24 @@ class DeticImageLabeler(Automation):  # type: ignore
     }
 
     def __init__(self, yaml_path: str) -> None:
+        self.temporary_image_filepath = "/tmp/input.jpg"
+        self.to_pil_image = transforms.ToPILImage()
         self.config = DeticImageLabalerConfig.from_yaml_file(yaml_path)
+        self.docker_client = docker.from_env()
+        self.container = self.docker_client.containers.run(
+            "detic", detach=True, network_mode="host"
+        )
+        # waiting for until the docker container is ready
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        while sock.connect_ex(("0.0.0.0", 8000)) != 0:
+            continue
+        self.client = Client("http://0.0.0.0:8000")
+
+    def __del__(self) -> None:
+        self.container.stop()
 
     def inference(self, dataset: Rosbag2Dataset) -> None:
-        pass
+        for index, image in enumerate(dataset):
+            self.to_pil_image(image).save(self.temporary_image_filepath)
+            print(self.client.predict(self.temporary_image_filepath))
+            # Image.open()

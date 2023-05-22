@@ -19,8 +19,9 @@ def test_clip_image_filter() -> None:
 
 def test_detic_auto_labeler() -> None:
     current_path = Path(os.path.dirname(os.path.realpath(__file__)))
-    filter = DeticImageLabeler(str(current_path / "detic_image_labeler.yaml"))
+    labeler = DeticImageLabeler(str(current_path / "detic_image_labeler.yaml"))
     dataset = Rosbag2Dataset(
         str(current_path / "rosbag" / "ford" / "ford.mcap"),
         str(current_path / "read_image_ford.yaml"),
     )
+    labeler.inference(dataset)
