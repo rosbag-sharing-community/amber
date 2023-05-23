@@ -34,11 +34,3 @@ jobs:
         run: poetry install
       - name: test
         run: poetry run task test
-      - name: build
-        run: poetry build
-      - name: test
-        run: poetry run task test
-      - uses: actions/upload-artifact@v3
-        with:
-          name: package
-          path: "dist/*"
