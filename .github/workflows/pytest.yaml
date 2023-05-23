@@ -34,3 +34,30 @@ jobs:
         run: poetry install
       - name: test
         run: poetry run task test
+  build:
+    name: build
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.8"]
+        poetry-version: ["1.2.0"]
+        os: [ubuntu-22.04]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: install google test
+        run: sudo apt update & sudo apt install -y googletest
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - uses: abatilo/actions-poetry@v2
+        with:
+          poetry-version: ${{ matrix.poetry-version }}
+      - name: build
+        run: poetry build
+      - name: test
+        run: poetry run task test
+      - uses: actions/upload-artifact@v3
+        with:
+          name: package
+          path: "dist/*"
