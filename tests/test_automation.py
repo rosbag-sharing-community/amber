@@ -1,4 +1,3 @@
-from rosbag2_pytorch_data_loader.automation.clip_image_filter import ClipImageFilter
 from rosbag2_pytorch_data_loader.automation.detic_image_labeler import DeticImageLabeler
 from pathlib import Path
 import os
