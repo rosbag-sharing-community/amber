@@ -22,6 +22,7 @@ import time
 from tqdm import tqdm
 from typing import Any, List
 import shutil
+import subprocess
 
 
 class DemoArguments:
@@ -51,10 +52,26 @@ class DeticImageLabeler(Automation):  # type: ignore
                     "mode": "rw",
                 },
             },
+            device_requests=self.build_device_requests(),
             command=["/bin/sh"],
             detach=True,
             tty=True,
+            runtime=None,
         )
+
+    def build_device_requests(self) -> list[docker.types.DeviceRequest]:
+        requests = []
+        if self.config.docker_config.use_gpu:
+            requests.append(
+                docker.types.DeviceRequest(count=-1, capabilities=[["gpu"]])
+            )
+        return requests
+
+    def cpu_or_gpu(self):
+        if self.config.docker_config.use_gpu:
+            return "cuda"
+        else:
+            return "cpu"
 
     def build_command(self, index: int) -> List[str]:
         return [
@@ -73,7 +90,8 @@ class DeticImageLabeler(Automation):  # type: ignore
             + str(index)
             + ".json \
         --vocabulary lvis \
-        --opts MODEL.WEIGHTS models/Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size.pth MODEL.DEVICE cpu",
+        --opts MODEL.WEIGHTS models/Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size.pth MODEL.DEVICE "
+            + self.cpu_or_gpu(),
         ]
 
     def __del__(self) -> None:

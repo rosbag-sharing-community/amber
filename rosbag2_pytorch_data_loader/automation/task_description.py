@@ -21,6 +21,11 @@ class DeticVocabulary(Enum):
 
 
 @dataclass
+class DockerConfig(YAMLWizard):  # type: ignore
+    use_gpu: bool = False
+
+
+@dataclass
 class DeticImageLabalerConfig(YAMLWizard):  # type: ignore
     task_type: str = "detic_image_labaler"
     model: DeticModelType = (
@@ -31,6 +36,7 @@ class DeticImageLabalerConfig(YAMLWizard):  # type: ignore
     config_file: str = "Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size.yaml"
     confidence_threshold: float = 0.5
     video_output_path: str = ""  # If the text is empty, it means no video output.
+    docker_config: DockerConfig = DockerConfig()
 
     def validate(self) -> None:
         if (
