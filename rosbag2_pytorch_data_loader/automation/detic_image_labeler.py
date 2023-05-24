@@ -34,11 +34,9 @@ class DemoArguments:
 class DeticImageLabeler(Automation):  # type: ignore
     def __init__(self, yaml_path: str) -> None:
         self.temporary_image_directory = "/tmp/detic_image_labaler"
-        if not os.path.exists(self.temporary_image_directory):
-            os.makedirs(self.temporary_image_directory)
-        else:
-            shutil.rmtree(self.temporary_image_directory)
-            os.makedirs(self.temporary_image_directory)
+        self.setup_directory(self.temporary_image_directory)
+        os.makedirs(os.path.join(self.temporary_image_directory, "inputs"))
+        os.makedirs(os.path.join(self.temporary_image_directory, "outputs"))
         self.to_pil_image = transforms.ToPILImage()
         self.config = DeticImageLabalerConfig.from_yaml_file(yaml_path)
         self.config.validate()
@@ -47,7 +45,11 @@ class DeticImageLabeler(Automation):  # type: ignore
         self.container = self.docker_client.containers.run(
             image="wamvtan/detic",
             volumes={
-                self.temporary_image_directory: {
+                os.path.join(self.temporary_image_directory, "inputs"): {
+                    "bind": "/workspace/Detic/inputs",
+                    "mode": "rw",
+                },
+                os.path.join(self.temporary_image_directory, "outputs"): {
                     "bind": "/workspace/Detic/outputs",
                     "mode": "rw",
                 },
@@ -59,6 +61,13 @@ class DeticImageLabeler(Automation):  # type: ignore
             runtime=None,
         )
 
+    def setup_directory(self, path: str) -> None:
+        if not os.path.exists(path):
+            os.makedirs(path)
+        else:
+            shutil.rmtree(path)
+            os.makedirs(path)
+
     def build_device_requests(self) -> list[docker.types.DeviceRequest]:
         requests = []
         if self.config.docker_config.use_gpu:
@@ -67,28 +76,19 @@ class DeticImageLabeler(Automation):  # type: ignore
             )
         return requests
 
-    def cpu_or_gpu(self):
+    def cpu_or_gpu(self) -> str:
         if self.config.docker_config.use_gpu:
             return "cuda"
         else:
             return "cpu"
 
-    def build_command(self, index: int) -> List[str]:
+    def build_command(self) -> List[str]:
         return [
             "/bin/bash",
             "-c",
             "python demo.py \
         --config-file configs/Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size.yaml \
-        --input "
-            + "/workspace/Detic/outputs/input"
-            + str(index)
-            + ".jpeg"
-            + " --output outputs/output"
-            + str(index)
-            + ".jpeg \
-        --json_output outputs/detection"
-            + str(index)
-            + ".json \
+        --input /workspace/Detic/inputs/*.jpeg --output outputs \
         --vocabulary lvis \
         --opts MODEL.WEIGHTS models/Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size.pth MODEL.DEVICE "
             + self.cpu_or_gpu(),
@@ -98,28 +98,27 @@ class DeticImageLabeler(Automation):  # type: ignore
         self.container.stop()
         self.container.remove()
 
-    def run_command(self, index: int) -> None:
-        self.container.exec_run(self.build_command(index))
+    def run_command(self) -> None:
+        self.container.exec_run(self.build_command())
 
     def inference(self, dataset: Rosbag2Dataset) -> None:
         video: Any = None
-        bar = tqdm(total=len(dataset))
-        bar.set_description("Annotation progress")
         for index, image in enumerate(dataset):
             self.to_pil_image(image).save(
                 os.path.join(
-                    self.temporary_image_directory, "input" + str(index) + ".jpeg"
+                    self.temporary_image_directory,
+                    "inputs",
+                    "input" + str(index) + ".jpeg",
                 )
             )
-            self.run_command(index)
-            bar.update()
-
+        self.run_command()
         for index in range(len(dataset)):
             if self.config.video_output_path != "":
                 opencv_image = cv2.imread(
                     os.path.join(
                         self.temporary_image_directory,
-                        "output" + str(index) + ".jpeg",
+                        "outputs",
+                        "input" + str(index) + ".jpeg",
                     )
                 )
                 if video == None:
