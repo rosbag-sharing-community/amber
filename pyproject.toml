@@ -54,7 +54,7 @@ pip = "^23.1.2"
 click = "8.0.4"
 
 [build-system]
-requires = ["poetry-core>=1.0.0", "scikit-build", "cmake", "ninja", "torch"]
+requires = ["poetry-core>=1.0.0", "scikit-build", "cmake", "ninja"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.coverage.html]
