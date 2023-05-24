@@ -33,7 +33,10 @@ class DeticImageLabalerConfig(YAMLWizard):  # type: ignore
     video_output_path: str = ""  # If the text is empty, it means no video output.
 
     def validate(self) -> None:
-        if os.path.splitext(self.video_output_path)[-1] != ".mp4":
+        if (
+            self.video_output_path != ""
+            and os.path.splitext(self.video_output_path)[-1] != ".mp4"
+        ):
             raise TaskDescriptionError(
                 "Type of the output video should be mp4, you specified "
                 + self.video_output_path

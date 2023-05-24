@@ -21,6 +21,7 @@ import cv2
 import time
 from tqdm import tqdm
 from typing import Any, List
+import shutil
 
 
 class DemoArguments:
@@ -34,12 +35,16 @@ class DeticImageLabeler(Automation):  # type: ignore
         self.temporary_image_directory = "/tmp/detic_image_labaler"
         if not os.path.exists(self.temporary_image_directory):
             os.makedirs(self.temporary_image_directory)
+        else:
+            shutil.rmtree(self.temporary_image_directory)
+            os.makedirs(self.temporary_image_directory)
         self.to_pil_image = transforms.ToPILImage()
         self.config = DeticImageLabalerConfig.from_yaml_file(yaml_path)
         self.config.validate()
         self.docker_client = docker.from_env()
+        self.docker_client.images.pull("wamvtan/detic")
         self.container = self.docker_client.containers.run(
-            image="detic",
+            image="wamvtan/detic",
             volumes={
                 self.temporary_image_directory: {
                     "bind": "/workspace/Detic/outputs",
@@ -64,12 +69,16 @@ class DeticImageLabeler(Automation):  # type: ignore
             + " --output outputs/output"
             + str(index)
             + ".jpeg \
+        --json_output outputs/detection"
+            + str(index)
+            + ".json \
         --vocabulary lvis \
         --opts MODEL.WEIGHTS models/Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size.pth MODEL.DEVICE cpu",
         ]
 
     def __del__(self) -> None:
         self.container.stop()
+        self.container.remove()
 
     def run_command(self, index: int) -> None:
         self.container.exec_run(self.build_command(index))
@@ -86,11 +95,6 @@ class DeticImageLabeler(Automation):  # type: ignore
             )
             self.run_command(index)
             bar.update()
-        # for conatiner in self.containers:
-        #     while conatiner.status != "exited":
-        #         time.sleep(0.1)
-        #         print(conatiner.status)
-        #         continue
 
         for index in range(len(dataset)):
             if self.config.video_output_path != "":
