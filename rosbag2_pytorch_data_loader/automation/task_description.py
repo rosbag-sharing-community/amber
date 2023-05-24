@@ -3,6 +3,7 @@ from dataclass_wizard import YAMLWizard, JSONWizard
 from rosbag2_pytorch_data_loader.exception import TaskDescriptionError
 from enum import Enum
 from typing import Dict
+import os
 
 
 class DeticModelType(Enum):
@@ -29,3 +30,11 @@ class DeticImageLabalerConfig(YAMLWizard):  # type: ignore
     custom_vocabulary: list[str] = field(default_factory=list)
     config_file: str = "Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size.yaml"
     confidence_threshold: float = 0.5
+    video_output_path: str = ""  # If the text is empty, it means no video output.
+
+    def validate(self) -> None:
+        if os.path.splitext(self.video_output_path)[-1] != ".mp4":
+            raise TaskDescriptionError(
+                "Type of the output video should be mp4, you specified "
+                + self.video_output_path
+            )
