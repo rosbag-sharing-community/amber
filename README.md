@@ -1,6 +1,7 @@
 # AMBER: Annotation and Multimodal Bag Extraction for Robotics
 
-[![pytest](https://github.com/OUXT-Polaris/amber/actions/workflows/pytest.yaml/badge.svg)](https://github.com/OUXT-Polaris/amber/actions/workflows/pytest.yaml)
+[![ci](https://github.com/hakuturu583/amber/actions/workflows/pytest.yaml/badge.svg)](https://github.com/hakuturu583/amber/actions/workflows/pytest.yaml)
+[![document](https://github.com/hakuturu583/amber/actions/workflows/document.yaml/badge.svg)](https://github.com/hakuturu583/amber/actions/workflows/document.yaml)
 
 Amber is a ROS2 friendly ML tools.
 Your rosbag2 become dataset!
