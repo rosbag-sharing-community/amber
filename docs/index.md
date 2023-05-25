@@ -33,3 +33,11 @@ Please follow [this documentation.](https://docs.docker.com/engine/install/ubunt
 #### Nvidia driver and nvidia docker(Optional)
 Some automation tools support cuda.
 If you want to use gpu, please install nvidia driver and nvidia docker.
+
+#### Google test(Optional)
+Google test is a used for testing C++ code inside amber.
+It is optional and it is not required for building amber in your local machine.
+
+```bash
+sudo apt update & sudo apt install -y googletest
+```
