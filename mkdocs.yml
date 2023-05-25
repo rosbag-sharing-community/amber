@@ -34,7 +34,6 @@ plugins:
   - git-revision-date-localized
   - gitsnippet
   - search
-  - mkdocs-video
   - mermaid2:
       arguments:
         theme: base
