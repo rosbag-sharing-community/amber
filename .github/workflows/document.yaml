@@ -9,6 +9,8 @@ on:
     - cron: 0 0 * * *
   release:
     types: [published]
+permissions:
+  contents: write
 
 jobs:
   document:
