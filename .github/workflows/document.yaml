@@ -1,0 +1,38 @@
+name: document
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+  schedule:
+    - cron: 0 0 * * *
+  release:
+    types: [published]
+
+jobs:
+  document:
+    name: document
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.8"]
+        poetry-version: ["1.2.0"]
+        os: [ubuntu-22.04]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - uses: abatilo/actions-poetry@v2
+        with:
+          poetry-version: ${{ matrix.poetry-version }}
+      - name: install
+        run: poetry install --no-interaction
+      - name: mkdocs build
+        run: poetry run mkdocs build
+      - uses: peaceiris/actions-gh-pages@v3
+        if: ${{ github.event_name != 'pull_request'}}
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: site
