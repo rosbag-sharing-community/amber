@@ -6,6 +6,10 @@ from typing import Dict
 import os
 
 
+class AutomationTaskType(Enum):
+    DETIC_IMAGE_LABELER = "detic_image_labeler"
+
+
 class DeticModelType(Enum):
     Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max_size = (
         "Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size"
@@ -27,7 +31,7 @@ class DockerConfig(YAMLWizard):  # type: ignore
 
 @dataclass
 class DeticImageLabalerConfig(YAMLWizard):  # type: ignore
-    task_type: str = "detic_image_labaler"
+    task_type: AutomationTaskType = AutomationTaskType.DETIC_IMAGE_LABELER
     model: DeticModelType = (
         DeticModelType.Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max_size
     )
