@@ -99,7 +99,9 @@ class DeticImageLabeler(Automation):  # type: ignore
         self.container.remove()
 
     def run_command(self) -> None:
-        self.container.exec_run(self.build_command())
+        _, stream = self.container.exec_run(self.build_command(), stream=True)
+        for data in stream:
+            print(data.decode())
 
     def inference(self, dataset: Rosbag2Dataset) -> None:
         video: Any = None
