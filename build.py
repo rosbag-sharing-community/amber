@@ -28,7 +28,6 @@ def build(setup_kwargs: Dict[str, Any]) -> None:
     # Copy built C-extensions back to the project.
     copy_files(src_dir, dest_dir, "**/*.pyd")
     copy_files(src_dir, dest_dir, "**/*.so")
-    install_detectron2()
 
 
 def remove_files(target_dir: Path, pattern: str) -> None:
@@ -52,18 +51,6 @@ def copy_files(src_dir: Path, dest_dir: Path, pattern: str) -> None:
             dest.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(src, dest)
             distutils_log.info(f"copied {src} to {dest}")
-
-
-def install_detectron2() -> None:
-    subprocess.call(
-        [
-            "poetry",
-            "run",
-            "pip3",
-            "install",
-            "git+https://github.com/facebookresearch/detectron2.git@main",
-        ]
-    )
 
 
 if __name__ == "__main__":
