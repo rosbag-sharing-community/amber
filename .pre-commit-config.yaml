@@ -6,6 +6,7 @@ repos:
     -   id: check-merge-conflict
     -   id: check-symlinks
     -   id: check-yaml
+        exclude: mkdocs.yaml
     -   id: end-of-file-fixer
     -   id: trailing-whitespace
 
@@ -36,3 +37,5 @@ repos:
     rev: v0.17.0
     hooks:
     -   id: gitlint
+
+exclude: mkdocs.yml
