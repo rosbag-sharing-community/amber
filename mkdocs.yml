@@ -100,3 +100,6 @@ nav:
     - How to use?: use_rosbag_as_dataset/how_to_use.md
     - Task descriptions:
       - Read images: use_rosbag_as_dataset/task_description/read_images.md
+  - Automation:
+    - CLI Tool: automation/cli.md
+    - Detic image labaler: automation/detic_image_labaler.md
