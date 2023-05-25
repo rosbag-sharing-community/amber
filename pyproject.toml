@@ -1,22 +1,22 @@
 [tool.poetry]
-name = "rosbag2_pytorch_data_loader"
+name = "amber"
 version = "0.0.1"
-description = "PyTorch data loader for rosbag2 (mcap format)"
+description = "Annotation and Multimodal Bag Extraction for Robotics"
 authors = ["Masaya Kataoka <ms.kataoka@gmail.com>"]
 license = "Apache 2.0"
 
 include = [
     # Source files for C extensions must be included in the source distribution.
     { path = "CMakeLists.txt", format = "sdist" },
-    { path = "rosbag2_pytorch_data_loader/**/*.cpp", format = "sdist" },
+    { path = "amber/**/*.cpp", format = "sdist" },
     # C extensions must be included in the wheel distribution.
-    { path = "rosbag2_pytorch_data_loader/**/*.pyd", format = "wheel" },
-    { path = "rosbag2_pytorch_data_loader/**/*.so", format = "wheel" },
+    { path = "amber/**/*.pyd", format = "wheel" },
+    { path = "amber/**/*.so", format = "wheel" },
 ]
 exclude = [
-    "rosbag2_pytorch_data_loader/**/*.cpp",
-    "rosbag2_pytorch_data_loader/**/*.pyd",
-    "rosbag2_pytorch_data_loader/**/*.so",
+    "amber/**/*.cpp",
+    "amber/**/*.pyd",
+    "amber/**/*.so",
 ]
 
 [tool.poetry.build]
@@ -87,7 +87,7 @@ strict = true
 addopts = [
     "--cov-report=html",
     "--cov-report=term",
-    "--cov=rosbag2_pytorch_data_loader",
+    "--cov=amber",
     "--doctest-modules",
     "--ignore=_skbuild",
     "--ignore=build.py",

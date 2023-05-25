@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.22)
 
-project(rosbag2_pytorch_data_loader)
+project(amber)
 find_package(PythonExtensions REQUIRED)
 
 if(NOT CMAKE_CXX_STANDARD)
@@ -15,14 +15,14 @@ endif()
 find_package(PythonExtensions REQUIRED)
 include(FindProtobuf REQUIRED)
 
-set(PROTO_FILES "rosbag2_pytorch_data_loader/proto/annotation.proto")
+set(PROTO_FILES "amber/proto/annotation.proto")
 protobuf_generate_python(PROTO_PY ${PROTO_FILES})
 
-set(MESSAGES_DIR rosbag2_pytorch_data_loader/tf2/messages)
-set(ROSIDL_RUNTIME_CPP_DIR rosbag2_pytorch_data_loader/tf2/rosidl_runtime_cpp)
-set(CONSOLE_BRIDGE_DIR rosbag2_pytorch_data_loader/tf2/console_bridge)
-set(TF2_DIR rosbag2_pytorch_data_loader/tf2/geometry2/tf2)
-set(TF2_PY_DIR rosbag2_pytorch_data_loader/tf2/geometry2/tf2_py)
+set(MESSAGES_DIR amber/tf2/messages)
+set(ROSIDL_RUNTIME_CPP_DIR amber/tf2/rosidl_runtime_cpp)
+set(CONSOLE_BRIDGE_DIR amber/tf2/console_bridge)
+set(TF2_DIR amber/tf2/geometry2/tf2)
+set(TF2_PY_DIR amber/tf2/geometry2/tf2_py)
 
 add_library(
   tf2

@@ -3,13 +3,13 @@ import argparse
 import os
 import sys
 
-from rosbag2_pytorch_data_loader.dataset.rosbag2_pytorch_dataset import Rosbag2Dataset
-from rosbag2_pytorch_data_loader.automation.automation import Automation
+from amber.dataset.rosbag2_dataset import Rosbag2Dataset
+from amber.automation.automation import Automation
 
 from gradio_client import Client
 
-import rosbag2_pytorch_data_loader
-from rosbag2_pytorch_data_loader.automation.task_description import (
+import amber
+from amber.automation.task_description import (
     DeticImageLabalerConfig,
 )
 

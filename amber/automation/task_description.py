@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from dataclass_wizard import YAMLWizard, JSONWizard
-from rosbag2_pytorch_data_loader.exception import TaskDescriptionError
+from amber.exception import TaskDescriptionError
 from enum import Enum
 from typing import Dict
 import os

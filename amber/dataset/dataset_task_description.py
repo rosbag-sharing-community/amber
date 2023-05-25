@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from dataclass_wizard import YAMLWizard
-from rosbag2_pytorch_data_loader.exception import TaskDescriptionError
+from amber.exception import TaskDescriptionError
 
 
 @dataclass

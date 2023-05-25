@@ -1,7 +1,7 @@
-from rosbag2_pytorch_data_loader.automation.detic_image_labeler import DeticImageLabeler
+from amber.automation.detic_image_labeler import DeticImageLabeler
 from pathlib import Path
 import os
-from rosbag2_pytorch_data_loader.dataset.rosbag2_pytorch_dataset import Rosbag2Dataset
+from amber.dataset.rosbag2_dataset import Rosbag2Dataset
 
 
 def test_detic_auto_labeler() -> None:

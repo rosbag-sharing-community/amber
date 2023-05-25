@@ -3,7 +3,7 @@ from mcap.records import Message, Schema
 from mcap_ros2.decoder import Decoder
 from mcap_ros2._dynamic import DecodedMessage
 from pyzstd import decompress
-from rosbag2_pytorch_data_loader.exception import ImageDecodingError
+from amber.exception import ImageDecodingError
 import numpy as np
 import torch
 import torchvision.transforms as transforms

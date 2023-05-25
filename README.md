@@ -1,8 +1,8 @@
-# rosbag2_pytorch_data_loader
+# AMBER: Annotation and Multimodal Bag Extraction for Robotics
 
-[![pytest](https://github.com/OUXT-Polaris/rosbag2_pytorch_data_loader/actions/workflows/pytest.yaml/badge.svg)](https://github.com/OUXT-Polaris/rosbag2_pytorch_data_loader/actions/workflows/pytest.yaml)
+[![pytest](https://github.com/OUXT-Polaris/amber/actions/workflows/pytest.yaml/badge.svg)](https://github.com/OUXT-Polaris/amber/actions/workflows/pytest.yaml)
 
-ROS2 friendly ML tools.
+Amber is a ROS2 friendly ML tools.
 Your rosbag2 become dataset!
 
 ## Dependencies

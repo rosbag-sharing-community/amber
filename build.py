@@ -16,10 +16,8 @@ def build(setup_kwargs: Dict[str, Any]) -> None:
     """Build C-extensions."""
     skbuild.setup(**setup_kwargs, script_args=["build_ext"])
 
-    src_dir = (
-        Path(skbuild.constants.CMAKE_INSTALL_DIR()) / "rosbag2_pytorch_data_loader"
-    )
-    dest_dir = Path("rosbag2_pytorch_data_loader")
+    src_dir = Path(skbuild.constants.CMAKE_INSTALL_DIR()) / "amber"
+    dest_dir = Path("amber")
 
     # Delete C-extensions copied in previous runs, just in case.
     remove_files(dest_dir, "**/*.pyd")

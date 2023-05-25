@@ -3,9 +3,9 @@ from torch.utils.data import Dataset
 from typing import Any, Dict
 from mcap.reader import NonSeekingReader
 from yaml import safe_load  # type: ignore
-from rosbag2_pytorch_data_loader.exception import TaskDescriptionError
-from rosbag2_pytorch_data_loader.dataset.conversion import decode_image_message
-from rosbag2_pytorch_data_loader.dataset.task_description import ImageOnlyConfig
+from amber.exception import TaskDescriptionError
+from amber.dataset.conversion import decode_image_message
+from amber.dataset.dataset_task_description import ImageOnlyConfig
 from dataclasses import dataclass
 from dataclass_wizard import JSONWizard
 

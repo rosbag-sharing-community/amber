@@ -1,6 +1,6 @@
 from typing import Any
 from abc import ABC, abstractmethod
-from rosbag2_pytorch_data_loader.dataset.rosbag2_pytorch_dataset import Rosbag2Dataset
+from amber.dataset.rosbag2_dataset import Rosbag2Dataset
 from mcap.writer import CompressionType, Writer
 from typing import List
 import json
