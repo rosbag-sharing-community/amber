@@ -44,7 +44,7 @@ def run_automation(args: Any) -> None:
 
 
 def run_video_import(args: Any) -> None:
-    pass
+    VideoImporter(args.video_path, args.topic_name).write(args.rosbag_path)
 
 
 def main() -> None:
