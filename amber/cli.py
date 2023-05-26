@@ -5,6 +5,7 @@ from yaml import safe_load  # type: ignore
 from amber.automation.detic_image_labeler import DeticImageLabeler
 from amber.automation.task_description import AutomationTaskType
 from amber.dataset.rosbag2_dataset import Rosbag2Dataset
+from amber.importer.video import VideoImporter
 from typing import Any
 
 
