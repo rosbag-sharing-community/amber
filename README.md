@@ -5,3 +5,4 @@
 
 Amber is a ROS2 friendly ML tools.
 Your rosbag2 become dataset!
+Please read [documentation](https://hakuturu583.github.io/amber/) first.

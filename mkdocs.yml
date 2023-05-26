@@ -85,6 +85,7 @@ markdown_extensions:
   - fontawesome_markdown
   - pymdownx.arithmatex:
       generic: true
+  - pymdownx.emoji
   - pymdownx.highlight
   - toc: { permalink: "#" }
   - pymdownx.superfences:
@@ -101,5 +102,5 @@ nav:
     - Task descriptions:
       - Read images: use_rosbag_as_dataset/task_description/read_images.md
   - Automation:
-    - CLI Tool: automation/cli.md
+    - Automation: automation/automation.md
     - Detic image labaler: automation/detic_image_labaler.md
