@@ -12,6 +12,7 @@ import amber
 from amber.automation.task_description import (
     DeticImageLabalerConfig,
 )
+from amber.automation.annotation import ImageAnnotation, BoundingBoxAnnotation
 
 import os
 import docker
@@ -23,6 +24,7 @@ from tqdm import tqdm
 from typing import Any, List
 import shutil
 import subprocess
+import json
 
 
 class DemoArguments:
@@ -35,8 +37,6 @@ class DeticImageLabeler(Automation):  # type: ignore
     def __init__(self, yaml_path: str) -> None:
         self.temporary_image_directory = "/tmp/detic_image_labaler"
         self.setup_directory(self.temporary_image_directory)
-        os.makedirs(os.path.join(self.temporary_image_directory, "inputs"))
-        os.makedirs(os.path.join(self.temporary_image_directory, "outputs"))
         self.to_pil_image = transforms.ToPILImage()
         self.config = DeticImageLabalerConfig.from_yaml_file(yaml_path)
         self.config.validate()
@@ -67,6 +67,8 @@ class DeticImageLabeler(Automation):  # type: ignore
         else:
             shutil.rmtree(path)
             os.makedirs(path)
+        os.makedirs(os.path.join(self.temporary_image_directory, "inputs"))
+        os.makedirs(os.path.join(self.temporary_image_directory, "outputs"))
 
     def build_device_requests(self) -> list[docker.types.DeviceRequest]:
         requests = []
@@ -103,8 +105,27 @@ class DeticImageLabeler(Automation):  # type: ignore
         for data in stream:
             print(data.decode())
 
-    def inference(self, dataset: Rosbag2Dataset) -> None:
+    def get_image_annotations(self, index: int) -> ImageAnnotation:
+        image_annotation = ImageAnnotation()
+        image_annotation.image_index = index
+        for annotation in json.load(
+            open(
+                os.path.join(
+                    self.temporary_image_directory,
+                    "outputs",
+                    "input" + str(index) + ".json",
+                ),
+                "r",
+            )
+        )["detections"]:
+            image_annotation.bounding_boxes.append(
+                BoundingBoxAnnotation.from_dict(annotation)
+            )
+        return image_annotation
+
+    def inference(self, dataset: Rosbag2Dataset) -> List[ImageAnnotation]:
         video: Any = None
+        image_annotations: List[ImageAnnotation] = []
         for index, image in enumerate(dataset):
             self.to_pil_image(image).save(
                 os.path.join(
@@ -123,6 +144,7 @@ class DeticImageLabeler(Automation):  # type: ignore
                         "input" + str(index) + ".jpeg",
                     )
                 )
+                image_annotations.append(self.get_image_annotations(index))
                 if video == None:
                     video = cv2.VideoWriter(
                         self.config.video_output_path,
@@ -131,3 +153,4 @@ class DeticImageLabeler(Automation):  # type: ignore
                         (opencv_image.shape[1], opencv_image.shape[0]),
                     )
                 video.write(opencv_image)
+        return image_annotations
