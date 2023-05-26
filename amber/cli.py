@@ -8,7 +8,7 @@ from amber.dataset.rosbag2_dataset import Rosbag2Dataset
 from typing import Any
 
 
-def automation(args: Any) -> None:
+def run_automation(args: Any) -> None:
     if not os.path.exists(args.task_description_yaml_path):
         raise TaskDescriptionError(
             "Task description yaml path : "
@@ -42,9 +42,14 @@ def automation(args: Any) -> None:
     )
 
 
+def run_video_import(args: Any) -> None:
+    pass
+
+
 def main() -> None:
     parser = ArgumentParser()
     subparsers = parser.add_subparsers()
+    # Setup command line options for automation
     parser_automation = subparsers.add_parser(
         "automation", help="Run automation command"
     )
@@ -68,7 +73,24 @@ def main() -> None:
         help="Path to the output rosbag path",
         default="",
     )
-    parser_automation.set_defaults(handler=automation)
+    parser_automation.set_defaults(handler=run_automation)
+    # Setup command line option for import command
+    parser_import = subparsers.add_parser(
+        "import", help="Import non-rosbag data into rosbag"
+    )
+    # Setup command line option for import video command
+    subparsers_import = parser_import.add_subparsers()
+    parser_video_import = subparsers_import.add_parser(
+        "video", help="Import video images into rosbag"
+    )
+    parser_video_import.add_argument("video_path", help="Path to the video.")
+    parser_video_import.add_argument("rosbag_path", help="Path to the output rosbag.")
+    parser_video_import.add_argument(
+        "topic_name", help="Topic name of the images in the video."
+    )
+    parser_video_import.set_defaults(handler=run_video_import)
+
+    # Parsing arguments
     args = parser.parse_args()
     if hasattr(args, "handler"):
         args.handler(args)
