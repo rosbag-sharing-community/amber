@@ -29,8 +29,11 @@ def automation(args: Any) -> None:
     with open(args.task_description_yaml_path, "rb") as file:
         task_description = safe_load(file)
     if task_description["task_type"] == AutomationTaskType.DETIC_IMAGE_LABELER.value:
-        DeticImageLabeler(args.task_description_yaml_path).inference(
-            Rosbag2Dataset(args.rosbag_path, args.dataset_description_yaml_path)
+        labeler = DeticImageLabeler(args.task_description_yaml_path)
+        dataset = Rosbag2Dataset(args.rosbag_path, args.dataset_description_yaml_path)
+        annotations = labeler.inference(dataset)
+        labeler.write(
+            dataset, "/detic_image_labeler", annotations, args.output_rosbag_path
         )
         return
     raise TaskDescriptionError(
@@ -58,6 +61,11 @@ def main() -> None:
     parser_automation.add_argument(
         "rosbag_path",
         help="Path to the target rosbag path",
+        default="",
+    )
+    parser_automation.add_argument(
+        "output_rosbag_path",
+        help="Path to the output rosbag path",
         default="",
     )
     parser_automation.set_defaults(handler=automation)

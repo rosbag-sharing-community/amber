@@ -19,6 +19,6 @@ class BoundingBoxAnnotation(JSONWizard):  # type: ignore
 
 
 @dataclass
-class ImageAnnotations(JSONWizard):  # type: ignore
+class ImageAnnotation(JSONWizard):  # type: ignore
     image_index: int = 0
     bounding_boxes: List[BoundingBoxAnnotation] = field(default_factory=list)

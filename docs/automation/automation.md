@@ -6,9 +6,10 @@ Automation tools can be used with two ways, use with CLI and use with Python API
 ## CLI tools
 
 All of the automation tools can be use `amber automation` command.
+If you want to check the help text, please type `amber automation --help`
 
 ```bash
-usage: amber automation [-h] task_description_yaml_path dataset_description_yaml_path rosbag_path
+usage: amber automation [-h] task_description_yaml_path dataset_description_yaml_path rosbag_path output_rosbag_path
 
 positional arguments:
   task_description_yaml_path
@@ -16,6 +17,7 @@ positional arguments:
   dataset_description_yaml_path
                         Path to the yaml description file path for dataset
   rosbag_path           Path to the target rosbag path
+  output_rosbag_path    Path to the output rosbag path
 
 options:
   -h, --help            show this help message and exit

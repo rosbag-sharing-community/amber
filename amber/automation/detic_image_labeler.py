@@ -12,7 +12,7 @@ import amber
 from amber.automation.task_description import (
     DeticImageLabalerConfig,
 )
-from amber.automation.annotation import ImageAnnotations, BoundingBoxAnnotation
+from amber.automation.annotation import ImageAnnotation, BoundingBoxAnnotation
 
 import os
 import docker
@@ -36,30 +36,30 @@ class DemoArguments:
 class DeticImageLabeler(Automation):  # type: ignore
     def __init__(self, yaml_path: str) -> None:
         self.temporary_image_directory = "/tmp/detic_image_labaler"
-        # self.setup_directory(self.temporary_image_directory)
+        self.setup_directory(self.temporary_image_directory)
         self.to_pil_image = transforms.ToPILImage()
         self.config = DeticImageLabalerConfig.from_yaml_file(yaml_path)
         self.config.validate()
         self.docker_client = docker.from_env()
-        # self.docker_client.images.pull("wamvtan/detic")
-        # self.container = self.docker_client.containers.run(
-        #     image="wamvtan/detic",
-        #     volumes={
-        #         os.path.join(self.temporary_image_directory, "inputs"): {
-        #             "bind": "/workspace/Detic/inputs",
-        #             "mode": "rw",
-        #         },
-        #         os.path.join(self.temporary_image_directory, "outputs"): {
-        #             "bind": "/workspace/Detic/outputs",
-        #             "mode": "rw",
-        #         },
-        #     },
-        #     device_requests=self.build_device_requests(),
-        #     command=["/bin/sh"],
-        #     detach=True,
-        #     tty=True,
-        #     runtime=None,
-        # )
+        self.docker_client.images.pull("wamvtan/detic")
+        self.container = self.docker_client.containers.run(
+            image="wamvtan/detic",
+            volumes={
+                os.path.join(self.temporary_image_directory, "inputs"): {
+                    "bind": "/workspace/Detic/inputs",
+                    "mode": "rw",
+                },
+                os.path.join(self.temporary_image_directory, "outputs"): {
+                    "bind": "/workspace/Detic/outputs",
+                    "mode": "rw",
+                },
+            },
+            device_requests=self.build_device_requests(),
+            command=["/bin/sh"],
+            detach=True,
+            tty=True,
+            runtime=None,
+        )
 
     def setup_directory(self, path: str) -> None:
         if not os.path.exists(path):
@@ -96,17 +96,17 @@ class DeticImageLabeler(Automation):  # type: ignore
             + self.cpu_or_gpu(),
         ]
 
-    # def __del__(self) -> None:
-    #     self.container.stop()
-    #     self.container.remove()
+    def __del__(self) -> None:
+        self.container.stop()
+        self.container.remove()
 
     def run_command(self) -> None:
         _, stream = self.container.exec_run(self.build_command(), stream=True)
         for data in stream:
             print(data.decode())
 
-    def get_image_annotations(self, index: int) -> ImageAnnotations:
-        image_annotation = ImageAnnotations()
+    def get_image_annotations(self, index: int) -> ImageAnnotation:
+        image_annotation = ImageAnnotation()
         image_annotation.image_index = index
         for annotation in json.load(
             open(
@@ -123,8 +123,9 @@ class DeticImageLabeler(Automation):  # type: ignore
             )
         return image_annotation
 
-    def inference(self, dataset: Rosbag2Dataset) -> None:
+    def inference(self, dataset: Rosbag2Dataset) -> List[ImageAnnotation]:
         video: Any = None
+        image_annotations: List[ImageAnnotation] = []
         for index, image in enumerate(dataset):
             self.to_pil_image(image).save(
                 os.path.join(
@@ -133,7 +134,7 @@ class DeticImageLabeler(Automation):  # type: ignore
                     "input" + str(index) + ".jpeg",
                 )
             )
-        # self.run_command()
+        self.run_command()
         for index in range(len(dataset)):
             if self.config.video_output_path != "":
                 opencv_image = cv2.imread(
@@ -143,7 +144,7 @@ class DeticImageLabeler(Automation):  # type: ignore
                         "input" + str(index) + ".jpeg",
                     )
                 )
-                self.get_image_annotations(index)
+                image_annotations.append(self.get_image_annotations(index))
                 if video == None:
                     video = cv2.VideoWriter(
                         self.config.video_output_path,
@@ -152,3 +153,4 @@ class DeticImageLabeler(Automation):  # type: ignore
                         (opencv_image.shape[1], opencv_image.shape[0]),
                     )
                 video.write(opencv_image)
+        return image_annotations
