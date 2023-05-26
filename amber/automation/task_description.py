@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from dataclass_wizard import YAMLWizard, JSONWizard
+from dataclass_wizard import YAMLWizard
 from amber.exception import TaskDescriptionError
 from enum import Enum
 from typing import Dict
