@@ -117,7 +117,7 @@ class DeticImageLabeler(Automation):  # type: ignore
                 ),
                 "r",
             )
-        ):
+        )["detections"]:
             image_annotation.bounding_boxes.append(
                 BoundingBoxAnnotation.from_dict(annotation)
             )
