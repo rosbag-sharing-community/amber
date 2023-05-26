@@ -1,4 +1,4 @@
-# AMBER: Annotation and Multimodal Bag Extraction for Robotics
+# AMBER: Automated annotation and Multimodal Bag Extraction for Robotics
 
 [![ci](https://github.com/hakuturu583/amber/actions/workflows/pytest.yaml/badge.svg)](https://github.com/hakuturu583/amber/actions/workflows/pytest.yaml)
 [![document](https://github.com/hakuturu583/amber/actions/workflows/document.yaml/badge.svg)](https://github.com/hakuturu583/amber/actions/workflows/document.yaml)

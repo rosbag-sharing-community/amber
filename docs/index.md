@@ -1,4 +1,4 @@
-# AMBER: Annotation and Multimodal Bag Extraction for Robotics
+# AMBER: Automated annotation and Multimodal Bag Extraction for Robotics
 
 Amber is a ROS2 friendly ML tools.
 Your rosbag2 become dataset!
