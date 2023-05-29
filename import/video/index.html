@@ -6,26 +6,25 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <meta content="Masaya Kataoka" name="author"/>
-<link href="https://hakuturu583.github.io/amber/tips/" rel="canonical"/>
-<link href=".." rel="prev"/>
-<link href="../use_rosbag_as_dataset/how_to_use/" rel="next"/>
-<link href="../assets/images/favicon.png" rel="icon"/>
+<link href="https://hakuturu583.github.io/amber/import/video/" rel="canonical"/>
+<link href="../import/" rel="prev"/>
+<link href="../../assets/images/favicon.png" rel="icon"/>
 <meta content="mkdocs-1.4.3, mkdocs-material-9.1.14" name="generator"/>
-<title>Tips - amber</title>
-<link href="../assets/stylesheets/main.85bb2934.min.css" rel="stylesheet"/>
-<link href="../assets/stylesheets/palette.a6bdf11c.min.css" rel="stylesheet"/>
+<title>Video - amber</title>
+<link href="../../assets/stylesheets/main.85bb2934.min.css" rel="stylesheet"/>
+<link href="../../assets/stylesheets/palette.a6bdf11c.min.css" rel="stylesheet"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
 <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
 <link href="https://use.fontawesome.com/releases/v5.15.0/css/all.css" rel="stylesheet"/>
-<script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+<script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
 </head>
 <body data-md-color-accent="indigo" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
 <input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
 <input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
 <label class="md-overlay" for="__drawer"></label>
 <div data-md-component="skip">
-<a class="md-skip" href="#tips">
+<a class="md-skip" href="#video">
           Skip to content
         </a>
 </div>
@@ -33,7 +32,7 @@
 </div>
 <header class="md-header" data-md-component="header">
 <nav aria-label="Header" class="md-header__inner md-grid">
-<a aria-label="amber" class="md-header__button md-logo" data-md-component="logo" href=".." title="amber">
+<a aria-label="amber" class="md-header__button md-logo" data-md-component="logo" href="../.." title="amber">
 <svg viewbox="0 0 640 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M320 0c17.7 0 32 14.3 32 32v64h120c39.8 0 72 32.2 72 72v272c0 39.8-32.2 72-72 72H168c-39.8 0-72-32.2-72-72V168c0-39.8 32.2-72 72-72h120V32c0-17.7 14.3-32 32-32zM208 384c-8.8 0-16 7.2-16 16s7.2 16 16 16h32c8.8 0 16-7.2 16-16s-7.2-16-16-16h-32zm96 0c-8.8 0-16 7.2-16 16s7.2 16 16 16h32c8.8 0 16-7.2 16-16s-7.2-16-16-16h-32zm96 0c-8.8 0-16 7.2-16 16s7.2 16 16 16h32c8.8 0 16-7.2 16-16s-7.2-16-16-16h-32zM264 256a40 40 0 1 0-80 0 40 40 0 1 0 80 0zm152 40a40 40 0 1 0 0-80 40 40 0 1 0 0 80zM48 224h16v192H48c-26.5 0-48-21.5-48-48v-96c0-26.5 21.5-48 48-48zm544 0c26.5 0 48 21.5 48 48v96c0 26.5-21.5 48-48 48h-16V224h16z"></path></svg>
 </a>
 <label class="md-header__button md-icon" for="__drawer">
@@ -49,7 +48,7 @@
 <div class="md-header__topic" data-md-component="header-topic">
 <span class="md-ellipsis">
             
-              Tips
+              Video
             
           </span>
 </div>
@@ -102,27 +101,27 @@
 <div class="md-grid">
 <ul class="md-tabs__list">
 <li class="md-tabs__item">
-<a class="md-tabs__link" href="..">
+<a class="md-tabs__link" href="../..">
       Home
     </a>
 </li>
 <li class="md-tabs__item">
-<a class="md-tabs__link md-tabs__link--active" href="./">
+<a class="md-tabs__link" href="../../tips/">
       Tips
     </a>
 </li>
 <li class="md-tabs__item">
-<a class="md-tabs__link" href="../use_rosbag_as_dataset/how_to_use/">
+<a class="md-tabs__link" href="../../use_rosbag_as_dataset/how_to_use/">
         Use rosbag as dataset
       </a>
 </li>
 <li class="md-tabs__item">
-<a class="md-tabs__link" href="../automation/automation/">
+<a class="md-tabs__link" href="../../automation/automation/">
         Automation
       </a>
 </li>
 <li class="md-tabs__item">
-<a class="md-tabs__link" href="../import/import/">
+<a class="md-tabs__link md-tabs__link--active" href="../import/">
         Import
       </a>
 </li>
@@ -136,7 +135,7 @@
 <div class="md-sidebar__inner">
 <nav aria-label="Navigation" class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" data-md-level="0">
 <label class="md-nav__title" for="__drawer">
-<a aria-label="amber" class="md-nav__button md-logo" data-md-component="logo" href=".." title="amber">
+<a aria-label="amber" class="md-nav__button md-logo" data-md-component="logo" href="../.." title="amber">
 <svg viewbox="0 0 640 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M320 0c17.7 0 32 14.3 32 32v64h120c39.8 0 72 32.2 72 72v272c0 39.8-32.2 72-72 72H168c-39.8 0-72-32.2-72-72V168c0-39.8 32.2-72 72-72h120V32c0-17.7 14.3-32 32-32zM208 384c-8.8 0-16 7.2-16 16s7.2 16 16 16h32c8.8 0 16-7.2 16-16s-7.2-16-16-16h-32zm96 0c-8.8 0-16 7.2-16 16s7.2 16 16 16h32c8.8 0 16-7.2 16-16s-7.2-16-16-16h-32zm96 0c-8.8 0-16 7.2-16 16s7.2 16 16 16h32c8.8 0 16-7.2 16-16s-7.2-16-16-16h-32zM264 256a40 40 0 1 0-80 0 40 40 0 1 0 80 0zm152 40a40 40 0 1 0 0-80 40 40 0 1 0 0 80zM48 224h16v192H48c-26.5 0-48-21.5-48-48v-96c0-26.5 21.5-48 48-48zm544 0c26.5 0 48 21.5 48 48v96c0 26.5-21.5 48-48 48h-16V224h16z"></path></svg>
 </a>
     amber
@@ -153,37 +152,14 @@
 </div>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="..">
+<a class="md-nav__link" href="../..">
         Home
       </a>
 </li>
-<li class="md-nav__item md-nav__item--active">
-<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
-<label class="md-nav__link md-nav__link--active" for="__toc">
-          Tips
-          <span class="md-nav__icon md-icon"></span>
-</label>
-<a class="md-nav__link md-nav__link--active" href="./">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../tips/">
         Tips
       </a>
-<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
-<label class="md-nav__title" for="__toc">
-<span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#i-do-not-have-rosbag2-but-i-have-rosbag-ros1">
-    I do not have rosbag2, but I have rosbag (ROS1)
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#my-rosbag-is-not-a-mcap-format">
-    My rosbag is not a mcap format.
-  </a>
-</li>
-</ul>
-</nav>
 </li>
 <li class="md-nav__item md-nav__item--nested">
 <input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_3" type="checkbox"/>
@@ -198,7 +174,7 @@
         </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../use_rosbag_as_dataset/how_to_use/">
+<a class="md-nav__link" href="../../use_rosbag_as_dataset/how_to_use/">
         How to use?
       </a>
 </li>
@@ -215,7 +191,7 @@
         </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../use_rosbag_as_dataset/task_description/read_images/">
+<a class="md-nav__link" href="../../use_rosbag_as_dataset/task_description/read_images/">
         Read images
       </a>
 </li>
@@ -238,39 +214,62 @@
         </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../automation/automation/">
+<a class="md-nav__link" href="../../automation/automation/">
         Automation
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../automation/detic_image_labaler/">
+<a class="md-nav__link" href="../../automation/detic_image_labaler/">
         Detic image labaler
       </a>
 </li>
 </ul>
 </nav>
 </li>
-<li class="md-nav__item md-nav__item--nested">
-<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_5" type="checkbox"/>
+<li class="md-nav__item md-nav__item--active md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_5" type="checkbox"/>
 <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
           Import
           <span class="md-nav__icon md-icon"></span>
 </label>
-<nav aria-expanded="false" aria-labelledby="__nav_5_label" class="md-nav" data-md-level="1">
+<nav aria-expanded="true" aria-labelledby="__nav_5_label" class="md-nav" data-md-level="1">
 <label class="md-nav__title" for="__nav_5">
 <span class="md-nav__icon md-icon"></span>
           Import
         </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../import/import/">
+<a class="md-nav__link" href="../import/">
         Import
       </a>
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../import/video/">
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+          Video
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
         Video
       </a>
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#use-with-cli">
+    Use with CLI
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#use-with-python-api">
+    Use with Python API
+  </a>
+</li>
+</ul>
+</nav>
 </li>
 </ul>
 </nav>
@@ -282,22 +281,28 @@
 </div>
 <div class="md-content" data-md-component="content">
 <article class="md-content__inner md-typeset">
-<h1 id="tips">Tips<a class="headerlink" href="#tips" title="Permanent link">#</a></h1>
-<h2 id="i-do-not-have-rosbag2-but-i-have-rosbag-ros1">I do not have rosbag2, but I have rosbag (ROS1)<a class="headerlink" href="#i-do-not-have-rosbag2-but-i-have-rosbag-ros1" title="Permanent link">#</a></h2>
-<p><a href="https://gitlab.com/ternaris/rosbags">This tool</a> can convert your rosbag into rosbag2 very easily.</p>
-<h2 id="my-rosbag-is-not-a-mcap-format">My rosbag is not a mcap format.<a class="headerlink" href="#my-rosbag-is-not-a-mcap-format" title="Permanent link">#</a></h2>
-<p>You can use <code>ros2 bag convert</code> command.
-First, you prepare compress.yaml like below.</p>
-<div class="highlight"><pre><span></span><code><span class="nt">output_bags</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uri</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rosbag</span>
-<span class="w">    </span><span class="nt">storage_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mcap</span>
-<span class="w">    </span><span class="nt">compression_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">message</span>
-<span class="w">    </span><span class="nt">compression_format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">zstd</span>
-<span class="w">    </span><span class="nt">all</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="w">    </span><span class="nt">compression_queue_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
-<span class="w">    </span><span class="nt">compression_threads</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<h1 id="video">Video<a class="headerlink" href="#video" title="Permanent link">#</a></h1>
+<p>Video import tool can convert video files into rosbag.
+Currently, only <code>*.mp4</code> file types are supported.</p>
+<h2 id="use-with-cli">Use with CLI<a class="headerlink" href="#use-with-cli" title="Permanent link">#</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This sample command is written with the assumption that it will be executed in the root directory of the amber package.</p>
+</div>
+<div class="highlight"><pre><span></span><code>amber<span class="w"> </span>import<span class="w"> </span>video<span class="w"> </span>tests/video/soccer_goal.mp4<span class="w"> </span>tests/video_importer.yaml
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>bag<span class="w"> </span>convert<span class="w"> </span>-i<span class="w"> </span><span class="o">(</span>PATH_TO_ROSBAG<span class="o">)</span><span class="w"> </span>-o<span class="w"> </span>conversion.yaml
+<p>If you want to know the option, please run <code>amber import video -h</code> command.</p>
+<p>example of the inporter config is here.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">topic_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/camera/image_raw</span>
+<span class="nt">rosbag_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">output.mcap</span>
+</code></pre></div>
+<h2 id="use-with-python-api">Use with Python API<a class="headerlink" href="#use-with-python-api" title="Permanent link">#</a></h2>
+<div class="highlight"><pre><span></span><code><span class="n">current_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)))</span>
+<span class="n">importer</span> <span class="o">=</span> <span class="n">VideoImporter</span><span class="p">(</span>
+    <span class="nb">str</span><span class="p">(</span><span class="n">current_path</span> <span class="o">/</span> <span class="s2">"video"</span> <span class="o">/</span> <span class="s2">"soccer_goal.mp4"</span><span class="p">),</span>
+    <span class="nb">str</span><span class="p">(</span><span class="n">current_path</span> <span class="o">/</span> <span class="s2">"video_importer.yaml"</span><span class="p">),</span>
+<span class="p">)</span>
+<span class="n">importer</span><span class="o">.</span><span class="n">write</span><span class="p">()</span>
 </code></pre></div>
 <hr/>
 <div class="md-source-file">
@@ -344,8 +349,8 @@ First, you prepare compress.yaml like below.</p>
 <div class="md-dialog" data-md-component="dialog">
 <div class="md-dialog__inner md-typeset"></div>
 </div>
-<script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs", "navigation.expand", "navigation.top", "toc.integrate"], "search": "../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
-<script src="../assets/javascripts/bundle.b4d07000.min.js"></script>
+<script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.expand", "navigation.top", "toc.integrate"], "search": "../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+<script src="../../assets/javascripts/bundle.b4d07000.min.js"></script>
 <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
 <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>

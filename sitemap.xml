@@ -21,6 +21,16 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://hakuturu583.github.io/amber/import/import/</loc>
+         <lastmod>2023-05-29</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://hakuturu583.github.io/amber/import/video/</loc>
+         <lastmod>2023-05-29</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://hakuturu583.github.io/amber/use_rosbag_as_dataset/how_to_use/</loc>
          <lastmod>2023-05-29</lastmod>
          <changefreq>daily</changefreq>
