@@ -10,13 +10,12 @@ Detic can classify 21k classes.
     This sample command is written with the assumption that it will be executed in the root directory of the amber package.
 
 ```bash
-amber automation tests/detic_image_labeler.yaml tests/read_image_ford.yaml tests/rosbag/ford/ford.mcap
+amber automation detic_image_labeler tests/detic_image_labeler.yaml tests/read_image_ford.yaml tests/rosbag/ford/ford.mcap output.mcap
 ```
 
 Task description yaml for the detic_image_labaler is here.
 
 ```yaml
-task_type: detic_image_labeler # This line should be detic_image_labeler
 confidence_threshold: 0.5      # If the confidence overs the threshold, detic determines the object are exists.
 video_output_path: output.mp4  # Relative path to the visualization result.
 docker_config:                 # Docker configuration

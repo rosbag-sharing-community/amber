@@ -7,14 +7,23 @@ from tqdm import tqdm
 import math
 from typing import Callable
 
+from dataclasses import dataclass
+from dataclass_wizard import YAMLWizard
+
+
+@dataclass
+class VideoImporterConfig(YAMLWizard):  # type: ignore
+    topic_name: str = "/camera/image_raw"
+    rosbag_path: str = "output.mcap"
+
 
 class VideoImporter:
-    def __init__(self, video_path: str, topic_name: str) -> None:
-        self.topic_name = topic_name
+    def __init__(self, video_path: str) -> None:
         self.capture = cv2.VideoCapture(video_path)
 
-    def write(self, rosbag_path: str) -> None:
-        with open(rosbag_path, "wb") as f:
+    def write(self, yaml_path: str) -> None:
+        config = VideoImporterConfig.from_yaml_file(yaml_path)
+        with open(config.rosbag_path, "wb") as f:
             writer = McapWriter(f)
             schema = writer.register_msgdef(
                 ImageMessageSchema.name, ImageMessageSchema.schema_text
@@ -27,7 +36,7 @@ class VideoImporter:
             for i in tqdm(range(int(self.capture.get(cv2.CAP_PROP_FRAME_COUNT)))):
                 ret, cv_image = self.capture.read()
                 writer.write_message(
-                    topic=self.topic_name,
+                    topic=config.topic_name,
                     schema=schema,
                     message=build_message_from_image(
                         cv_image,
