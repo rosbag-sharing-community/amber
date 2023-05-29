@@ -81,7 +81,7 @@ def check_config_files_exists_for_import(args: Any) -> None:
 
 def run_video_import(args: Any) -> None:
     check_config_files_exists_for_import(args)
-    VideoImporter(args.video).write(args.config)
+    VideoImporter(args.video, args.config).write()
 
 
 def main() -> None:

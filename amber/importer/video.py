@@ -18,11 +18,12 @@ class VideoImporterConfig(YAMLWizard):  # type: ignore
 
 
 class VideoImporter:
-    def __init__(self, video_path: str) -> None:
+    def __init__(self, video_path: str, yaml_path: str) -> None:
+        self.yaml_path = yaml_path
         self.capture = cv2.VideoCapture(video_path)
 
-    def write(self, yaml_path: str) -> None:
-        config = VideoImporterConfig.from_yaml_file(yaml_path)
+    def write(self) -> None:
+        config = VideoImporterConfig.from_yaml_file(self.yaml_path)
         with open(config.rosbag_path, "wb") as f:
             writer = McapWriter(f)
             schema = writer.register_msgdef(
