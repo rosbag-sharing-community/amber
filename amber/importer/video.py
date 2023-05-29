@@ -5,6 +5,7 @@ from amber.dataset.conversion import build_message_from_image
 from mcap_ros2.writer import Writer as McapWriter
 from tqdm import tqdm
 import math
+from typing import Callable
 
 
 class VideoImporter:
@@ -18,7 +19,7 @@ class VideoImporter:
             schema = writer.register_msgdef(
                 ImageMessageSchema.name, ImageMessageSchema.schema_text
             )
-            nanoseconds_timestamp = math.floor(
+            get_nanoseconds_timestamp: Callable[[], int] = lambda: math.floor(
                 Time(self.capture.get(cv2.CAP_PROP_POS_MSEC), TimeUnit.MILLISECOND).get(
                     TimeUnit.NANOSECOND
                 )
@@ -37,8 +38,8 @@ class VideoImporter:
                         ),
                         "bgr8",
                     ),
-                    log_time=nanoseconds_timestamp,
-                    publish_time=nanoseconds_timestamp,
+                    log_time=get_nanoseconds_timestamp(),
+                    publish_time=get_nanoseconds_timestamp(),
                     sequence=i,
                 )
             writer.finish()
