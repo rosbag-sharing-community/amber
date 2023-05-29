@@ -3,51 +3,14 @@ from amber.exception import TaskDescriptionError
 import os
 from yaml import safe_load  # type: ignore
 from amber.automation.detic_image_labeler import DeticImageLabeler
-from amber.automation.task_description import AutomationTaskType
 from amber.dataset.rosbag2_dataset import Rosbag2Dataset
-from typing import Any
+from amber.importer.video import VideoImporter
+from typing import Any, Callable
 
 
-def automation(args: Any) -> None:
-    if not os.path.exists(args.task_description_yaml_path):
-        raise TaskDescriptionError(
-            "Task description yaml path : "
-            + args.task_description_yaml_path
-            + " does not exist."
-        )
-    if not os.path.exists(args.dataset_description_yaml_path):
-        raise TaskDescriptionError(
-            "Dataset description yaml path : "
-            + args.dataset_description_yaml_path
-            + " does not exist."
-        )
-    if not os.path.exists(args.rosbag_path):
-        raise TaskDescriptionError(
-            "Specified rosbag path : " + args.rosbag_path + " does not exist."
-        )
-    task_description = {}
-    with open(args.task_description_yaml_path, "rb") as file:
-        task_description = safe_load(file)
-    if task_description["task_type"] == AutomationTaskType.DETIC_IMAGE_LABELER.value:
-        labeler = DeticImageLabeler(args.task_description_yaml_path)
-        dataset = Rosbag2Dataset(args.rosbag_path, args.dataset_description_yaml_path)
-        annotations = labeler.inference(dataset)
-        labeler.write(
-            dataset, "/detic_image_labeler", annotations, args.output_rosbag_path
-        )
-        return
-    raise TaskDescriptionError(
-        "Task description type is invalid, please check task description.yaml. task_type you specified is "
-        + task_description["task_type"]
-    )
-
-
-def main() -> None:
-    parser = ArgumentParser()
-    subparsers = parser.add_subparsers()
-    parser_automation = subparsers.add_parser(
-        "automation", help="Run automation command"
-    )
+def setup_arguments_and_parser_for_automation(
+    parser_automation: Any, func: Callable[[Any], None]
+) -> None:
     parser_automation.add_argument(
         "task_description_yaml_path",
         help="Path to the yaml description file path",
@@ -68,7 +31,87 @@ def main() -> None:
         help="Path to the output rosbag path",
         default="",
     )
-    parser_automation.set_defaults(handler=automation)
+    parser_automation.set_defaults(handler=func)
+
+
+def check_config_files_exists_for_automation(args: Any) -> None:
+    if not os.path.exists(args.task_description_yaml_path):
+        raise TaskDescriptionError(
+            "Task description yaml path : "
+            + args.task_description_yaml_path
+            + " does not exist."
+        )
+    if not os.path.exists(args.dataset_description_yaml_path):
+        raise TaskDescriptionError(
+            "Dataset description yaml path : "
+            + args.dataset_description_yaml_path
+            + " does not exist."
+        )
+    if not os.path.exists(args.rosbag_path):
+        raise TaskDescriptionError(
+            "Specified rosbag path : " + args.rosbag_path + " does not exist."
+        )
+
+
+def run_detic_image_labaler_automation(args: Any) -> None:
+    check_config_files_exists_for_automation(args)
+    task_description = {}
+    with open(args.task_description_yaml_path, "rb") as file:
+        task_description = safe_load(file)
+    labeler = DeticImageLabeler(args.task_description_yaml_path)
+    dataset = Rosbag2Dataset(args.rosbag_path, args.dataset_description_yaml_path)
+    annotations = labeler.inference(dataset)
+    labeler.write(dataset, "/detic_image_labeler", annotations, args.output_rosbag_path)
+
+
+def setup_arguments_and_parser_for_import(
+    parser_import: Any, func: Callable[[Any], None]
+) -> None:
+    parser_import.add_argument("video", help="Video file path for importer.")
+    parser_import.add_argument("config", help="Config file for video importer.")
+    parser_import.set_defaults(handler=func)
+
+
+def check_config_files_exists_for_import(args: Any) -> None:
+    if not os.path.exists(args.config):
+        raise TaskDescriptionError(
+            "Specified config : " + args.config + " does not exist."
+        )
+
+
+def run_video_import(args: Any) -> None:
+    check_config_files_exists_for_import(args)
+    VideoImporter(args.video, args.config).write()
+
+
+def main() -> None:
+    parser = ArgumentParser()
+    subparsers = parser.add_subparsers()
+    # Setup command line options for automation
+    parser_automation = subparsers.add_parser(
+        "automation", help="Run automation command"
+    )
+    subparsers_automation = parser_automation.add_subparsers()
+    # Setup command line option for detic image labaler
+    parser_detic_image_labeler_automation = subparsers_automation.add_parser(
+        "detic_image_labeler", help="Run detic image labaler for rosbag"
+    )
+    setup_arguments_and_parser_for_automation(
+        parser_detic_image_labeler_automation, run_detic_image_labaler_automation
+    )
+
+    # Setup command line option for import command
+    parser_import = subparsers.add_parser(
+        "import", help="Import non-rosbag data into rosbag"
+    )
+    # Setup command line option for import video command
+    subparsers_import = parser_import.add_subparsers()
+    parser_video_import = subparsers_import.add_parser(
+        "video", help="Import video images into rosbag"
+    )
+    setup_arguments_and_parser_for_import(parser_video_import, run_video_import)
+
+    # Parsing arguments
     args = parser.parse_args()
     if hasattr(args, "handler"):
         args.handler(args)

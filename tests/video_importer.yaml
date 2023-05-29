@@ -1,0 +1,2 @@
+topic_name: /camera/image_raw
+rosbag_path: output.mcap

@@ -3,3 +3,7 @@ dist
 poetry.lock
 __pycache__
 .coverage
+
+# output data
+output.mcap
+output.mp4
