@@ -7,6 +7,11 @@ from amber.exception import ImageDecodingError
 import numpy as np
 import torch
 import torchvision.transforms as transforms
+import numpy
+from amber.unit.time import Time, TimeUnit
+import math
+from sys import byteorder
+from typing import Any
 
 
 def decompress_message(message: Message) -> Message:
@@ -47,3 +52,28 @@ def decode_image_message(
     else:
         ros_message = decoder.decode(schema, message)
     return image_to_tensor(ros_message_to_image(ros_message))
+
+
+def build_message_from_image(
+    image: numpy.ndarray, frame_id: str, stamp: Time, image_encodings: str = "bgr8"
+) -> Any:
+    data = image.flatten()
+    return {
+        "header": {
+            "stamp": {
+                "sec": int(math.floor(stamp.get(TimeUnit.SECOND))),
+                "nanosec": Time(
+                    stamp.get(TimeUnit.SECOND)
+                    - int(math.floor(stamp.get(TimeUnit.SECOND))),
+                    TimeUnit.NANOSECOND,
+                ),
+            },
+            "frame_id": frame_id,
+        },
+        "height": int(image.shape[0]),
+        "width": int(image.shape[1]),
+        "encoding": image_encodings,
+        "is_bigendian": True if byteorder == "big" else False,
+        "step": len(data) // int(image.shape[0]),
+        "data": data,
+    }
