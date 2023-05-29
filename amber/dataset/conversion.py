@@ -58,15 +58,14 @@ def build_message_from_image(
     image: numpy.ndarray, frame_id: str, stamp: Time, image_encodings: str = "bgr8"
 ) -> Any:
     data = image.flatten()
+    floored_stamp: float = math.floor(stamp.get(TimeUnit.SECOND))
     return {
         "header": {
             "stamp": {
-                "sec": int(math.floor(stamp.get(TimeUnit.SECOND))),
+                "sec": int(floored_stamp),
                 "nanosec": Time(
-                    stamp.get(TimeUnit.SECOND)
-                    - int(math.floor(stamp.get(TimeUnit.SECOND))),
-                    TimeUnit.NANOSECOND,
-                ),
+                    stamp.get(TimeUnit.SECOND) - floored_stamp, TimeUnit.SECOND
+                ).get(TimeUnit.NANOSECOND),
             },
             "frame_id": frame_id,
         },
@@ -75,5 +74,5 @@ def build_message_from_image(
         "encoding": image_encodings,
         "is_bigendian": True if byteorder == "big" else False,
         "step": len(data) // int(image.shape[0]),
-        "data": data,
+        "data": data.tolist(),
     }
