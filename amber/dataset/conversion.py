@@ -2,7 +2,7 @@ from PIL import Image
 from mcap.records import Message, Schema
 from mcap_ros2.decoder import Decoder
 from mcap_ros2._dynamic import DecodedMessage
-from pyzstd import decompress
+from pyzstd import decompress, compress
 from amber.exception import ImageDecodingError
 import numpy as np
 import torch
@@ -12,6 +12,11 @@ from amber.unit.time import Time, TimeUnit
 import math
 from sys import byteorder
 from typing import Any
+
+
+def compress_message(message: Message) -> Message:
+    message.data = compress(message.data)
+    return message
 
 
 def decompress_message(message: Message) -> Message:

@@ -1,0 +1,110 @@
+rosbag2_bagfile_information:
+  version: 5
+  storage_identifier: mcap
+  duration:
+    nanoseconds: 933022222
+  starting_time:
+    nanoseconds_since_epoch: 8331088888
+  message_count: 251
+  topics_with_message_count:
+    - topic_metadata:
+        name: /camera/image_raw
+        type: sensor_msgs/Image
+        serialization_format: cdr
+        offered_qos_profiles: ""
+      message_count: 251
+  compression_format: zstd
+  compression_mode: MESSAGE
+  relative_file_paths:
+    - soccer_goal_0.mcap
+    - soccer_goal_1.mcap
+    - soccer_goal_2.mcap
+    - soccer_goal_3.mcap
+    - soccer_goal_4.mcap
+    - soccer_goal_5.mcap
+    - soccer_goal_6.mcap
+    - soccer_goal_7.mcap
+    - soccer_goal_8.mcap
+    - soccer_goal_9.mcap
+    - soccer_goal_10.mcap
+    - soccer_goal_11.mcap
+    - soccer_goal_12.mcap
+  files:
+    - path: soccer_goal_0.mcap
+      starting_time:
+        nanoseconds_since_epoch: 0
+      duration:
+        nanoseconds: 933022222
+      message_count: 29
+    - path: soccer_goal_1.mcap
+      starting_time:
+        nanoseconds_since_epoch: 966344444
+      duration:
+        nanoseconds: 799733333
+      message_count: 24
+    - path: soccer_goal_2.mcap
+      starting_time:
+        nanoseconds_since_epoch: 1732755555
+      duration:
+        nanoseconds: 733200000
+      message_count: 22
+    - path: soccer_goal_3.mcap
+      starting_time:
+        nanoseconds_since_epoch: 2499277777
+      duration:
+        nanoseconds: 633122223
+      message_count: 20
+    - path: soccer_goal_4.mcap
+      starting_time:
+        nanoseconds_since_epoch: 3165722222
+      duration:
+        nanoseconds: 566588889
+      message_count: 18
+    - path: soccer_goal_5.mcap
+      starting_time:
+        nanoseconds_since_epoch: 3765633333
+      duration:
+        nanoseconds: 633122222
+      message_count: 20
+    - path: soccer_goal_6.mcap
+      starting_time:
+        nanoseconds_since_epoch: 4432077777
+      duration:
+        nanoseconds: 566477778
+      message_count: 18
+    - path: soccer_goal_7.mcap
+      starting_time:
+        nanoseconds_since_epoch: 5031877777
+      duration:
+        nanoseconds: 633233334
+      message_count: 20
+    - path: soccer_goal_8.mcap
+      starting_time:
+        nanoseconds_since_epoch: 5698433333
+      duration:
+        nanoseconds: 633122222
+      message_count: 20
+    - path: soccer_goal_9.mcap
+      starting_time:
+        nanoseconds_since_epoch: 6364877777
+      duration:
+        nanoseconds: 566611111
+      message_count: 18
+    - path: soccer_goal_10.mcap
+      starting_time:
+        nanoseconds_since_epoch: 6964811111
+      duration:
+        nanoseconds: 633122222
+      message_count: 20
+    - path: soccer_goal_11.mcap
+      starting_time:
+        nanoseconds_since_epoch: 7631255555
+      duration:
+        nanoseconds: 666522222
+      message_count: 21
+    - path: soccer_goal_12.mcap
+      starting_time:
+        nanoseconds_since_epoch: 8331088888
+      duration:
+        nanoseconds: 0
+      message_count: 1
