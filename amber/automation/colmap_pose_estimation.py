@@ -70,7 +70,19 @@ class ColmapPoseEstimation(Automation):  # type: ignore
         os.makedirs(self.get_output_directory_path())
 
     def build_command(self) -> List[str]:
-        return ["ns-process-data", ""]
+        return [
+            "ns-process-data",
+            "images",
+            "--data",
+            "/workspace/inputs",
+            "--output-dir",
+            "/workspace/outputs",
+        ]
+
+    def run_command(self) -> None:
+        _, stream = self.container.exec_run(self.build_command(), stream=True)
+        for data in stream:
+            print(data.decode())
 
     def inference(self, dataset: Rosbag2Dataset) -> None:
         for index, image in enumerate(dataset):
@@ -80,3 +92,4 @@ class ColmapPoseEstimation(Automation):  # type: ignore
                     "input" + str(index) + ".jpeg",
                 )
             )
+        self.run_command()
