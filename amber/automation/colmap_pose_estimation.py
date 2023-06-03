@@ -69,6 +69,12 @@ class ColmapPoseEstimation(Automation):  # type: ignore
         os.makedirs(self.get_input_directory_path())
         os.makedirs(self.get_output_directory_path())
 
+    def cpu_or_gpu(self) -> str:
+        if self.config.docker_config.use_gpu:
+            return "--gpu"
+        else:
+            return "--no-gpu"
+
     def build_command(self) -> List[str]:
         return [
             "ns-process-data",
@@ -77,6 +83,7 @@ class ColmapPoseEstimation(Automation):  # type: ignore
             "/workspace/inputs",
             "--output-dir",
             "/workspace/outputs",
+            self.cpu_or_gpu(),
         ]
 
     def run_command(self) -> None:
