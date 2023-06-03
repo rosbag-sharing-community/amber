@@ -15,6 +15,7 @@ import glob
 class MessageMetaData(JSONWizard):  # type: ignore
     sequence: int = 0
     topic: str = ""
+    rosbag_path: str = ""
 
 
 class Rosbag2Dataset(Dataset):  # type: ignore
@@ -28,7 +29,7 @@ class Rosbag2Dataset(Dataset):  # type: ignore
         if os.path.isfile(rosbag_path):
             self.rosbag_files = [rosbag_path]
         else:
-            self.rosbag_files = glob.glob(rosbag_path + "/**/*.text", recursive=True)
+            self.rosbag_files = glob.glob(rosbag_path + "/**/*.mcap", recursive=True)
         self.transform = transform
         self.target_transform = target_transform
         self.task_description_yaml_path = task_description_yaml_path
@@ -61,7 +62,11 @@ class Rosbag2Dataset(Dataset):  # type: ignore
                     )
                     self.message_metadata.append(
                         MessageMetaData.from_dict(
-                            {"sequence": message.sequence, "topic": channel.topic}
+                            {
+                                "sequence": message.sequence,
+                                "topic": channel.topic,
+                                "rosbag_path": rosbag_file,
+                            }
                         )
                     )
 

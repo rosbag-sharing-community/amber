@@ -4,7 +4,7 @@ rosbag2_bagfile_information:
   duration:
     nanoseconds: 933022222
   starting_time:
-    nanoseconds_since_epoch: 8331088888
+    nanoseconds_since_epoch: 8297777777
   message_count: 251
   topics_with_message_count:
     - topic_metadata:
@@ -40,13 +40,13 @@ rosbag2_bagfile_information:
       starting_time:
         nanoseconds_since_epoch: 966344444
       duration:
-        nanoseconds: 799733333
+        nanoseconds: 766411111
       message_count: 24
     - path: soccer_goal_2.mcap
       starting_time:
-        nanoseconds_since_epoch: 1732755555
+        nanoseconds_since_epoch: 1766077777
       duration:
-        nanoseconds: 733200000
+        nanoseconds: 699877778
       message_count: 22
     - path: soccer_goal_3.mcap
       starting_time:
@@ -100,11 +100,11 @@ rosbag2_bagfile_information:
       starting_time:
         nanoseconds_since_epoch: 7631255555
       duration:
-        nanoseconds: 666522222
-      message_count: 21
+        nanoseconds: 633211111
+      message_count: 20
     - path: soccer_goal_12.mcap
       starting_time:
-        nanoseconds_since_epoch: 8331088888
+        nanoseconds_since_epoch: 8297777777
       duration:
-        nanoseconds: 0
-      message_count: 1
+        nanoseconds: 33311111
+      message_count: 2

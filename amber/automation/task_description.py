@@ -24,6 +24,7 @@ class DeticVocabulary(Enum):
 class DockerConfig(YAMLWizard):  # type: ignore
     use_gpu: bool = False
     claenup_image_on_shutdown: bool = False
+    shm_size: str = "64M"
 
 
 @dataclass

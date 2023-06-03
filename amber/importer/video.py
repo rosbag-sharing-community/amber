@@ -46,7 +46,7 @@ class VideoImporter:
                             self.capture.get(cv2.CAP_PROP_POS_MSEC),
                             TimeUnit.MILLISECOND,
                         ),
-                        "bgr8",
+                        "rgb8",
                     ),
                     log_time=get_nanoseconds_timestamp(),
                     publish_time=get_nanoseconds_timestamp(),

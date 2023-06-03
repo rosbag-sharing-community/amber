@@ -1,7 +1,0 @@
-output_bags:
-  - uri: soccer_goal
-    max_bagfile_size: 10000000
-    compression_mode: message
-    compression_format: zstd
-    storage_id: mcap
-    all: true

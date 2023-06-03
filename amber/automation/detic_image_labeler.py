@@ -49,7 +49,7 @@ class DeticImageLabeler(Automation):  # type: ignore
                 },
             },
             device_requests=self.build_device_requests(),
-            command=["/bin/sh"],
+            command=["/bin/bash"],
             detach=True,
             tty=True,
             runtime=None,

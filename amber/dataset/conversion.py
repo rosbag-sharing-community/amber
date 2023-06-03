@@ -12,6 +12,8 @@ from amber.unit.time import Time, TimeUnit
 import math
 from sys import byteorder
 from typing import Any
+import cv2
+import io
 
 
 def compress_message(message: Message) -> Message:
