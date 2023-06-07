@@ -8,12 +8,12 @@ from typing import List
 from torchvision import transforms
 
 
-class ColmapPoseEstimation(Automation):  # type: ignore
+class Nerf3DReconstruction(Automation):  # type: ignore
     docker_image_name = "dromni/nerfstudio:0.3.1"
 
     def __init__(self, yaml_path: str) -> None:
         self.config = ColmapPoseEstimationConfig.from_yaml_file(yaml_path)
-        self.temporary_image_directory = "/tmp/colmap_pose_estimation"
+        self.temporary_image_directory = "/tmp/nerf_3d_reconstruction"
         self.setup_directory(self.temporary_image_directory)
         self.to_pil_image = transforms.ToPILImage()
         self.docker_client = docker.from_env()
@@ -25,8 +25,12 @@ class ColmapPoseEstimation(Automation):  # type: ignore
                     "bind": "/workspace/inputs",
                     "mode": "rw",
                 },
-                self.get_output_directory_path(): {
-                    "bind": "/workspace/outputs",
+                self.get_camera_pose_output_directory_path(): {
+                    "bind": "/workspace/outputs/camera_poses",
+                    "mode": "rw",
+                },
+                self.get_trained_model_output_directory_path(): {
+                    "bind": "/workspace/outputs/models",
                     "mode": "rw",
                 },
             },
@@ -41,8 +45,11 @@ class ColmapPoseEstimation(Automation):  # type: ignore
     def get_input_directory_path(self) -> str:
         return os.path.join(self.temporary_image_directory, "inputs")
 
-    def get_output_directory_path(self) -> str:
-        return os.path.join(self.temporary_image_directory, "outputs")
+    def get_camera_pose_output_directory_path(self) -> str:
+        return os.path.join(self.temporary_image_directory, "outputs", "camera_poses")
+
+    def get_trained_model_output_directory_path(self) -> str:
+        return os.path.join(self.temporary_image_directory, "outputs", "models")
 
     def __del__(self) -> None:
         self.container.stop()
@@ -67,7 +74,7 @@ class ColmapPoseEstimation(Automation):  # type: ignore
             shutil.rmtree(path)
             os.makedirs(path)
         os.makedirs(self.get_input_directory_path())
-        os.makedirs(self.get_output_directory_path())
+        os.makedirs(self.get_camera_pose_output_directory_path())
 
     def cpu_or_gpu(self) -> str:
         if self.config.docker_config.use_gpu:
@@ -75,19 +82,22 @@ class ColmapPoseEstimation(Automation):  # type: ignore
         else:
             return "--no-gpu"
 
-    def build_command(self) -> List[str]:
+    def build_post_process_command(self) -> List[str]:
         return [
             "ns-process-data",
             "images",
             "--data",
             "/workspace/inputs",
             "--output-dir",
-            "/workspace/outputs",
+            "/workspace/outputs/camera_poses",
             self.cpu_or_gpu(),
         ]
 
-    def run_command(self) -> None:
-        _, stream = self.container.exec_run(self.build_command(), stream=True)
+    def build_train_command(self) -> List[str]:
+        return ["ns-train", "instant-ngp", "--data", "/workspace/outputs/camera_poses"]
+
+    def run_command(self, command: List[str]) -> None:
+        _, stream = self.container.exec_run(command, stream=True)
         for data in stream:
             print(data.decode())
 
@@ -99,4 +109,5 @@ class ColmapPoseEstimation(Automation):  # type: ignore
                     "input" + str(index) + ".jpeg",
                 )
             )
-        self.run_command()
+        self.run_command(self.build_post_process_command())
+        self.run_command(self.build_train_command())
