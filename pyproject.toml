@@ -56,7 +56,11 @@ black = "^23.3.0"
 pip = "^23.1.2"
 click = "8.0.4"
 python = "^3.10"
-# dependency for documenatation
+
+[tool.poetry.group.docs]
+optional = true
+
+[tool.poetry.group.docs.dependencies]
 mkdocs = "^1.4"
 mkdocs-material = "^9.1"
 fontawesome_markdown = "*"
