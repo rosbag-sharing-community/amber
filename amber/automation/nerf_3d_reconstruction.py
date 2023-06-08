@@ -6,6 +6,7 @@ from amber.dataset.rosbag2_dataset import Rosbag2Dataset
 from amber.automation.task_description import ColmapPoseEstimationConfig
 from typing import List
 from torchvision import transforms
+import uuid
 
 
 class Nerf3DReconstruction(Automation):  # type: ignore
@@ -13,8 +14,10 @@ class Nerf3DReconstruction(Automation):  # type: ignore
 
     def __init__(self, yaml_path: str) -> None:
         self.config = ColmapPoseEstimationConfig.from_yaml_file(yaml_path)
-        self.temporary_image_directory = "/tmp/nerf_3d_reconstruction"
-        self.setup_directory(self.temporary_image_directory)
+        self.temporary_image_directory = "/tmp/nerf_3d_reconstruction/" + str(
+            uuid.uuid4()
+        )
+        self.setup_directory()
         self.to_pil_image = transforms.ToPILImage()
         self.docker_client = docker.from_env()
         self.docker_client.images.pull("dromni/nerfstudio", tag="0.3.1")
@@ -25,12 +28,8 @@ class Nerf3DReconstruction(Automation):  # type: ignore
                     "bind": "/workspace/inputs",
                     "mode": "rw",
                 },
-                self.get_camera_pose_output_directory_path(): {
-                    "bind": "/workspace/outputs/camera_poses",
-                    "mode": "rw",
-                },
-                self.get_trained_model_output_directory_path(): {
-                    "bind": "/workspace/outputs/models",
+                self.get_output_directory_path(): {
+                    "bind": "/workspace/outputs",
                     "mode": "rw",
                 },
             },
@@ -45,11 +44,17 @@ class Nerf3DReconstruction(Automation):  # type: ignore
     def get_input_directory_path(self) -> str:
         return os.path.join(self.temporary_image_directory, "inputs")
 
+    def get_output_directory_path(self) -> str:
+        return os.path.join(self.temporary_image_directory, "outputs")
+
     def get_camera_pose_output_directory_path(self) -> str:
-        return os.path.join(self.temporary_image_directory, "outputs", "camera_poses")
+        return os.path.join(self.get_output_directory_path(), "camera_poses")
+
+    def get_checkpoint_output_directory_path(self) -> str:
+        return os.path.join(self.get_output_directory_path(), "checkpoints")
 
     def get_trained_model_output_directory_path(self) -> str:
-        return os.path.join(self.temporary_image_directory, "outputs", "models")
+        return os.path.join(self.get_output_directory_path(), "models")
 
     def __del__(self) -> None:
         self.container.stop()
@@ -67,14 +72,10 @@ class Nerf3DReconstruction(Automation):  # type: ignore
             )
         return requests
 
-    def setup_directory(self, path: str) -> None:
-        if not os.path.exists(path):
-            os.makedirs(path)
-        else:
-            shutil.rmtree(path)
-            os.makedirs(path)
+    def setup_directory(self) -> None:
+        if not os.path.exists(self.temporary_image_directory):
+            os.makedirs(self.temporary_image_directory)
         os.makedirs(self.get_input_directory_path())
-        os.makedirs(self.get_camera_pose_output_directory_path())
 
     def cpu_or_gpu(self) -> str:
         if self.config.docker_config.use_gpu:
@@ -94,7 +95,14 @@ class Nerf3DReconstruction(Automation):  # type: ignore
         ]
 
     def build_train_command(self) -> List[str]:
-        return ["ns-train", "instant-ngp", "--data", "/workspace/outputs/camera_poses"]
+        return [
+            "ns-train",
+            "instant-ngp",
+            "--data",
+            "/workspace/outputs/camera_poses",
+            "--output-dir",
+            self.get_checkpoint_output_directory_path(),
+        ]
 
     def run_command(self, command: List[str]) -> None:
         _, stream = self.container.exec_run(command, stream=True)

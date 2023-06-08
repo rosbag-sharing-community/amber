@@ -17,7 +17,7 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ["3.8"]
-        poetry-version: ["1.2.0"]
+        poetry-version: ["1.4.0"]
         os: [ubuntu-22.04]
     runs-on: ${{ matrix.os }}
     steps:
@@ -31,7 +31,7 @@ jobs:
         with:
           poetry-version: ${{ matrix.poetry-version }}
       - name: install
-        run: poetry install
+        run: poetry install --with dev
       - name: test
         run: poetry run task test
   build:
@@ -40,7 +40,7 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ["3.8"]
-        poetry-version: ["1.2.0"]
+        poetry-version: ["1.4.0"]
         os: [ubuntu-22.04]
     runs-on: ${{ matrix.os }}
     steps:
