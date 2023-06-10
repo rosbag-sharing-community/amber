@@ -6,12 +6,12 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <meta content="Masaya Kataoka" name="author"/>
-<link href="https://hakuturu583.github.io/amber/automation/automation/" rel="canonical"/>
-<link href="../../use_rosbag_as_dataset/task_description/read_images/" rel="prev"/>
-<link href="../detic_image_labaler/" rel="next"/>
+<link href="https://hakuturu583.github.io/amber/automation/nerf_3d_reconstruction/" rel="canonical"/>
+<link href="../detic_image_labaler/" rel="prev"/>
+<link href="../../import/import/" rel="next"/>
 <link href="../../assets/images/favicon.png" rel="icon"/>
 <meta content="mkdocs-1.4.3, mkdocs-material-9.1.15" name="generator"/>
-<title>Automation - amber</title>
+<title>NeRF 3D Reconstruction - amber</title>
 <link href="../../assets/stylesheets/main.26e3688c.min.css" rel="stylesheet"/>
 <link href="../../assets/stylesheets/palette.ecc896b0.min.css" rel="stylesheet"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -25,7 +25,7 @@
 <input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
 <label class="md-overlay" for="__drawer"></label>
 <div data-md-component="skip">
-<a class="md-skip" href="#automation">
+<a class="md-skip" href="#nerf-3d-reconstruction">
           Skip to content
         </a>
 </div>
@@ -49,7 +49,7 @@
 <div class="md-header__topic" data-md-component="header-topic">
 <span class="md-ellipsis">
             
-              Automation
+              NeRF 3D Reconstruction
             
           </span>
 </div>
@@ -117,7 +117,7 @@
       </a>
 </li>
 <li class="md-tabs__item">
-<a class="md-tabs__link md-tabs__link--active" href="./">
+<a class="md-tabs__link md-tabs__link--active" href="../automation/">
         Automation
       </a>
 </li>
@@ -214,14 +214,24 @@
           Automation
         </label>
 <ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../automation/">
+        Automation
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../detic_image_labaler/">
+        Detic image labaler
+      </a>
+</li>
 <li class="md-nav__item md-nav__item--active">
 <input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
 <label class="md-nav__link md-nav__link--active" for="__toc">
-          Automation
+          NeRF 3D Reconstruction
           <span class="md-nav__icon md-icon"></span>
 </label>
 <a class="md-nav__link md-nav__link--active" href="./">
-        Automation
+        NeRF 3D Reconstruction
       </a>
 <nav aria-label="Table of contents" class="md-nav md-nav--secondary">
 <label class="md-nav__title" for="__toc">
@@ -230,56 +240,22 @@
     </label>
 <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#cli-tools">
-    CLI tools
+<a class="md-nav__link" href="#use-with-cli">
+    Use with CLI
   </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#python-api">
-    Python API
+<a class="md-nav__link" href="#use-with-python-api">
+    Use with Python API
   </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#support-status">
-    Support status
-  </a>
-<nav aria-label="Support status" class="md-nav">
-<ul class="md-nav__list">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#docker-support">
-    Docker Support
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#native-support">
-    Native Support
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hugging-face-support">
-    Hugging face Support
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#cuda-support">
-    CUDA Support
+<a class="md-nav__link" href="#how-to-see-the-training-result">
+    How to see the training result.
   </a>
 </li>
 </ul>
 </nav>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../detic_image_labaler/">
-        Detic image labaler
-      </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../nerf_3d_reconstruction/">
-        NeRF 3D Reconstruction
-      </a>
 </li>
 </ul>
 </nav>
@@ -316,54 +292,71 @@
 </div>
 <div class="md-content" data-md-component="content">
 <article class="md-content__inner md-typeset">
-<h1 id="automation">Automation<a class="headerlink" href="#automation" title="Permanent link">#</a></h1>
-<p>Automation helps you to enjoy your ML life.
-Automation tools can be used with two ways, use with CLI and use with Python API</p>
-<h2 id="cli-tools">CLI tools<a class="headerlink" href="#cli-tools" title="Permanent link">#</a></h2>
-<p>All of the automation tools can be use <code>amber automation</code> command.
-If you want to check the help text, please type <code>amber automation --help</code></p>
-<h2 id="python-api">Python API<a class="headerlink" href="#python-api" title="Permanent link">#</a></h2>
-<p>All of the automation tools have Python classes.
-If you want to know detail, please read detatiled documentations.</p>
-<h2 id="support-status">Support status<a class="headerlink" href="#support-status" title="Permanent link">#</a></h2>
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Docker Support (CPU)</th>
-<th>Docker Support(CUDA)</th>
-<th>Native Support</th>
-<th>CUDA Support(Native)</th>
-<th>Huggingface Support</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><a href="../detic_image_labaler">DeticImageLabaler</a></td>
-<td><img alt="✔️" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/2714.png" title=":heavy_check_mark:"/></td>
-<td><img alt="✔️" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/2714.png" title=":heavy_check_mark:"/></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td><a href="../nerf_3d_reconstruction">NeRF 3D Reconstruction</a></td>
-<td></td>
-<td><img alt="✔️" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/2714.png" title=":heavy_check_mark:"/></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<h3 id="docker-support">Docker Support<a class="headerlink" href="#docker-support" title="Permanent link">#</a></h3>
-<p>Support automation algorithm inside docker.</p>
-<h3 id="native-support">Native Support<a class="headerlink" href="#native-support" title="Permanent link">#</a></h3>
-<p>Support automation algorithm in native environment.</p>
-<h3 id="hugging-face-support">Hugging face Support<a class="headerlink" href="#hugging-face-support" title="Permanent link">#</a></h3>
-<p>Support running automation algorithum on <a href="https://huggingface.co/">hugging face.</a></p>
-<h3 id="cuda-support">CUDA Support<a class="headerlink" href="#cuda-support" title="Permanent link">#</a></h3>
-<p>Support cuda for accelerating automation.</p>
+<h1 id="nerf-3d-reconstruction">NeRF 3D Reconstruction<a class="headerlink" href="#nerf-3d-reconstruction" title="Permanent link">#</a></h1>
+<p>NeRF is a deep learning rendering algorithm called Neural radiance fields.
+AMBER works with <a href="https://github.com/nerfstudio-project/nerfstudio">nerf-studio</a>, where various NeRF algorithms are implemented, to learn NeRF from image data recorded in rosbag.</p>
+<p>Special thanks to nerfstudio contributers.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Limitation : NeRF 3D reconstruction feature is just developed and not well-used.
+This feature currently supports nerfacto and poisson surface reconstruction method.</p>
+</div>
+<h2 id="use-with-cli">Use with CLI<a class="headerlink" href="#use-with-cli" title="Permanent link">#</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Currently, generated mesh and pointcloud cannot be write into rosbag. So, final argument <code>hoge.mcap</code> does not work.</p>
+</div>
+<div class="highlight"><pre><span></span><code>amber<span class="w"> </span>automation<span class="w"> </span>nerf<span class="w"> </span>tests/nerf_3d_reconstruction.yaml<span class="w"> </span>tests/read_images_soccer_goal.yaml<span class="w"> </span>tests/rosbag/soccer_goal/<span class="w"> </span>hoge.mcap
+</code></pre></div>
+<h2 id="use-with-python-api">Use with Python API<a class="headerlink" href="#use-with-python-api" title="Permanent link">#</a></h2>
+<div class="highlight"><pre><span></span><code><span class="n">current_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)))</span>
+<span class="n">labeler</span> <span class="o">=</span> <span class="n">Nerf3DReconstruction</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">current_path</span> <span class="o">/</span> <span class="s2">"nerf_3d_reconstruction.yaml"</span><span class="p">))</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">Rosbag2Dataset</span><span class="p">(</span>
+    <span class="nb">str</span><span class="p">(</span><span class="n">current_path</span> <span class="o">/</span> <span class="s2">"rosbag"</span> <span class="o">/</span> <span class="s2">"soccer_goal"</span><span class="p">),</span>
+    <span class="nb">str</span><span class="p">(</span><span class="n">current_path</span> <span class="o">/</span> <span class="s2">"read_images_soccer_goal.yaml"</span><span class="p">),</span>
+<span class="p">)</span>
+<span class="n">labeler</span><span class="o">.</span><span class="n">inference</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+</code></pre></div>
+<p><code>nerf_3d_reconstruction.yaml</code> and <code>read_image_ford.yaml</code> are exactly same when you use detic_image_labaler with CLI.</p>
+<h2 id="how-to-see-the-training-result">How to see the training result.<a class="headerlink" href="#how-to-see-the-training-result" title="Permanent link">#</a></h2>
+<p>When the training and exporting 3D mesh finished.
+Output like below was generated.</p>
+<div class="highlight"><pre><span></span><code>╭──────────────────────────────────────────────<span class="w"> </span>🎉<span class="w"> </span>Training<span class="w"> </span>Finished<span class="w"> </span>🎉<span class="w"> </span>──────────────────────────────────────────────╮
+│<span class="w">                        </span>╷<span class="w">                                                                                            </span>│
+│<span class="w">   </span>Config<span class="w"> </span>File<span class="w">          </span>│<span class="w"> </span>/workspace/outputs/checkpoints/camera_poses/nerfacto/2023-06-10_100233/config.yml<span class="w">          </span>│
+│<span class="w">   </span>Checkpoint<span class="w"> </span>Directory<span class="w"> </span>│<span class="w"> </span>/workspace/outputs/checkpoints/camera_poses/nerfacto/2023-06-10_100233/nerfstudio_models<span class="w">   </span>│
+│<span class="w">                        </span>╵<span class="w">                                                                                            </span>│
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+Printing<span class="w"> </span>profiling<span class="w"> </span>stats,<span class="w"> </span>from<span class="w"> </span>longest<span class="w"> </span>to<span class="w"> </span>shortest<span class="w"> </span>duration<span class="w"> </span><span class="k">in</span><span class="w"> </span>seconds
+
+VanillaPipeline.get_average_eval_image_metrics:<span class="w"> </span><span class="m">11</span>.2157
+
+VanillaPipeline.get_eval_image_metrics_and_images:<span class="w"> </span><span class="m">0</span>.4561
+
+VanillaPipeline.get_eval_loss_dict:<span class="w"> </span><span class="m">0</span>.0392
+
+Trainer.train_iteration:<span class="w"> </span><span class="m">0</span>.0260
+
+VanillaPipeline.get_train_loss_dict:<span class="w"> </span><span class="m">0</span>.0170
+
+Trainer.eval_iteration:<span class="w"> </span><span class="m">0</span>.0014
+
+find:<span class="w"> </span>paths<span class="w"> </span>must<span class="w"> </span>precede<span class="w"> </span>expression:<span class="w"> </span><span class="sb">`</span><span class="p">|</span><span class="s1">'</span>
+
+<span class="s1">find: paths must precede expression: `|'</span>
+
+Successfully<span class="w"> </span>copied<span class="w"> </span><span class="m">420</span>.6MB<span class="w"> </span>to<span class="w"> </span>/tmp/nerf_3d_reconstruction/6d1873fd-fa94-4c1a-a592-b4fd5cbc927e/outputs
+Artifacts<span class="w"> </span>are<span class="w"> </span>outputed<span class="w"> </span>under<span class="w"> </span>/tmp/nerf_3d_reconstruction/6d1873fd-fa94-4c1a-a592-b4fd5cbc927e/outputs
+If<span class="w"> </span>you<span class="w"> </span>want<span class="w"> </span>to<span class="w"> </span>check<span class="w"> </span>the<span class="w"> </span>trained<span class="w"> </span>result,<span class="w"> </span>please<span class="w"> </span><span class="nb">type</span><span class="w"> </span>commands<span class="w"> </span>below<span class="w"> </span>:
+docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--rm<span class="w"> </span>--gpus<span class="w"> </span>all<span class="w"> </span>-p<span class="w"> </span><span class="m">7007</span>:7007<span class="w">             </span>-v<span class="w"> </span>/tmp/nerf_3d_reconstruction/6d1873fd-fa94-4c1a-a592-b4fd5cbc927e:/workspace<span class="w"> </span>dromni/nerfstudio:0.3.1/bin/bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">"find -name config.yml | xargs -I {} ns-viewer --load-config {}"</span>
+</code></pre></div>
+<p>If you want to see the NeRF result, please type final commands shown in the result like below.　　</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--rm<span class="w"> </span>--gpus<span class="w"> </span>all<span class="w"> </span>-p<span class="w"> </span><span class="m">7007</span>:7007<span class="w">             </span>-v<span class="w"> </span>/tmp/nerf_3d_reconstruction/6d1873fd-fa94-4c1a-a592-b4fd5cbc927e:/workspace<span class="w"> </span>dromni/nerfstudio:0.3.1/bin/bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">"find -name config.yml | xargs -I {} ns-viewer --load-config {}"</span>
+</code></pre></div>
+<p>Open</p>
+<p>Then, you can see result like below.</p>
+<iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" frameborder="0" height="315" src="https://www.youtube.com/embed/NgEIB4TRRTo" title="YouTube video player" width="560"></iframe>
 <hr/>
 <div class="md-source-file">
 <small>
