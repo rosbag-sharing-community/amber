@@ -1,0 +1,3 @@
+dataset_type: image_only
+image_topics:
+  - topic_name: /camera/image_raw

@@ -23,6 +23,8 @@ class DeticVocabulary(Enum):
 @dataclass
 class DockerConfig(YAMLWizard):  # type: ignore
     use_gpu: bool = False
+    claenup_image_on_shutdown: bool = False
+    shm_size: str = "64M"
 
 
 @dataclass
@@ -46,3 +48,8 @@ class DeticImageLabalerConfig(YAMLWizard):  # type: ignore
                 "Type of the output video should be mp4, you specified "
                 + self.video_output_path
             )
+
+
+@dataclass
+class ColmapPoseEstimationConfig(YAMLWizard):  # type: ignore
+    docker_config: DockerConfig = DockerConfig()

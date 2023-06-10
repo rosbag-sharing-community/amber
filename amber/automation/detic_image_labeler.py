@@ -1,4 +1,3 @@
-# Copyright (c) Facebook, Inc. and its affiliates.
 import argparse
 import os
 import sys
@@ -27,12 +26,6 @@ import subprocess
 import json
 
 
-class DemoArguments:
-    def __init__(self, config: DeticImageLabalerConfig) -> None:
-        self.vocabulary = config.vocabulary.value
-        self.custom_vocabulary = ",".join(config.custom_vocabulary)
-
-
 class DeticImageLabeler(Automation):  # type: ignore
     def __init__(self, yaml_path: str) -> None:
         self.temporary_image_directory = "/tmp/detic_image_labaler"
@@ -41,9 +34,10 @@ class DeticImageLabeler(Automation):  # type: ignore
         self.config = DeticImageLabalerConfig.from_yaml_file(yaml_path)
         self.config.validate()
         self.docker_client = docker.from_env()
-        self.docker_client.images.pull("wamvtan/detic")
+        self.docker_image_name = "wamvtan/detic"
+        self.docker_client.images.pull(self.docker_image_name)
         self.container = self.docker_client.containers.run(
-            image="wamvtan/detic",
+            image=self.docker_image_name,
             volumes={
                 os.path.join(self.temporary_image_directory, "inputs"): {
                     "bind": "/workspace/Detic/inputs",
@@ -55,7 +49,7 @@ class DeticImageLabeler(Automation):  # type: ignore
                 },
             },
             device_requests=self.build_device_requests(),
-            command=["/bin/sh"],
+            command=["/bin/bash"],
             detach=True,
             tty=True,
             runtime=None,
@@ -99,6 +93,10 @@ class DeticImageLabeler(Automation):  # type: ignore
     def __del__(self) -> None:
         self.container.stop()
         self.container.remove()
+        if self.config.docker_config.claenup_image_on_shutdown:
+            self.docker_client.images.remove(
+                image=self.docker_image_name, force=False, noprune=False
+            )
 
     def run_command(self) -> None:
         _, stream = self.container.exec_run(self.build_command(), stream=True)

@@ -8,12 +8,14 @@ from amber.dataset.conversion import decode_image_message
 from amber.dataset.dataset_task_description import ImageOnlyConfig
 from dataclasses import dataclass
 from dataclass_wizard import JSONWizard
+import glob
 
 
 @dataclass
 class MessageMetaData(JSONWizard):  # type: ignore
     sequence: int = 0
     topic: str = ""
+    rosbag_path: str = ""
 
 
 class Rosbag2Dataset(Dataset):  # type: ignore
@@ -24,10 +26,12 @@ class Rosbag2Dataset(Dataset):  # type: ignore
         transform: Any = None,
         target_transform: Any = None,
     ) -> None:
-        self.rosbag_path = rosbag_path
+        if os.path.isfile(rosbag_path):
+            self.rosbag_files = [rosbag_path]
+        else:
+            self.rosbag_files = glob.glob(rosbag_path + "/**/*.mcap", recursive=True)
         self.transform = transform
         self.target_transform = target_transform
-        self.reader = NonSeekingReader(rosbag_path)
         self.task_description_yaml_path = task_description_yaml_path
         self.dispatch(lambda obj: self.read_images(obj))
 
@@ -47,18 +51,24 @@ class Rosbag2Dataset(Dataset):  # type: ignore
         config = ImageOnlyConfig.from_yaml_file(yaml_path)
         self.images = []
         self.message_metadata = []
-        for schema, channel, message in self.reader.iter_messages():
-            if channel.topic in config.get_image_topics():
-                self.images.append(
-                    decode_image_message(
-                        message, schema, config.compressed(channel.topic)
+        for rosbag_file in self.rosbag_files:
+            reader = NonSeekingReader(rosbag_file)
+            for schema, channel, message in reader.iter_messages():
+                if channel.topic in config.get_image_topics():
+                    self.images.append(
+                        decode_image_message(
+                            message, schema, config.compressed(channel.topic)
+                        )
                     )
-                )
-                self.message_metadata.append(
-                    MessageMetaData.from_dict(
-                        {"sequence": message.sequence, "topic": channel.topic}
+                    self.message_metadata.append(
+                        MessageMetaData.from_dict(
+                            {
+                                "sequence": message.sequence,
+                                "topic": channel.topic,
+                                "rosbag_path": rosbag_file,
+                            }
+                        )
                     )
-                )
 
     def __len__(self) -> int:
         return self.dispatch(lambda yaml_path: len(self.images))  # type: ignore
