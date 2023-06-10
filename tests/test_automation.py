@@ -3,6 +3,8 @@ from amber.automation.nerf_3d_reconstruction import Nerf3DReconstruction
 from pathlib import Path
 import os
 from amber.dataset.rosbag2_dataset import Rosbag2Dataset
+import torch
+import pytest
 
 
 def test_detic_auto_labeler() -> None:
@@ -15,8 +17,10 @@ def test_detic_auto_labeler() -> None:
     labeler.inference(dataset)
 
 
-# @pytest.mark.slow
-def test_colmap_pose_estimation() -> None:
+@pytest.mark.skipif(
+    not torch.cuda.is_available(), reason="NeRF is too heavy for CPU machine."
+)  # type: ignore
+def test_nerf_3d_reconstruction() -> None:
     current_path = Path(os.path.dirname(os.path.realpath(__file__)))
     labeler = Nerf3DReconstruction(str(current_path / "nerf_3d_reconstruction.yaml"))
     dataset = Rosbag2Dataset(

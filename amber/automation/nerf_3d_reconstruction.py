@@ -188,3 +188,4 @@ class Nerf3DReconstruction(Automation):  # type: ignore
         self.run_command(self.build_export_pointcloud_command())
         self.run_command(self.build_export_mesh_command())
         subprocess.call(self.build_docker_copy_command())
+        print("Artifacts are outputed under " + self.get_output_directory_path())
