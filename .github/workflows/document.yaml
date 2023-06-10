@@ -31,7 +31,7 @@ jobs:
         with:
           poetry-version: ${{ matrix.poetry-version }}
       - name: install
-        run: poetry install --no-interaction
+        run: poetry install --no-interaction --with=docs
       - name: mkdocs build
         run: poetry run mkdocs build
       - uses: peaceiris/actions-gh-pages@v3

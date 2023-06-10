@@ -31,7 +31,7 @@ jobs:
         with:
           poetry-version: ${{ matrix.poetry-version }}
       - name: install
-        run: poetry install --with dev
+        run: poetry install --with=dev
       - name: test
         run: poetry run task test
   build:
