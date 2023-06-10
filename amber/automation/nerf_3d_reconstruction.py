@@ -15,8 +15,9 @@ class Nerf3DReconstruction(Automation):  # type: ignore
 
     def __init__(self, yaml_path: str) -> None:
         self.config = ColmapPoseEstimationConfig.from_yaml_file(yaml_path)
+        self.result_id = str(uuid.uuid4())
         self.temporary_directory = os.path.join(
-            "/tmp/nerf_3d_reconstruction", str(uuid.uuid4())
+            "/tmp/nerf_3d_reconstruction", self.result_id
         )
         self.setup_directory()
         self.to_pil_image = transforms.ToPILImage()
@@ -189,3 +190,11 @@ class Nerf3DReconstruction(Automation):  # type: ignore
         self.run_command(self.build_export_mesh_command())
         subprocess.call(self.build_docker_copy_command())
         print("Artifacts are outputed under " + self.get_output_directory_path())
+        print("If you want to check the trained result, please type commands below : ")
+        print(
+            "docker run -it --rm --gpus all -p 7007:7007 \
+            -v /tmp/nerf_3d_reconstruction/"
+            + self.result_id
+            + ":/workspace dromni/nerfstudio:0.3.1"
+            "/bin/bash -c `find -name config.yml | xargs -I {} ns-viewer --load-config {}`"
+        )
