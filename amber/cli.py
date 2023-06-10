@@ -3,6 +3,7 @@ from amber.exception import TaskDescriptionError
 import os
 from yaml import safe_load  # type: ignore
 from amber.automation.detic_image_labeler import DeticImageLabeler
+from amber.automation.nerf_3d_reconstruction import Nerf3DReconstruction
 from amber.dataset.rosbag2_dataset import Rosbag2Dataset
 from amber.importer.video import VideoImporter
 from typing import Any, Callable
@@ -64,6 +65,16 @@ def run_detic_image_labaler_automation(args: Any) -> None:
     labeler.write(dataset, "/detic_image_labeler", annotations, args.output_rosbag_path)
 
 
+def run_nerf_3d_reconstruction_automation(args: Any) -> None:
+    check_config_files_exists_for_automation(args)
+    task_description = {}
+    with open(args.task_description_yaml_path, "rb") as file:
+        task_description = safe_load(file)
+    reconstruction = Nerf3DReconstruction(args.task_description_yaml_path)
+    dataset = Rosbag2Dataset(args.rosbag_path, args.dataset_description_yaml_path)
+    reconstruction.inference(dataset)
+
+
 def setup_arguments_and_parser_for_import(
     parser_import: Any, func: Callable[[Any], None]
 ) -> None:
@@ -98,6 +109,13 @@ def main() -> None:
     )
     setup_arguments_and_parser_for_automation(
         parser_detic_image_labeler_automation, run_detic_image_labaler_automation
+    )
+    # Setup command line option for NeRF 3D reconstruction
+    parser_nerf_3d_reconstruction = subparsers_automation.add_parser(
+        "nerf", help="Run NeRF 3D reconstruction."
+    )
+    setup_arguments_and_parser_for_automation(
+        parser_nerf_3d_reconstruction, run_nerf_3d_reconstruction_automation
     )
 
     # Setup command line option for import command
