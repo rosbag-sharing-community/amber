@@ -29,10 +29,6 @@ class Nerf3DReconstruction(Automation):  # type: ignore
                     "bind": "/workspace/inputs",
                     "mode": "rw",
                 },
-                self.get_output_directory_path(): {
-                    "bind": "/workspace/output",
-                    "mode": "rw",
-                },
             },
             # ports={7007: 7007},
             device_requests=self.build_device_requests(),
@@ -93,6 +89,11 @@ class Nerf3DReconstruction(Automation):  # type: ignore
         ]
 
     def build_post_process_command(self) -> List[str]:
+        """Same as "ns-process-data images --data /workspace/inputs --output-dir /workspace/outputs/camera_poses"
+
+        Returns:
+            List[str]: bash command for post-processing data.
+        """
         return [
             "ns-process-data",
             "images",
@@ -104,6 +105,13 @@ class Nerf3DReconstruction(Automation):  # type: ignore
         ]
 
     def build_train_command(self) -> List[str]:
+        """Same as "ns-train nerfact --data /workspace/outputs/camera_poses
+            --output-dir /workspace/outputs/checkpoints
+            --vis tensorboard --pipeline.model.predict-normals True"
+
+        Returns:
+            List[str]: _description_
+        """
         return [
             "ns-train",
             "nerfacto",
@@ -118,17 +126,48 @@ class Nerf3DReconstruction(Automation):  # type: ignore
         ]
 
     def build_export_pointcloud_command(self) -> List[str]:
+        """Same as "find -name config.yml | xargs -I {} ns-export pointcloud
+            --load-config {} --output-dir /workspace/outputs/pointcloud"
+
+        Returns:
+            List[str]: bash command for exporting point cloud
+        """
         return [
-            "/bin/bash",
-            "-c",
-            "find -name config.yml | xargs -I {} ns-export pointcloud --load-config {} --output-dir /workspace/outputs/pointcloud",
+            "find",
+            "-name",
+            "config.yml",
+            "|",
+            "xargs",
+            "-I",
+            "{}",
+            "ns-export",
+            "pointcloud",
+            "--load-config",
+            "{}",
+            "--output-dir",
+            "/workspace/outputs/pointcloud",
         ]
 
     def build_export_mesh_command(self) -> List[str]:
+        """Same as "find -name config.yml | xargs -I {} ns-export poisson --load-config {} --output-dir /workspace/outputs/mesh"
+
+        Returns:
+            List[str]: bash command for exporting mesh
+        """
         return [
-            "/bin/bash",
-            "-c",
-            "find -name config.yml | xargs -I {} ns-export poisson --load-config {} --output-dir /workspace/outputs/pointcloud",
+            "find",
+            "-name",
+            "config.yml",
+            "|",
+            "xargs",
+            "-I",
+            "{}",
+            "ns-export",
+            "poisson",
+            "--load-config",
+            "{}",
+            "--output-dir",
+            "/workspace/outputs/mesh",
         ]
 
     def run_command(self, command: List[str]) -> None:
