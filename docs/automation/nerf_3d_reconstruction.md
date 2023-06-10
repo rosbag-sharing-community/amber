@@ -5,6 +5,10 @@ AMBER works with [nerf-studio](https://github.com/nerfstudio-project/nerfstudio)
 
 Special thanks to nerfstudio contributers.
 
+!!! warning
+    Limitation : NeRF 3D reconstruction feature is just developed and not well-used.
+    This feature currently supports nerfacto and poisson surface reconstruction method.
+
 ## Use with CLI
 
 !!! warning
