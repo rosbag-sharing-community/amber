@@ -196,5 +196,5 @@ class Nerf3DReconstruction(Automation):  # type: ignore
             -v /tmp/nerf_3d_reconstruction/"
             + self.result_id
             + ":/workspace dromni/nerfstudio:0.3.1"
-            "/bin/bash -c `find -name config.yml | xargs -I {} ns-viewer --load-config {}`"
+            '/bin/bash -c "find -name config.yml | xargs -I {} ns-viewer --load-config {}"'
         )
