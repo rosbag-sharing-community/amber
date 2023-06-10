@@ -7,6 +7,7 @@ from amber.automation.task_description import ColmapPoseEstimationConfig
 from typing import List
 from torchvision import transforms
 import uuid
+import subprocess
 
 
 class Nerf3DReconstruction(Automation):  # type: ignore
@@ -14,8 +15,8 @@ class Nerf3DReconstruction(Automation):  # type: ignore
 
     def __init__(self, yaml_path: str) -> None:
         self.config = ColmapPoseEstimationConfig.from_yaml_file(yaml_path)
-        self.temporary_image_directory = "/tmp/nerf_3d_reconstruction/" + str(
-            uuid.uuid4()
+        self.temporary_directory = os.path.join(
+            "/tmp/nerf_3d_reconstruction", str(uuid.uuid4())
         )
         self.setup_directory()
         self.to_pil_image = transforms.ToPILImage()
@@ -29,10 +30,11 @@ class Nerf3DReconstruction(Automation):  # type: ignore
                     "mode": "rw",
                 },
                 self.get_output_directory_path(): {
-                    "bind": "/workspace/outputs",
+                    "bind": "/workspace/output",
                     "mode": "rw",
                 },
             },
+            # ports={7007: 7007},
             device_requests=self.build_device_requests(),
             shm_size=self.config.docker_config.shm_size,
             command=["/bin/bash"],
@@ -42,10 +44,10 @@ class Nerf3DReconstruction(Automation):  # type: ignore
         )
 
     def get_input_directory_path(self) -> str:
-        return os.path.join(self.temporary_image_directory, "inputs")
+        return os.path.join(self.temporary_directory, "inputs")
 
     def get_output_directory_path(self) -> str:
-        return os.path.join(self.temporary_image_directory, "outputs")
+        return os.path.join(self.temporary_directory, "outputs")
 
     def get_camera_pose_output_directory_path(self) -> str:
         return os.path.join(self.get_output_directory_path(), "camera_poses")
@@ -73,8 +75,7 @@ class Nerf3DReconstruction(Automation):  # type: ignore
         return requests
 
     def setup_directory(self) -> None:
-        if not os.path.exists(self.temporary_image_directory):
-            os.makedirs(self.temporary_image_directory)
+        os.makedirs(self.temporary_directory)
         os.makedirs(self.get_input_directory_path())
 
     def cpu_or_gpu(self) -> str:
@@ -82,6 +83,14 @@ class Nerf3DReconstruction(Automation):  # type: ignore
             return "--gpu"
         else:
             return "--no-gpu"
+
+    def build_docker_copy_command(self) -> List[str]:
+        return [
+            "docker",
+            "cp",
+            self.container.id + ":/workspace/outputs",
+            self.get_output_directory_path(),
+        ]
 
     def build_post_process_command(self) -> List[str]:
         return [
@@ -97,11 +106,29 @@ class Nerf3DReconstruction(Automation):  # type: ignore
     def build_train_command(self) -> List[str]:
         return [
             "ns-train",
-            "instant-ngp",
+            "nerfacto",
             "--data",
             "/workspace/outputs/camera_poses",
             "--output-dir",
-            self.get_checkpoint_output_directory_path(),
+            "/workspace/outputs/checkpoints",
+            "--vis",
+            "tensorboard",
+            "--pipeline.model.predict-normals",
+            "True",
+        ]
+
+    def build_export_pointcloud_command(self) -> List[str]:
+        return [
+            "/bin/bash",
+            "-c",
+            "find -name config.yml | xargs -I {} ns-export pointcloud --load-config {} --output-dir /workspace/outputs/pointcloud",
+        ]
+
+    def build_export_mesh_command(self) -> List[str]:
+        return [
+            "/bin/bash",
+            "-c",
+            "find -name config.yml | xargs -I {} ns-export poisson --load-config {} --output-dir /workspace/outputs/pointcloud",
         ]
 
     def run_command(self, command: List[str]) -> None:
@@ -119,3 +146,6 @@ class Nerf3DReconstruction(Automation):  # type: ignore
             )
         self.run_command(self.build_post_process_command())
         self.run_command(self.build_train_command())
+        self.run_command(self.build_export_pointcloud_command())
+        self.run_command(self.build_export_mesh_command())
+        subprocess.call(self.build_docker_copy_command())
