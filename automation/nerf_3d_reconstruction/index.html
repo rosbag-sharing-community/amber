@@ -354,15 +354,15 @@ docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </s
 <p>If you want to see the NeRF result, please type final commands shown in the result like below.　　</p>
 <div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--rm<span class="w"> </span>--gpus<span class="w"> </span>all<span class="w"> </span>-p<span class="w"> </span><span class="m">7007</span>:7007<span class="w">             </span>-v<span class="w"> </span>/tmp/nerf_3d_reconstruction/6d1873fd-fa94-4c1a-a592-b4fd5cbc927e:/workspace<span class="w"> </span>dromni/nerfstudio:0.3.1/bin/bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">"find -name config.yml | xargs -I {} ns-viewer --load-config {}"</span>
 </code></pre></div>
-<p>Open</p>
-<p>Then, you can see result like below.</p>
+<p>Open url showed in console.
+Then, you can see result like below.</p>
 <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" frameborder="0" height="315" src="https://www.youtube.com/embed/NgEIB4TRRTo" title="YouTube video player" width="560"></iframe>
 <hr/>
 <div class="md-source-file">
 <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">June 10, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">June 11, 2023</span>
 </small>
 </div>
 </article>
