@@ -23,7 +23,7 @@ amber automation nerf tests/nerf_3d_reconstruction.yaml tests/read_images_soccer
 ```python
 current_path = Path(os.path.dirname(os.path.realpath(__file__)))
 labeler = Nerf3DReconstruction(str(current_path / "nerf_3d_reconstruction.yaml"))
-dataset = Rosbag2Dataset(
+dataset = ImagesDataset(
     str(current_path / "rosbag" / "soccer_goal"),
     str(current_path / "read_images_soccer_goal.yaml"),
 )

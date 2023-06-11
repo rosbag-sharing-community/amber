@@ -1,3 +1,2 @@
-dataset_type: image_only
 image_topics:
   - topic_name: /image_front_left

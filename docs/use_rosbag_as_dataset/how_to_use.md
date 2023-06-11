@@ -15,7 +15,7 @@ In order to specify this, write yaml setting file.
 
 
 ```python
-dataset = Rosbag2Dataset("(path to rosbag .mcap file)", "(path to rosbag yaml description file)")
+dataset = ImagesDataset("(path to rosbag .mcap file)", "(path to rosbag yaml description file)")
 ```
 
 If you want to know wahat types of task `amber` supports, please check task description section in this document.

@@ -30,7 +30,7 @@ After executing this command, `output.mp4` movie file was generated.
 ```python
 current_path = Path(os.path.dirname(os.path.realpath(__file__)))
 labeler = DeticImageLabeler(str(current_path / "detic_image_labeler.yaml"))
-dataset = Rosbag2Dataset(
+dataset = ImagesDataset(
     str(current_path / "rosbag" / "ford" / "ford.mcap"),
     str(current_path / "read_image_ford.yaml"),
 )
