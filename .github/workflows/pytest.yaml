@@ -1,6 +1,10 @@
 name: ci
 on:
   pull_request:
+    paths-ignore:
+      - mkdocs.yml
+      - .github/workflows/document.yaml
+      - docs/**
   push:
     branches:
       - master
