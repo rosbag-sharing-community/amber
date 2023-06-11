@@ -1,4 +1,5 @@
 from amber.dataset.images_dataset import ImagesDataset
+from amber.dataset.rosbag2_dataset import download_rosbag
 from amber.dataset.conversion import image_to_tensor
 from torch.utils.data import DataLoader
 import torch
@@ -60,4 +61,11 @@ def test_read_image_ford() -> None:
     reason="Do you have access rights to the test data?",
 )  # type: ignore
 def test_read_images_with_bounding_box_ford() -> None:
-    pass
+    current_path = Path(os.path.dirname(os.path.realpath(__file__)))
+    download_rosbag(
+        bucket_name="amber-test-rosbag",
+        remote_rosbag_directory="ford_with_annotation",
+        remote_rosbag_filename="bounding_box.mcap",
+        endpoint_url="https://s3.us-west-1.wasabisys.com",
+        download_dir=os.path.join(str(current_path / "rosbag")),
+    )

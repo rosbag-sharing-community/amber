@@ -6,6 +6,7 @@ from amber.exception import TaskDescriptionError
 from dataclasses import dataclass
 from dataclass_wizard import JSONWizard
 import glob
+import boto3
 
 
 @dataclass
@@ -32,6 +33,29 @@ class Rosbag2Dataset(Dataset):  # type: ignore
         self.transform = transform
         self.target_transform = target_transform
         self.task_description_yaml_path = task_description_yaml_path
+        self.message_metadata.clear()
 
     def get_metadata(self, index: int) -> MessageMetaData:
         return self.message_metadata[index]
+
+
+def download_rosbag(
+    bucket_name: str,
+    remote_rosbag_directory: str,
+    remote_rosbag_filename: str,
+    endpoint_url: str,
+    download_dir: str = "/tmp/amber/remote_bags",
+    aws_access_key_id: str = os.environ["AWS_ACCESS_KEY_ID"],
+    aws_secret_access_key: str = os.environ["AWS_SECRET_ACCESS_KEY"],
+) -> str:
+    s3 = boto3.resource(
+        "s3",
+        endpoint_url=endpoint_url,
+        aws_access_key_id=aws_access_key_id,
+        aws_secret_access_key=aws_secret_access_key,
+    )
+    remote_rosbag_path = os.path.join(remote_rosbag_directory, remote_rosbag_filename)
+    bucket = s3.Bucket(bucket_name)
+    local_rosbag_path = os.path.join(download_dir, remote_rosbag_path)
+    bucket.download_file(remote_rosbag_path, local_rosbag_path)
+    return local_rosbag_path
