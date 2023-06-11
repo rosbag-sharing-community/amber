@@ -3,8 +3,8 @@ on:
   pull_request:
     paths:
       - .github/workflows/pytest.yaml
-      - amber
-      - tests
+      - amber/**
+      - tests/**
   push:
     branches:
       - master
