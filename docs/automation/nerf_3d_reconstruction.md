@@ -75,8 +75,7 @@ If you want to see the NeRF result, please type final commands shown in the resu
 docker run -it --rm --gpus all -p 7007:7007             -v /tmp/nerf_3d_reconstruction/6d1873fd-fa94-4c1a-a592-b4fd5cbc927e:/workspace dromni/nerfstudio:0.3.1/bin/bash -c "find -name config.yml | xargs -I {} ns-viewer --load-config {}"
 ```
 
-Open
-
+Open url showed in console.
 Then, you can see result like below.
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/NgEIB4TRRTo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
