@@ -1,10 +1,10 @@
 name: ci
 on:
   pull_request:
-    paths-ignore:
-      - mkdocs.yml
-      - .github/workflows/document.yaml
-      - docs/**
+    paths:
+      - .github/workflows/pytest.yaml
+      - amber
+      - tests
   push:
     branches:
       - master
