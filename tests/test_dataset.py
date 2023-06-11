@@ -6,6 +6,7 @@ import tests
 import os
 from PIL import Image
 from pathlib import Path
+import pytest
 
 
 def test_read_image_vrx() -> None:
@@ -52,3 +53,11 @@ def test_read_image_ford() -> None:
                 ),
             )
             count = count + 1
+
+
+@pytest.mark.skipif(
+    (not os.getenv("AWS_ACCESS_KEY_ID")) or (not os.getenv("AWS_SECRET_ACCESS_KEY")),
+    reason="Do you have access rights to the test data?",
+)  # type: ignore
+def test_read_images_with_bounding_box_ford() -> None:
+    pass
