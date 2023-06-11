@@ -12,10 +12,10 @@ from mcap.reader import NonSeekingReader
 
 @dataclass
 class ReadImagesConfig(YAMLWizard):  # type: ignore
-    image_topics: list[ImageTopicConfig] = field(default_factory=list)
+    image_topics: List[ImageTopicConfig] = field(default_factory=list)
 
-    def get_image_topics(self) -> list[str]:
-        topics: list[str] = []
+    def get_image_topics(self) -> List[str]:
+        topics: List[str] = []
         for topic in self.image_topics:
             topics.append(topic.topic_name)
         return topics
@@ -39,9 +39,11 @@ class ImagesDataset(Rosbag2Dataset):  # type: ignore
         transform: Any = None,
         target_transform: Any = None,
     ) -> None:
+        self.images.clear()
         super().__init__(
             rosbag_path, task_description_yaml_path, transform, target_transform
         )
+        self.read_images(task_description_yaml_path)
 
     def read_images(self, yaml_path: str) -> None:
         config = ReadImagesConfig.from_yaml_file(yaml_path)
@@ -63,6 +65,7 @@ class ImagesDataset(Rosbag2Dataset):  # type: ignore
                             }
                         )
                     )
+        assert len(self.images) == len(self.message_metadata)
 
     def __len__(self) -> int:
         return len(self.images)
