@@ -309,7 +309,7 @@ Detic can classify 21k classes.</p>
 <h2 id="use-with-python-api">Use with Python API<a class="headerlink" href="#use-with-python-api" title="Permanent link">#</a></h2>
 <div class="highlight"><pre><span></span><code><span class="n">current_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)))</span>
 <span class="n">labeler</span> <span class="o">=</span> <span class="n">DeticImageLabeler</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">current_path</span> <span class="o">/</span> <span class="s2">"detic_image_labeler.yaml"</span><span class="p">))</span>
-<span class="n">dataset</span> <span class="o">=</span> <span class="n">Rosbag2Dataset</span><span class="p">(</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">ImagesDataset</span><span class="p">(</span>
     <span class="nb">str</span><span class="p">(</span><span class="n">current_path</span> <span class="o">/</span> <span class="s2">"rosbag"</span> <span class="o">/</span> <span class="s2">"ford"</span> <span class="o">/</span> <span class="s2">"ford.mcap"</span><span class="p">),</span>
     <span class="nb">str</span><span class="p">(</span><span class="n">current_path</span> <span class="o">/</span> <span class="s2">"read_image_ford.yaml"</span><span class="p">),</span>
 <span class="p">)</span>

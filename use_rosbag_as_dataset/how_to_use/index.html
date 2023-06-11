@@ -299,7 +299,7 @@ only zstd message compression supports.</p>
 <p>Rosbag includes multimodal data, such as image/pointcloud/audio/etc...
 So, you need to describe what data you want to extract from rosbag.
 In order to specify this, write yaml setting file.</p>
-<div class="highlight"><pre><span></span><code><span class="n">dataset</span> <span class="o">=</span> <span class="n">Rosbag2Dataset</span><span class="p">(</span><span class="s2">"(path to rosbag .mcap file)"</span><span class="p">,</span> <span class="s2">"(path to rosbag yaml description file)"</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">dataset</span> <span class="o">=</span> <span class="n">ImagesDataset</span><span class="p">(</span><span class="s2">"(path to rosbag .mcap file)"</span><span class="p">,</span> <span class="s2">"(path to rosbag yaml description file)"</span><span class="p">)</span>
 </code></pre></div>
 <p>If you want to know wahat types of task <code>amber</code> supports, please check task description section in this document.</p>
 <hr/>

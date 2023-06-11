@@ -311,7 +311,7 @@ This feature currently supports nerfacto and poisson surface reconstruction meth
 <h2 id="use-with-python-api">Use with Python API<a class="headerlink" href="#use-with-python-api" title="Permanent link">#</a></h2>
 <div class="highlight"><pre><span></span><code><span class="n">current_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)))</span>
 <span class="n">labeler</span> <span class="o">=</span> <span class="n">Nerf3DReconstruction</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">current_path</span> <span class="o">/</span> <span class="s2">"nerf_3d_reconstruction.yaml"</span><span class="p">))</span>
-<span class="n">dataset</span> <span class="o">=</span> <span class="n">Rosbag2Dataset</span><span class="p">(</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">ImagesDataset</span><span class="p">(</span>
     <span class="nb">str</span><span class="p">(</span><span class="n">current_path</span> <span class="o">/</span> <span class="s2">"rosbag"</span> <span class="o">/</span> <span class="s2">"soccer_goal"</span><span class="p">),</span>
     <span class="nb">str</span><span class="p">(</span><span class="n">current_path</span> <span class="o">/</span> <span class="s2">"read_images_soccer_goal.yaml"</span><span class="p">),</span>
 <span class="p">)</span>
