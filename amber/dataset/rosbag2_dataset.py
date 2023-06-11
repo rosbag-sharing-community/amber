@@ -32,7 +32,6 @@ class Rosbag2Dataset(Dataset):  # type: ignore
         self.transform = transform
         self.target_transform = target_transform
         self.task_description_yaml_path = task_description_yaml_path
-        self.message_metadata.clear()
 
     def get_metadata(self, index: int) -> MessageMetaData:
         return self.message_metadata[index]

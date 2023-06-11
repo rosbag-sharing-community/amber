@@ -26,30 +26,31 @@ class Automation(ABC):
     ) -> None:
         rosbag_file = open(output_rosbag_path, "w+b")
         writer = Writer(rosbag_file)
-        reader = NonSeekingReader(dataset.rosbag_path)
-        topics = []
-        # Copy all topics
-        for schema, channel, message in reader.iter_messages():
-            if channel.topic not in topics:
-                writer.register_msgdef(schema.name, schema.data.decode("utf-8"))
-                topics.append(channel.topic)
-            writer.write_message(
-                topic=channel.topic,
-                schema=schema,
-                message=message,
-                log_time=message.log_time,
-                publish_time=message.publish_time,
-                sequence=message.sequence,
+        for rosbag_filepath in dataset.rosbag_files:
+            reader = NonSeekingReader(rosbag_filepath)
+            topics = []
+            # Copy all topics
+            for schema, channel, message in reader.iter_messages():
+                if channel.topic not in topics:
+                    writer.register_msgdef(schema.name, schema.data.decode("utf-8"))
+                    topics.append(channel.topic)
+                writer.write_message(
+                    topic=channel.topic,
+                    schema=schema,
+                    message=message,
+                    log_time=message.log_time,
+                    publish_time=message.publish_time,
+                    sequence=message.sequence,
+                )
+            # Append annotation data
+            annotation_schema = writer.register_msgdef(
+                "std_msgs/msg/String", "string annotation_json"
             )
-        # Append annotation data
-        annotation_schema = writer.register_msgdef(
-            "std_msgs/msg/String", "string annotation_json"
-        )
-        writer.write_message(
-            topic=topic,
-            schema=annotation_schema,
-            message={"annotations": annotation_data},
-            sequence=0,
-        )
+            writer.write_message(
+                topic=topic,
+                schema=annotation_schema,
+                message={"annotations": annotation_data},
+                sequence=0,
+            )
         writer.finish()
         rosbag_file.close()
