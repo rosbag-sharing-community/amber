@@ -2,7 +2,7 @@ import docker
 from amber.automation.automation import Automation
 import shutil
 import os
-from amber.dataset.rosbag2_dataset import Rosbag2Dataset
+from amber.dataset.images_dataset import ImagesDataset
 from amber.automation.task_description import ColmapPoseEstimationConfig
 from typing import List
 from torchvision import transforms
@@ -176,7 +176,7 @@ class Nerf3DReconstruction(Automation):  # type: ignore
         for data in stream:
             print(data.decode())
 
-    def inference(self, dataset: Rosbag2Dataset) -> None:
+    def inference(self, dataset: ImagesDataset) -> None:
         for index, image in enumerate(dataset):
             self.to_pil_image(image).save(
                 os.path.join(

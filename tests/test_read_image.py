@@ -1,4 +1,4 @@
-from amber.dataset.rosbag2_dataset import Rosbag2Dataset
+from amber.dataset.images_dataset import ImagesDataset
 from amber.dataset.conversion import image_to_tensor
 from torch.utils.data import DataLoader
 import torch
@@ -10,7 +10,7 @@ from pathlib import Path
 
 def test_read_image_vrx() -> None:
     current_path = Path(os.path.dirname(os.path.realpath(__file__)))
-    dataset = Rosbag2Dataset(
+    dataset = ImagesDataset(
         str(current_path / "rosbag" / "vrx" / "vrx.mcap"),
         str(current_path / "read_image_vrx.yaml"),
     )
@@ -33,7 +33,7 @@ def test_read_image_vrx() -> None:
 
 def test_read_image_ford() -> None:
     current_path = Path(os.path.dirname(os.path.realpath(__file__)))
-    dataset = Rosbag2Dataset(
+    dataset = ImagesDataset(
         str(current_path / "rosbag" / "ford" / "ford.mcap"),
         str(current_path / "read_image_ford.yaml"),
     )

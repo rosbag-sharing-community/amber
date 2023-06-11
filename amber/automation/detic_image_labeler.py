@@ -2,7 +2,7 @@ import argparse
 import os
 import sys
 
-from amber.dataset.rosbag2_dataset import Rosbag2Dataset
+from amber.dataset.images_dataset import ImagesDataset
 from amber.automation.automation import Automation
 
 from gradio_client import Client
@@ -121,7 +121,7 @@ class DeticImageLabeler(Automation):  # type: ignore
             )
         return image_annotation
 
-    def inference(self, dataset: Rosbag2Dataset) -> List[ImageAnnotation]:
+    def inference(self, dataset: ImagesDataset) -> List[ImageAnnotation]:
         video: Any = None
         image_annotations: List[ImageAnnotation] = []
         for index, image in enumerate(dataset):
