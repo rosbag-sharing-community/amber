@@ -4,3 +4,7 @@ class TaskDescriptionError(Exception):
 
 class ImageDecodingError(Exception):
     pass
+
+
+class RosbagSchemaError(Exception):
+    pass

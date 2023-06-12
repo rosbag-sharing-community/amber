@@ -3,8 +3,14 @@ class Schema:
     schema_text: str
 
 
+class StringMessageSchema(Schema):
+    name = "std_msgs/msg/String"
+    schema_text = """\
+string data"""
+
+
 class ImageMessageSchema(Schema):
-    name = "sensor_msgs/Image"
+    name = "sensor_msgs/msg/Image"
     schema_text = """\
 std_msgs/Header header
 uint32 height

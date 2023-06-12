@@ -2,10 +2,13 @@ from typing import Any
 from abc import ABC, abstractmethod
 from amber.dataset.images_dataset import Rosbag2Dataset
 from mcap.writer import CompressionType, Writer
-from typing import List
+from typing import List, Dict
 import json
 from mcap.reader import NonSeekingReader
 from mcap_ros2.writer import Writer
+from mcap.records import Schema
+from amber.dataset.schema import StringMessageSchema
+from amber.exception import RosbagSchemaError
 
 
 class Automation(ABC):
@@ -17,6 +20,42 @@ class Automation(ABC):
     def inference(self, dataset: Rosbag2Dataset) -> Any:
         pass
 
+    def schema_exists(self, target_schema: Schema, schemas: List[Schema]) -> bool:
+        for schema in schemas:
+            if schema.name == target_schema.name:
+                if (
+                    schema.data == target_schema.data
+                    and schema.encoding == target_schema.encoding
+                ):
+                    return True
+                else:
+                    raise RosbagSchemaError(
+                        "Schema "
+                        + schema.name
+                        + " was matched, but data and encoding was not matched."
+                    )
+        return False
+
+    def get_schema_from_list(
+        self, target_schema: Schema, schemas: List[Schema]
+    ) -> Schema:
+        for schema in schemas:
+            if schema.name == target_schema.name:
+                if (
+                    schema.data == target_schema.data
+                    and schema.encoding == target_schema.encoding
+                ):
+                    return schema
+                else:
+                    raise RosbagSchemaError(
+                        "Schema "
+                        + schema.name
+                        + " was matched, but data and encoding was not matched."
+                    )
+        raise RosbagSchemaError(
+            "Schema " + schema.name + " does not exist, please check rosbag data."
+        )
+
     def write(
         self,
         dataset: Rosbag2Dataset,
@@ -24,33 +63,38 @@ class Automation(ABC):
         annotation_data: List[Any],
         output_rosbag_path: str,
     ) -> None:
+        annotation_json: Dict[str, List[Schema]] = {"annotations": []}
         rosbag_file = open(output_rosbag_path, "w+b")
         writer = Writer(rosbag_file)
+        schemas: List[Schema] = []
         for rosbag_filepath in dataset.rosbag_files:
             reader = NonSeekingReader(rosbag_filepath)
-            topics = []
             # Copy all topics
             for schema, channel, message in reader.iter_messages():
-                if channel.topic not in topics:
+                if not self.schema_exists(schema, schemas):
                     writer.register_msgdef(schema.name, schema.data.decode("utf-8"))
-                    topics.append(channel.topic)
+                    schema.id = len(schemas)
+                    schemas.append(schema)
                 writer.write_message(
                     topic=channel.topic,
-                    schema=schema,
+                    schema=self.get_schema_from_list(schema, schemas),
                     message=message,
                     log_time=message.log_time,
                     publish_time=message.publish_time,
                     sequence=message.sequence,
                 )
-            # Append annotation data
-            annotation_schema = writer.register_msgdef(
-                "std_msgs/msg/String", "string annotation_json"
-            )
-            writer.write_message(
-                topic=topic,
-                schema=annotation_schema,
-                message={"annotations": annotation_data},
-                sequence=0,
-            )
+        for annotation in annotation_data:
+            annotation_json["annotations"].append(annotation.to_json())
+        # Append annotation data
+        annotation_schema = writer.register_msgdef(
+            StringMessageSchema.name, StringMessageSchema.schema_text
+        )
+        annotation_schema.id = len(schemas)
+        writer.write_message(
+            topic=topic,
+            schema=annotation_schema,
+            message={"data": json.dumps(annotation_json)},
+            sequence=0,
+        )
         writer.finish()
         rosbag_file.close()
