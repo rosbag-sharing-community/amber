@@ -10,7 +10,7 @@ Detic can classify 21k classes.
     This sample command is written with the assumption that it will be executed in the root directory of the amber package.
 
 ```bash
-amber automation detic_image_labeler tests/detic_image_labeler.yaml tests/read_image_ford.yaml tests/rosbag/ford/ford.mcap output.mcap
+amber automation detic_image_labeler tests/automation/detic_image_labeler.yaml tests/read_image_ford.yaml tests/rosbag/ford/ford.mcap output.mcap
 ```
 
 Task description yaml for the detic_image_labaler is here.
@@ -29,15 +29,15 @@ After executing this command, `output.mp4` movie file was generated.
 
 ```python
 current_path = Path(os.path.dirname(os.path.realpath(__file__)))
-labeler = DeticImageLabeler(str(current_path / "detic_image_labeler.yaml"))
+labeler = DeticImageLabeler(str(current_path / "automation" / "detic_image_labeler.yaml"))
 dataset = ImagesDataset(
     str(current_path / "rosbag" / "ford" / "ford.mcap"),
-    str(current_path / "read_image_ford.yaml"),
+    str(current_path / "rosbag" / "ford" / "read_image.yaml"),
 )
 labeler.inference(dataset)
 ```
 
-`detic_image_labeler.yaml` and `read_image_ford.yaml` are exactly same when you use detic_image_labaler with CLI.
+`detic_image_labeler.yaml` and `read_image.yaml` are exactly same when you use detic_image_labaler with CLI.
 
 After executing this command, `output.mp4` movie file was generated.
 <iframe width="560" height="315" src="https://www.youtube.com/embed/OPR3ZVzRXCM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>

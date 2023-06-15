@@ -9,7 +9,9 @@ import pytest
 
 def test_detic_auto_labeler() -> None:
     current_path = Path(os.path.dirname(os.path.realpath(__file__)))
-    labeler = DeticImageLabeler(str(current_path / "detic_image_labeler.yaml"))
+    labeler = DeticImageLabeler(
+        str(current_path / "automation" / "detic_image_labeler.yaml")
+    )
     dataset = ImagesDataset(
         str(current_path / "rosbag" / "ford" / "ford.mcap"),
         str(current_path / "read_image_ford.yaml"),
@@ -22,9 +24,11 @@ def test_detic_auto_labeler() -> None:
 )  # type: ignore
 def test_nerf_3d_reconstruction() -> None:
     current_path = Path(os.path.dirname(os.path.realpath(__file__)))
-    labeler = Nerf3DReconstruction(str(current_path / "nerf_3d_reconstruction.yaml"))
+    labeler = Nerf3DReconstruction(
+        str(current_path / "automation" / "nerf_3d_reconstruction.yaml")
+    )
     dataset = ImagesDataset(
         str(current_path / "rosbag" / "soccer_goal"),
-        str(current_path / "read_images_soccer_goal.yaml"),
+        str(current_path / "rosbag" / "soccer_goal" / "read_image.yaml"),
     )
     labeler.inference(dataset)

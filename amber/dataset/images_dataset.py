@@ -13,20 +13,13 @@ from mcap.reader import NonSeekingReader
 @dataclass
 class ReadImagesConfig(YAMLWizard):  # type: ignore
     image_topics: List[ImageTopicConfig] = field(default_factory=list)
+    compressed: bool = True
 
     def get_image_topics(self) -> List[str]:
         topics: List[str] = []
         for topic in self.image_topics:
             topics.append(topic.topic_name)
         return topics
-
-    def compressed(self, topic_name: str) -> bool:
-        for topic in self.image_topics:
-            if topic.topic_name == topic_name:
-                return bool(topic.compressed)
-        raise TaskDescriptionError(
-            "Topic : " + topic_name + " does not exist in rosbag."
-        )
 
 
 class ImagesDataset(Rosbag2Dataset):  # type: ignore
@@ -52,9 +45,7 @@ class ImagesDataset(Rosbag2Dataset):  # type: ignore
             for schema, channel, message in reader.iter_messages():
                 if channel.topic in config.get_image_topics():
                     self.images.append(
-                        decode_image_message(
-                            message, schema, config.compressed(channel.topic)
-                        )
+                        decode_image_message(message, schema, config.compressed)
                     )
                     self.message_metadata.append(
                         MessageMetaData.from_dict(

@@ -15,17 +15,17 @@ Special thanks to nerfstudio contributers.
     Currently, generated mesh and pointcloud cannot be write into rosbag. So, final argument `hoge.mcap` does not work.
 
 ```bash
-amber automation nerf tests/nerf_3d_reconstruction.yaml tests/read_images_soccer_goal.yaml tests/rosbag/soccer_goal/ hoge.mcap
+amber automation nerf tests/nerf_3d_reconstruction.yaml tests/rosbag/soccer_goal/read_image.yaml tests/rosbag/soccer_goal/ hoge.mcap
 ```
 
 ## Use with Python API
 
 ```python
 current_path = Path(os.path.dirname(os.path.realpath(__file__)))
-labeler = Nerf3DReconstruction(str(current_path / "nerf_3d_reconstruction.yaml"))
+labeler = Nerf3DReconstruction(str(current_path / "automation" / "nerf_3d_reconstruction.yaml"))
 dataset = ImagesDataset(
     str(current_path / "rosbag" / "soccer_goal"),
-    str(current_path / "read_images_soccer_goal.yaml"),
+    str(current_path / "rosbag" / "soccer_goal", "read_image.yaml"),
 )
 labeler.inference(dataset)
 ```

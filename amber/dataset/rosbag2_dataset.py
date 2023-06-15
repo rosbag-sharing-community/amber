@@ -1,6 +1,6 @@
 import os
 from torch.utils.data import Dataset
-from typing import Any, Dict, List
+from typing import Any, List
 from yaml import safe_load  # type: ignore
 from amber.exception import TaskDescriptionError
 from dataclasses import dataclass
@@ -18,6 +18,7 @@ class MessageMetaData(JSONWizard):  # type: ignore
 
 class Rosbag2Dataset(Dataset):  # type: ignore
     message_metadata: List[MessageMetaData] = []
+    compressed: bool = False
 
     def __init__(
         self,

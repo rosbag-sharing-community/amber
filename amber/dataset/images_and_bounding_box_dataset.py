@@ -15,17 +15,10 @@ from mcap.reader import NonSeekingReader
 class ReadImagesAndBoundingBoxConfig(YAMLWizard):  # type: ignore
     image_topics: List[ImageTopicConfig] = field(default_factory=list)
     annotations: List[ImageAnnotation] = field(default_factory=list)
+    compressed: bool = True
 
     def get_image_topics(self) -> List[str]:
         topics: List[str] = []
         for topic in self.image_topics:
             topics.append(topic.topic_name)
         return topics
-
-    def compressed(self, topic_name: str) -> bool:
-        for topic in self.image_topics:
-            if topic.topic_name == topic_name:
-                return bool(topic.compressed)
-        raise TaskDescriptionError(
-            "Topic : " + topic_name + " does not exist in rosbag."
-        )

@@ -1,7 +1,6 @@
 from typing import Any
 from abc import ABC, abstractmethod
 from amber.dataset.images_dataset import Rosbag2Dataset
-from mcap.writer import CompressionType, Writer
 from typing import List, Dict
 import json
 from mcap.reader import NonSeekingReader
@@ -29,7 +28,7 @@ class Automation(ABC):
     ) -> None:
         annotation_json: Dict[str, List[Schema]] = {"annotations": []}
         rosbag_file = open(output_rosbag_path, "w+b")
-        writer = Writer(rosbag_file)
+        writer = Writer(output=rosbag_file)
         schema_dicts: Dict[str, Schema] = {}  # {schena name : schema}
         for rosbag_filepath in dataset.rosbag_files:
             reader = NonSeekingReader(rosbag_filepath)
