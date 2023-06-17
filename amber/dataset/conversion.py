@@ -50,15 +50,20 @@ def image_to_tensor(image: Image) -> torch.Tensor:
     return transforms.Compose([transforms.PILToTensor()])(image)
 
 
+def decode_message(message: Message, schema: Schema, decompress: bool) -> Message:
+    decoder = Decoder()
+    if decompress:
+        return decoder.decode(schema, decompress_message(message))
+    else:
+        return decoder.decode(schema, message)
+
+
 def decode_image_message(
     message: Message, schema: Schema, decompress: bool
 ) -> torch.Tensor:
-    decoder = Decoder()
-    if decompress:
-        ros_message = decoder.decode(schema, decompress_message(message))
-    else:
-        ros_message = decoder.decode(schema, message)
-    return image_to_tensor(ros_message_to_image(ros_message))
+    return image_to_tensor(
+        ros_message_to_image(decode_message(message, schema, decompress))
+    )
 
 
 def build_message_from_image(

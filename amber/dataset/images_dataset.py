@@ -24,6 +24,7 @@ class ReadImagesConfig(YAMLWizard):  # type: ignore
 
 class ImagesDataset(Rosbag2Dataset):  # type: ignore
     images: List[torch.Tensor] = []
+    config: ReadImagesConfig = ReadImagesConfig()
 
     def __init__(
         self,
@@ -33,19 +34,24 @@ class ImagesDataset(Rosbag2Dataset):  # type: ignore
         target_transform: Any = None,
     ) -> None:
         self.images.clear()
+        self.config = ReadImagesConfig.from_yaml_file(task_description_yaml_path)
+        print(self.config)
         super().__init__(
-            rosbag_path, task_description_yaml_path, transform, target_transform
+            rosbag_path,
+            task_description_yaml_path,
+            self.config.compressed,
+            transform,
+            target_transform,
         )
         self.read_images(task_description_yaml_path)
 
     def read_images(self, yaml_path: str) -> None:
-        config = ReadImagesConfig.from_yaml_file(yaml_path)
         for rosbag_file in self.rosbag_files:
             reader = NonSeekingReader(rosbag_file)
             for schema, channel, message in reader.iter_messages():
-                if channel.topic in config.get_image_topics():
+                if channel.topic in self.config.get_image_topics():
                     self.images.append(
-                        decode_image_message(message, schema, config.compressed)
+                        decode_image_message(message, schema, self.config.compressed)
                     )
                     self.message_metadata.append(
                         MessageMetaData.from_dict(

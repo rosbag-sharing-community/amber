@@ -62,12 +62,13 @@ def test_read_image_ford() -> None:
 )  # type: ignore
 def test_read_images_with_bounding_box_ford() -> None:
     current_path = Path(os.path.dirname(os.path.realpath(__file__)))
-    # dataset = ImagesDataset(
-    #     str(current_path / "rosbag" / "ford_with_annotation" / "bounding_box.mcap"),
-    #     str(
-    #         current_path
-    #         / "rosbag"
-    #         / "ford_with_annotation"
-    #         / "read_images_and_bounding_box.yaml"
-    #     ),
-    # )
+    dataset = ImagesDataset(
+        # str(current_path / "rosbag" / "ford_with_annotation" / "bounding_box.mcap"),
+        str(current_path / ".." / "output.mcap"),
+        str(
+            current_path
+            / "rosbag"
+            / "ford_with_annotation"
+            / "read_images_and_bounding_box.yaml"
+        ),
+    )

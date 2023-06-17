@@ -7,7 +7,9 @@ from mcap.reader import NonSeekingReader
 from mcap_ros2.writer import Writer
 from mcap.records import Schema
 from amber.dataset.schema import StringMessageSchema
+from amber.dataset.conversion import decode_message
 from amber.exception import RosbagSchemaError
+from mcap_ros2.decoder import Decoder
 
 
 class Automation(ABC):
@@ -41,7 +43,7 @@ class Automation(ABC):
                 writer.write_message(
                     topic=channel.topic,
                     schema=schema_dicts[schema.name],
-                    message=message,
+                    message=decode_message(message, schema, dataset.compressed),
                     log_time=message.log_time,
                     publish_time=message.publish_time,
                     sequence=message.sequence,

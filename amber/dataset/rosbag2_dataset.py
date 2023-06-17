@@ -24,6 +24,7 @@ class Rosbag2Dataset(Dataset):  # type: ignore
         self,
         rosbag_path: str,
         task_description_yaml_path: str,
+        compressed: bool,
         transform: Any = None,
         target_transform: Any = None,
     ) -> None:
@@ -31,6 +32,7 @@ class Rosbag2Dataset(Dataset):  # type: ignore
             self.rosbag_files = [rosbag_path]
         else:
             self.rosbag_files = glob.glob(rosbag_path + "/**/*.mcap", recursive=True)
+        self.compressed = compressed
         self.transform = transform
         self.target_transform = target_transform
         self.task_description_yaml_path = task_description_yaml_path
