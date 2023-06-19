@@ -1,18 +1,21 @@
 from amber.dataset.rosbag2_dataset import Rosbag2Dataset, MessageMetaData
+from amber.automation.annotation import BoundingBoxAnnotation, ImageAnnotation
 from amber.dataset.topic_config import ImageTopicConfig
 import torch
 from dataclasses import dataclass, field
 from dataclass_wizard import YAMLWizard
 from amber.exception import TaskDescriptionError
-from amber.dataset.conversion import decode_image_message
-from typing import Any, List
+from amber.dataset.conversion import decode_image_message, decode_message
+from typing import Any, List, Tuple
 from amber.dataset.rosbag2_dataset import Rosbag2Dataset
 from mcap.reader import NonSeekingReader
+import json
 
 
 @dataclass
-class ReadImagesConfig(YAMLWizard):  # type: ignore
+class ReadImagesAndAnnotationsConfig(YAMLWizard):  # type: ignore
     image_topics: List[ImageTopicConfig] = field(default_factory=list)
+    annotation_topic: str = ""
     compressed: bool = True
 
     def get_image_topics(self) -> List[str]:
@@ -22,9 +25,10 @@ class ReadImagesConfig(YAMLWizard):  # type: ignore
         return topics
 
 
-class ImagesDataset(Rosbag2Dataset):  # type: ignore
+class ImagesAndAnnotationsDataset(Rosbag2Dataset):  # type: ignore
     images: List[torch.Tensor] = []
-    config: ReadImagesConfig = ReadImagesConfig()
+    annotations: List[ImageAnnotation] = []
+    config = ReadImagesAndAnnotationsConfig()
 
     def __init__(
         self,
@@ -32,9 +36,11 @@ class ImagesDataset(Rosbag2Dataset):  # type: ignore
         task_description_yaml_path: str,
         transform: Any = None,
         target_transform: Any = None,
-    ) -> None:
+    ):
         self.images.clear()
-        self.config = ReadImagesConfig.from_yaml_file(task_description_yaml_path)
+        self.config = ReadImagesAndAnnotationsConfig.from_yaml_file(
+            task_description_yaml_path
+        )
         print(self.config)
         super().__init__(
             rosbag_path,
@@ -44,6 +50,7 @@ class ImagesDataset(Rosbag2Dataset):  # type: ignore
             target_transform,
         )
         self.read_images()
+        self.read_annotations()
 
     def read_images(self) -> None:
         for rosbag_file in self.rosbag_files:
@@ -63,6 +70,17 @@ class ImagesDataset(Rosbag2Dataset):  # type: ignore
                         )
                     )
         assert len(self.images) == len(self.message_metadata)
+
+    def read_annotations(self) -> None:
+        for rosbag_file in self.rosbag_files:
+            reader = NonSeekingReader(rosbag_file)
+            for schema, channel, message in reader.iter_messages():
+                if channel.topic in self.config.annotation_topic:
+                    annotation_json = decode_message(
+                        message, schema, self.config.compressed
+                    )
+                    for annotation in json.loads(annotation_json.data):
+                        self.annotations.append(ImageAnnotation.from_json(annotation))
 
     def __len__(self) -> int:
         return len(self.images)

@@ -28,7 +28,7 @@ class Automation(ABC):
         annotation_data: List[Any],
         output_rosbag_path: str,
     ) -> None:
-        annotation_json: Dict[str, List[Schema]] = {"annotations": []}
+        annotation_json: List[str] = []
         rosbag_file = open(output_rosbag_path, "w+b")
         writer = Writer(output=rosbag_file)
         schema_dicts: Dict[str, Schema] = {}  # {schena name : schema}
@@ -49,7 +49,7 @@ class Automation(ABC):
                     sequence=message.sequence,
                 )
         for annotation in annotation_data:
-            annotation_json["annotations"].append(annotation.to_json())
+            annotation_json.append(annotation.to_json())
         # Append annotation data
         annotation_schema = writer.register_msgdef(
             StringMessageSchema.name, StringMessageSchema.schema_text

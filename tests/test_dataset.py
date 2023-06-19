@@ -1,4 +1,5 @@
 from amber.dataset.images_dataset import ImagesDataset
+from amber.dataset.images_and_annotations_dataset import ImagesAndAnnotationsDataset
 from amber.dataset.rosbag2_dataset import download_rosbag
 from amber.dataset.conversion import image_to_tensor
 from torch.utils.data import DataLoader
@@ -62,9 +63,8 @@ def test_read_image_ford() -> None:
 )  # type: ignore
 def test_read_images_with_bounding_box_ford() -> None:
     current_path = Path(os.path.dirname(os.path.realpath(__file__)))
-    dataset = ImagesDataset(
-        # str(current_path / "rosbag" / "ford_with_annotation" / "bounding_box.mcap"),
-        str(current_path / ".." / "output.mcap"),
+    dataset = ImagesAndAnnotationsDataset(
+        str(current_path / "rosbag" / "ford_with_annotation" / "bounding_box.mcap"),
         str(
             current_path
             / "rosbag"
