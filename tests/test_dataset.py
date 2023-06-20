@@ -61,10 +61,34 @@ def test_read_image_ford() -> None:
     (not os.getenv("AWS_ACCESS_KEY_ID")) or (not os.getenv("AWS_SECRET_ACCESS_KEY")),
     reason="Do you have access rights to the test data?",
 )  # type: ignore
+def test_download_rosbag() -> None:
+    current_path = Path(os.path.dirname(os.path.realpath(__file__)))
+    download_rosbag(
+        bucket_name="amber-test-rosbag",
+        remote_rosbag_directory="ford_with_annotation",
+        remote_rosbag_filename="bounding_box.mcap",
+        endpoint_url="https://s3.us-west-1.wasabisys.com",
+        is_public=False,
+        download_dir=str(current_path / "rosbag"),
+    )
+
+
+@pytest.mark.skipif(
+    (not os.getenv("AWS_ACCESS_KEY_ID")) or (not os.getenv("AWS_SECRET_ACCESS_KEY")),
+    reason="Do you have access rights to the test data?",
+)  # type: ignore
 def test_read_images_with_bounding_box_ford() -> None:
     current_path = Path(os.path.dirname(os.path.realpath(__file__)))
     dataset = ImagesAndAnnotationsDataset(
-        str(current_path / "rosbag" / "ford_with_annotation" / "bounding_box.mcap"),
+        download_rosbag(
+            bucket_name="amber-test-rosbag",
+            remote_rosbag_directory="ford_with_annotation",
+            remote_rosbag_filename="bounding_box.mcap",
+            endpoint_url="https://s3.us-west-1.wasabisys.com",
+            is_public=True,
+            download_dir=str(current_path / "rosbag"),
+        ),
+        # str(current_path / "rosbag" / "ford_with_annotation" / "bounding_box.mcap"),
         str(
             current_path
             / "rosbag"
