@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 from dataclass_wizard import YAMLWizard
 from amber.exception import TaskDescriptionError
 from amber.dataset.conversion import decode_image_message, decode_message
-from typing import Any, List, Tuple
+from typing import Any, List, Dict, Tuple
 from amber.dataset.rosbag2_dataset import Rosbag2Dataset
 from mcap.reader import NonSeekingReader
 import json
@@ -27,7 +27,7 @@ class ReadImagesAndAnnotationsConfig(YAMLWizard):  # type: ignore
 
 class ImagesAndAnnotationsDataset(Rosbag2Dataset):  # type: ignore
     images: List[torch.Tensor] = []
-    annotations: List[ImageAnnotation] = []
+    annotations: Dict[int, ImageAnnotation] = {}
     config = ReadImagesAndAnnotationsConfig()
 
     def __init__(
@@ -80,10 +80,11 @@ class ImagesAndAnnotationsDataset(Rosbag2Dataset):  # type: ignore
                         message, schema, self.config.compressed
                     )
                     for annotation in json.loads(annotation_json.data):
-                        self.annotations.append(ImageAnnotation.from_json(annotation))
+                        annotation = ImageAnnotation.from_json(annotation)
+                        self.annotations[annotation.image_index] = annotation
 
     def __len__(self) -> int:
         return len(self.images)
 
-    def __getitem__(self, index: int) -> torch.Tensor:
-        return self.images[index]
+    def __getitem__(self, index: int) -> Tuple[torch.Tensor, ImageAnnotation]:
+        return (self.images[index], self.annotations[index])
