@@ -50,6 +50,7 @@ def download_rosbag(
     endpoint_url: str,
     download_dir: str = "/tmp/amber/remote_bags",
     is_public: bool = True,
+    false_overwrite: bool = False,
     aws_access_key_id: str = os.environ["AWS_ACCESS_KEY_ID"],
     aws_secret_access_key: str = os.environ["AWS_SECRET_ACCESS_KEY"],
 ) -> str:
@@ -64,6 +65,8 @@ def download_rosbag(
             remote_rosbag_directory, remote_rosbag_filename
         )
         local_rosbag_path = os.path.join(download_dir, remote_rosbag_path)
+        if os.path.exists(local_rosbag_path) and not false_overwrite:
+            return local_rosbag_path
         with open(local_rosbag_path, mode="wb") as f:
             f.write(
                 requests.get(
@@ -88,5 +91,7 @@ def download_rosbag(
         )
         bucket = s3.Bucket(bucket_name)
         local_rosbag_path = os.path.join(download_dir, remote_rosbag_path)
+        if os.path.exists(local_rosbag_path) and not false_overwrite:
+            return local_rosbag_path
         bucket.download_file(remote_rosbag_path, local_rosbag_path)
         return local_rosbag_path
