@@ -14,7 +14,7 @@ def test_detic_auto_labeler() -> None:
     )
     dataset = ImagesDataset(
         str(current_path / "rosbag" / "ford" / "ford.mcap"),
-        str(current_path / "read_image_ford.yaml"),
+        str(current_path / "rosbag" / "ford" / "read_image.yaml"),
     )
     labeler.inference(dataset)
 
