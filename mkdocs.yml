@@ -99,8 +99,8 @@ nav:
   - Tips: tips.md
   - Use rosbag as dataset:
     - How to use?: use_rosbag_as_dataset/how_to_use.md
-    - Task descriptions:
-      - Read images: use_rosbag_as_dataset/task_description/read_images.md
+    - Read images: use_rosbag_as_dataset/read_images.md
+    - Read images and annotation: use_rosbag_as_dataset/read_images_and_annotations.md
   - Automation:
     - Automation: automation/automation.md
     - Detic image labaler: automation/detic_image_labaler.md
