@@ -38,6 +38,9 @@ jobs:
         run: poetry install --with=dev
       - name: test
         run: poetry run task test
+        env:
+          AWS_ACCESS_KEY_ID: ${{secrets.WASABI_ACCESS_KEY}}
+          AWS_SECRET_ACCESS_KEY: ${{secrets.WASABI_SECRET_ACCESS_KEY}}
   build:
     name: build
     strategy:
