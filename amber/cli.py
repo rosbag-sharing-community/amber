@@ -62,7 +62,9 @@ def run_detic_image_labaler_automation(args: Any) -> None:
     labeler = DeticImageLabeler(args.task_description_yaml_path)
     dataset = ImagesDataset(args.rosbag_path, args.dataset_description_yaml_path)
     annotations = labeler.inference(dataset)
-    labeler.write(dataset, "/detic_image_labeler", annotations, args.output_rosbag_path)
+    labeler.write(
+        dataset, "/detic_image_labeler/annotation", annotations, args.output_rosbag_path
+    )
 
 
 def run_nerf_3d_reconstruction_automation(args: Any) -> None:
