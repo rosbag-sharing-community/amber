@@ -6,25 +6,26 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <meta content="Masaya Kataoka" name="author"/>
-<link href="https://hakuturu583.github.io/amber/" rel="canonical"/>
-<link href="tips/" rel="next"/>
-<link href="assets/images/favicon.png" rel="icon"/>
+<link href="https://hakuturu583.github.io/amber/use_rosbag_as_dataset/read_images_and_annotations/" rel="canonical"/>
+<link href="../read_images/" rel="prev"/>
+<link href="../../automation/automation/" rel="next"/>
+<link href="../../assets/images/favicon.png" rel="icon"/>
 <meta content="mkdocs-1.4.3, mkdocs-material-9.1.16" name="generator"/>
-<title>amber</title>
-<link href="assets/stylesheets/main.26e3688c.min.css" rel="stylesheet"/>
-<link href="assets/stylesheets/palette.ecc896b0.min.css" rel="stylesheet"/>
+<title>Read images and annotation - amber</title>
+<link href="../../assets/stylesheets/main.26e3688c.min.css" rel="stylesheet"/>
+<link href="../../assets/stylesheets/palette.ecc896b0.min.css" rel="stylesheet"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
 <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
 <link href="https://use.fontawesome.com/releases/v5.15.0/css/all.css" rel="stylesheet"/>
-<script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+<script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
 </head>
 <body data-md-color-accent="indigo" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
 <input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
 <input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
 <label class="md-overlay" for="__drawer"></label>
 <div data-md-component="skip">
-<a class="md-skip" href="#amber-automated-annotation-and-multimodal-bag-extraction-for-robotics">
+<a class="md-skip" href="#read-images-and-annotations">
           Skip to content
         </a>
 </div>
@@ -32,7 +33,7 @@
 </div>
 <header class="md-header" data-md-component="header">
 <nav aria-label="Header" class="md-header__inner md-grid">
-<a aria-label="amber" class="md-header__button md-logo" data-md-component="logo" href="." title="amber">
+<a aria-label="amber" class="md-header__button md-logo" data-md-component="logo" href="../.." title="amber">
 <svg viewbox="0 0 640 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M320 0c17.7 0 32 14.3 32 32v64h120c39.8 0 72 32.2 72 72v272c0 39.8-32.2 72-72 72H168c-39.8 0-72-32.2-72-72V168c0-39.8 32.2-72 72-72h120V32c0-17.7 14.3-32 32-32zM208 384c-8.8 0-16 7.2-16 16s7.2 16 16 16h32c8.8 0 16-7.2 16-16s-7.2-16-16-16h-32zm96 0c-8.8 0-16 7.2-16 16s7.2 16 16 16h32c8.8 0 16-7.2 16-16s-7.2-16-16-16h-32zm96 0c-8.8 0-16 7.2-16 16s7.2 16 16 16h32c8.8 0 16-7.2 16-16s-7.2-16-16-16h-32zM264 256a40 40 0 1 0-80 0 40 40 0 1 0 80 0zm152 40a40 40 0 1 0 0-80 40 40 0 1 0 0 80zM48 224h16v192H48c-26.5 0-48-21.5-48-48v-96c0-26.5 21.5-48 48-48zm544 0c26.5 0 48 21.5 48 48v96c0 26.5-21.5 48-48 48h-16V224h16z"></path></svg>
 </a>
 <label class="md-header__button md-icon" for="__drawer">
@@ -48,7 +49,7 @@
 <div class="md-header__topic" data-md-component="header-topic">
 <span class="md-ellipsis">
             
-              Home
+              Read images and annotation
             
           </span>
 </div>
@@ -101,27 +102,27 @@
 <div class="md-grid">
 <ul class="md-tabs__list">
 <li class="md-tabs__item">
-<a class="md-tabs__link md-tabs__link--active" href=".">
+<a class="md-tabs__link" href="../..">
       Home
     </a>
 </li>
 <li class="md-tabs__item">
-<a class="md-tabs__link" href="tips/">
+<a class="md-tabs__link" href="../../tips/">
       Tips
     </a>
 </li>
 <li class="md-tabs__item">
-<a class="md-tabs__link" href="use_rosbag_as_dataset/how_to_use/">
+<a class="md-tabs__link md-tabs__link--active" href="../how_to_use/">
         Use rosbag as dataset
       </a>
 </li>
 <li class="md-tabs__item">
-<a class="md-tabs__link" href="automation/automation/">
+<a class="md-tabs__link" href="../../automation/automation/">
         Automation
       </a>
 </li>
 <li class="md-tabs__item">
-<a class="md-tabs__link" href="import/import/">
+<a class="md-tabs__link" href="../../import/import/">
         Import
       </a>
 </li>
@@ -135,7 +136,7 @@
 <div class="md-sidebar__inner">
 <nav aria-label="Navigation" class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" data-md-level="0">
 <label class="md-nav__title" for="__drawer">
-<a aria-label="amber" class="md-nav__button md-logo" data-md-component="logo" href="." title="amber">
+<a aria-label="amber" class="md-nav__button md-logo" data-md-component="logo" href="../.." title="amber">
 <svg viewbox="0 0 640 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M320 0c17.7 0 32 14.3 32 32v64h120c39.8 0 72 32.2 72 72v272c0 39.8-32.2 72-72 72H168c-39.8 0-72-32.2-72-72V168c0-39.8 32.2-72 72-72h120V32c0-17.7 14.3-32 32-32zM208 384c-8.8 0-16 7.2-16 16s7.2 16 16 16h32c8.8 0 16-7.2 16-16s-7.2-16-16-16h-32zm96 0c-8.8 0-16 7.2-16 16s7.2 16 16 16h32c8.8 0 16-7.2 16-16s-7.2-16-16-16h-32zm96 0c-8.8 0-16 7.2-16 16s7.2 16 16 16h32c8.8 0 16-7.2 16-16s-7.2-16-16-16h-32zM264 256a40 40 0 1 0-80 0 40 40 0 1 0 80 0zm152 40a40 40 0 1 0 0-80 40 40 0 1 0 0 80zM48 224h16v192H48c-26.5 0-48-21.5-48-48v-96c0-26.5 21.5-48 48-48zm544 0c26.5 0 48 21.5 48 48v96c0 26.5-21.5 48-48 48h-16V224h16z"></path></svg>
 </a>
     amber
@@ -151,14 +152,46 @@
 </a>
 </div>
 <ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../..">
+        Home
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../tips/">
+        Tips
+      </a>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          Use rosbag as dataset
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+          Use rosbag as dataset
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../how_to_use/">
+        How to use?
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../read_images/">
+        Read images
+      </a>
+</li>
 <li class="md-nav__item md-nav__item--active">
 <input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
 <label class="md-nav__link md-nav__link--active" for="__toc">
-          Home
+          Read images and annotation
           <span class="md-nav__icon md-icon"></span>
 </label>
-<a class="md-nav__link md-nav__link--active" href=".">
-        Home
+<a class="md-nav__link md-nav__link--active" href="./">
+        Read images and annotation
       </a>
 <nav aria-label="Table of contents" class="md-nav md-nav--secondary">
 <label class="md-nav__title" for="__toc">
@@ -167,87 +200,12 @@
     </label>
 <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#how-it-works">
-    How it works
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#how-to-setup">
-    How to setup?
-  </a>
-<nav aria-label="How to setup?" class="md-nav">
-<ul class="md-nav__list">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#check-your-os-is-suppoted-platform">
-    Check your OS is suppoted platform?
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#install-dependencies">
-    Install Dependencies
-  </a>
-<nav aria-label="Install Dependencies" class="md-nav">
-<ul class="md-nav__list">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#poetry">
-    Poetry
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#docker">
-    Docker
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#nvidia-driver-and-nvidia-dockeroptional">
-    Nvidia driver and nvidia docker(Optional)
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#google-testoptional">
-    Google test(Optional)
+<a class="md-nav__link" href="#supported-annotation-type">
+    Supported annotation type
   </a>
 </li>
 </ul>
 </nav>
-</li>
-</ul>
-</nav>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="tips/">
-        Tips
-      </a>
-</li>
-<li class="md-nav__item md-nav__item--nested">
-<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_3" type="checkbox"/>
-<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
-          Use rosbag as dataset
-          <span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
-<label class="md-nav__title" for="__nav_3">
-<span class="md-nav__icon md-icon"></span>
-          Use rosbag as dataset
-        </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="use_rosbag_as_dataset/how_to_use/">
-        How to use?
-      </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="use_rosbag_as_dataset/read_images/">
-        Read images
-      </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="use_rosbag_as_dataset/read_images_and_annotations/">
-        Read images and annotation
-      </a>
 </li>
 </ul>
 </nav>
@@ -265,17 +223,17 @@
         </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="automation/automation/">
+<a class="md-nav__link" href="../../automation/automation/">
         Automation
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="automation/detic_image_labaler/">
+<a class="md-nav__link" href="../../automation/detic_image_labaler/">
         Detic image labaler
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="automation/nerf_3d_reconstruction/">
+<a class="md-nav__link" href="../../automation/nerf_3d_reconstruction/">
         NeRF 3D Reconstruction
       </a>
 </li>
@@ -295,12 +253,12 @@
         </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="import/import/">
+<a class="md-nav__link" href="../../import/import/">
         Import
       </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="import/video/">
+<a class="md-nav__link" href="../../import/video/">
         Video
       </a>
 </li>
@@ -314,42 +272,43 @@
 </div>
 <div class="md-content" data-md-component="content">
 <article class="md-content__inner md-typeset">
-<h1 id="amber-automated-annotation-and-multimodal-bag-extraction-for-robotics">AMBER: Automated annotation and Multimodal Bag Extraction for Robotics<a class="headerlink" href="#amber-automated-annotation-and-multimodal-bag-extraction-for-robotics" title="Permanent link">#</a></h1>
-<p>Amber is a ROS2 friendly ML tools.
-Your rosbag2 become dataset!</p>
-<h2 id="how-it-works">How it works<a class="headerlink" href="#how-it-works" title="Permanent link">#</a></h2>
-<ol>
-<li>Prepare rosbag2 with mcap format.</li>
-<li>Prepare task description yaml file.</li>
-<li>Enjyo your ML life with Robots!</li>
-</ol>
-<h2 id="how-to-setup">How to setup?<a class="headerlink" href="#how-to-setup" title="Permanent link">#</a></h2>
-<h3 id="check-your-os-is-suppoted-platform">Check your OS is suppoted platform?<a class="headerlink" href="#check-your-os-is-suppoted-platform" title="Permanent link">#</a></h3>
-<p>This tool is only support ubuntu 22.04.
-Please install ubuntu 22.04 in your local machine first.</p>
-<h3 id="install-dependencies">Install Dependencies<a class="headerlink" href="#install-dependencies" title="Permanent link">#</a></h3>
-<h4 id="poetry">Poetry<a class="headerlink" href="#poetry" title="Permanent link">#</a></h4>
-<p>Setup environment and dependencies in python.
-Please follow <a href="https://python-poetry.org/docs/">this documentation.</a></p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Developer and github actions are tested under poetry 1.2.0</p>
-</div>
-<h4 id="docker">Docker<a class="headerlink" href="#docker" title="Permanent link">#</a></h4>
-<p>Some automation tools are executed inside docker.
-Please follow <a href="https://docs.docker.com/engine/install/ubuntu/">this documentation.</a></p>
-<div class="admonition notion">
-<p class="admonition-title">Notion</p>
-<p>Developer use docker version 23.0.5</p>
-</div>
-<h4 id="nvidia-driver-and-nvidia-dockeroptional">Nvidia driver and nvidia docker(Optional)<a class="headerlink" href="#nvidia-driver-and-nvidia-dockeroptional" title="Permanent link">#</a></h4>
-<p>Some automation tools support cuda.
-If you want to use gpu, please install nvidia driver and nvidia docker.</p>
-<h4 id="google-testoptional">Google test(Optional)<a class="headerlink" href="#google-testoptional" title="Permanent link">#</a></h4>
-<p>Google test is a used for testing C++ code inside amber.
-It is optional and it is not required for building amber in your local machine.</p>
-<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>apt<span class="w"> </span>update<span class="w"> </span><span class="p">&amp;</span><span class="w"> </span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>googletest
+<h1 id="read-images-and-annotations">Read images and annotations<a class="headerlink" href="#read-images-and-annotations" title="Permanent link">#</a></h1>
+<p>ImagesAndAnnotationsDataset Class provides image and annotations.
+Example task description yaml file is here.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">image_topics</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">topic_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/image_front_left</span>
+<span class="nt">annotation_topic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/detic_image_labeler/annotation</span>
+<span class="nt">compressed</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 </code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">dataset</span> <span class="o">=</span> <span class="n">ImagesAndAnnotationsDataset</span><span class="p">(</span><span class="s2">"(path to rosbag .mcap file)"</span><span class="p">,</span> <span class="s2">"(path to rosbag yaml description file)"</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="supported-annotation-type">Supported annotation type<a class="headerlink" href="#supported-annotation-type" title="Permanent link">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Support status</th>
+<th>Remarks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Bounding Box</td>
+<td><img alt="✔️" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/2714.png" title=":heavy_check_mark:"/></td>
+<td></td>
+</tr>
+<tr>
+<td>Polygon</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Mask</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
 <hr/>
 <div class="md-source-file">
 <small>
@@ -395,8 +354,8 @@ It is optional and it is not required for building amber in your local machine.<
 <div class="md-dialog" data-md-component="dialog">
 <div class="md-dialog__inner md-typeset"></div>
 </div>
-<script id="__config" type="application/json">{"base": ".", "features": ["navigation.tabs", "navigation.expand", "navigation.top", "toc.integrate"], "search": "assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
-<script src="assets/javascripts/bundle.a51614de.min.js"></script>
+<script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.expand", "navigation.top", "toc.integrate"], "search": "../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+<script src="../../assets/javascripts/bundle.a51614de.min.js"></script>
 <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
 <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
