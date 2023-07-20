@@ -21,7 +21,7 @@ Setup environment and dependencies in python.
 Please follow [this documentation.](https://python-poetry.org/docs/)
 
 !!! warning
-    Developer and github actions are tested under poetry 1.2.0
+    Developer and github actions are tested under poetry 1.5.1
 
 #### Docker
 Some automation tools are executed inside docker.
