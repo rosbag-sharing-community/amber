@@ -96,3 +96,19 @@ def test_read_images_with_bounding_box_ford() -> None:
             / "read_images_and_bounding_box.yaml"
         ),
     )
+
+
+@pytest.mark.skipif(
+    (not os.getenv("AWS_ACCESS_KEY_ID")) or (not os.getenv("AWS_SECRET_ACCESS_KEY")),
+    reason="Do you have access rights to the test data?",
+)  # type: ignore
+def test_read_pointcloud() -> None:
+    current_path = Path(os.path.dirname(os.path.realpath(__file__)))
+    download_rosbag(
+        bucket_name="amber-test-rosbag",
+        remote_rosbag_directory="vrx",
+        remote_rosbag_filename="vrx_teleop.mcap",
+        endpoint_url="https://s3.us-west-1.wasabisys.com",
+        is_public=True,
+        download_dir=str(current_path / "rosbag"),
+    )
