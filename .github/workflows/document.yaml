@@ -23,11 +23,12 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ["3.10.6"]
-        poetry-version: ["1.4.0"]
+        poetry-version: ["1.5.1"]
         os: [ubuntu-22.04]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
+      - uses: ./.github/workflows/actions/cleanup_runner
       - uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
