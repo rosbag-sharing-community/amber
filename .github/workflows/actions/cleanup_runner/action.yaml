@@ -1,0 +1,46 @@
+name: "Cleanup Runner Image"
+description: "Clean up runner"
+
+runs:
+  using: "composite"
+  steps:
+  - name: cleanup
+    run: |
+      docker images
+      sudo rm -rf "/opt/ghc" || true
+      sudo rm -rf "/usr/share/dotnet" || true
+      sudo rm -rf "$AGENT_TOOLSDIRECTORY" || true
+      sudo rm -rf "/usr/local/lib/android" || true
+      sudo rm -rf "/usr/local/share/boost" || true
+      docker rmi $(docker image ls -q --filter "reference=node*")
+      docker rmi $(docker image ls -q --filter "reference=debian*")
+      docker rmi $(docker image ls -q --filter "reference=alpine*")
+      docker rmi $(docker image ls -q --filter "reference=ubuntu:18.04")
+      docker rmi $(docker image ls -q --filter "reference=ubuntu:20.04")
+      sudo apt purge \
+        ansible \
+        aria2 \
+        azure-cli \
+        bazel \
+        cabal* \
+        clang* \
+        dotnet-sdk* \
+        ghc* \
+        google-chrome-stable \
+        google-cloud-sdk \
+        heroku \
+        kubectl \
+        mysql* \
+        node* \
+        npm* \
+        php* \
+        powershell \
+        rpm \
+        ruby* \
+        subversion \
+        yarn \
+        -yq >/dev/null 2>&1 || true
+      sudo apt-get autoremove -y >/dev/null 2>&1 || true
+      sudo apt-get autoclean -y >/dev/null 2>&1 || true
+      df -h
+    shell: bash

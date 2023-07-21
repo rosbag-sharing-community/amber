@@ -26,6 +26,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
+      - uses: ./.github/workflows/actions/cleanup_runner
       - name: install google test
         run: sudo apt update & sudo apt install -y googletest
       - uses: actions/setup-python@v4
@@ -61,8 +62,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
-      - name: install google test
-        run: sudo apt update & sudo apt install -y googletest
+      - uses: ./.github/workflows/actions/cleanup_runner
       - uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
