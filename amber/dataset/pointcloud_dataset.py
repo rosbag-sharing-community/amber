@@ -4,14 +4,15 @@ import torch
 from dataclasses import dataclass, field
 from dataclass_wizard import YAMLWizard
 from amber.exception import TaskDescriptionError
-from amber.dataset.conversion import decode_message
+from amber.dataset.conversion import ros_message_to_pointcloud
 from typing import Any, List
 from amber.dataset.rosbag2_dataset import Rosbag2Dataset
 from mcap.reader import NonSeekingReader
+import open3d
 
 
 @dataclass
-class ReadImagesConfig(YAMLWizard):  # type: ignore
+class ReadPointCloudConfig(YAMLWizard):  # type: ignore
     pointcloud_topics: List[PointcloudTopicConfig] = field(default_factory=list)
     compressed: bool = True
 
@@ -22,4 +23,27 @@ class ReadImagesConfig(YAMLWizard):  # type: ignore
         return topics
 
 
-# class PointcloudDataset(Rosbag2Dataset):
+class PointcloudDataset(Rosbag2Dataset):  # type: ignore
+    def __init__(
+        self,
+        rosbag_path: str,
+        task_description_yaml_path: str,
+        transform: Any = None,
+        target_transform: Any = None,
+    ) -> None:
+        self.config = ReadPointCloudConfig.from_yaml_file(task_description_yaml_path)
+        print(self.config)
+        super().__init__(
+            rosbag_path,
+            task_description_yaml_path,
+            self.config.compressed,
+            transform,
+            target_transform,
+        )
+
+    def test_read_pointclouds(self) -> None:
+        for rosbag_file in self.rosbag_files:
+            reader = NonSeekingReader(rosbag_file)
+            for schema, channel, message in reader.iter_messages():
+                if channel.topic in self.config.get_image_topics():
+                    ros_message_to_pointcloud()

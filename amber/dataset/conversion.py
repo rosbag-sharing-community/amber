@@ -14,6 +14,7 @@ from sys import byteorder
 from typing import Any
 import cv2
 import io
+import open3d
 
 
 def compress_message(message: Message) -> Message:
@@ -44,6 +45,13 @@ def ros_message_to_image(ros_message: DecodedMessage) -> Image:
                 + ros_message.encoding
                 + " , it was not supported yet."
             )
+
+
+def ros_message_to_pointcloud(
+    ros_message: DecodedMessage,
+) -> open3d.geometry.PointCloud:
+    pointcloud = open3d.geometry.PointCloud()
+    return pointcloud
 
 
 def image_to_tensor(image: Image) -> torch.Tensor:
