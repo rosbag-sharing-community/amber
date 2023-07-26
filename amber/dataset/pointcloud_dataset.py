@@ -4,7 +4,7 @@ import torch
 from dataclasses import dataclass, field
 from dataclass_wizard import YAMLWizard
 from amber.exception import TaskDescriptionError
-from amber.dataset.conversion import ros_message_to_pointcloud
+from amber.dataset.conversion import decode_pointcloud_message
 from typing import Any, List
 from amber.dataset.rosbag2_dataset import Rosbag2Dataset
 from mcap.reader import NonSeekingReader
@@ -40,10 +40,11 @@ class PointcloudDataset(Rosbag2Dataset):  # type: ignore
             transform,
             target_transform,
         )
+        self.read_pointclouds()
 
-    def test_read_pointclouds(self) -> None:
+    def read_pointclouds(self) -> None:
         for rosbag_file in self.rosbag_files:
             reader = NonSeekingReader(rosbag_file)
             for schema, channel, message in reader.iter_messages():
-                if channel.topic in self.config.get_image_topics():
-                    ros_message_to_pointcloud()
+                if channel.topic in self.config.get_pointcloud_topics():
+                    decode_pointcloud_message(message, schema, self.config.compressed)

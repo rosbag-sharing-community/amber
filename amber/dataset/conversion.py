@@ -51,6 +51,7 @@ def ros_message_to_pointcloud(
     ros_message: DecodedMessage,
 ) -> open3d.geometry.PointCloud:
     pointcloud = open3d.geometry.PointCloud()
+    print(pointcloud)
     return pointcloud
 
 
@@ -72,6 +73,12 @@ def decode_image_message(
     return image_to_tensor(
         ros_message_to_image(decode_message(message, schema, decompress))
     )
+
+
+def decode_pointcloud_message(
+    message: Message, schema: Schema, decompress: bool
+) -> open3d.geometry.PointCloud:
+    return ros_message_to_pointcloud(decode_message(message, schema, decompress))
 
 
 def build_message_from_image(

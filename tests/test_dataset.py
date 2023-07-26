@@ -1,5 +1,6 @@
 from amber.dataset.images_dataset import ImagesDataset
 from amber.dataset.images_and_annotations_dataset import ImagesAndAnnotationsDataset
+from amber.dataset.pointcloud_dataset import PointcloudDataset
 from amber.dataset.rosbag2_dataset import download_rosbag
 from amber.dataset.conversion import image_to_tensor
 from torch.utils.data import DataLoader
@@ -88,7 +89,6 @@ def test_read_images_with_bounding_box_ford() -> None:
             is_public=True,
             download_dir=str(current_path / "rosbag"),
         ),
-        # str(current_path / "rosbag" / "ford_with_annotation" / "bounding_box.mcap"),
         str(
             current_path
             / "rosbag"
@@ -104,11 +104,14 @@ def test_read_images_with_bounding_box_ford() -> None:
 )  # type: ignore
 def test_read_pointcloud() -> None:
     current_path = Path(os.path.dirname(os.path.realpath(__file__)))
-    download_rosbag(
-        bucket_name="amber-test-rosbag",
-        remote_rosbag_directory="vrx",
-        remote_rosbag_filename="vrx_teleop.mcap",
-        endpoint_url="https://s3.us-west-1.wasabisys.com",
-        is_public=True,
-        download_dir=str(current_path / "rosbag"),
+    dataset = PointcloudDataset(
+        download_rosbag(
+            bucket_name="amber-test-rosbag",
+            remote_rosbag_directory="vrx",
+            remote_rosbag_filename="vrx_teleop.mcap",
+            endpoint_url="https://s3.us-west-1.wasabisys.com",
+            is_public=True,
+            download_dir=str(current_path / "rosbag"),
+        ),
+        str(current_path / "rosbag" / "vrx" / "read_pointcloud.yaml"),
     )
