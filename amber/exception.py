@@ -2,7 +2,7 @@ class TaskDescriptionError(Exception):
     pass
 
 
-class ImageDecodingError(Exception):
+class MessageDecodingError(Exception):
     pass
 
 
