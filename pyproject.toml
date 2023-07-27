@@ -73,6 +73,7 @@ optional = true
 mkdocs = "^1.4"
 mkdocs-material = "^9.1"
 fontawesome_markdown = "*"
+markdown = "3.3.0"
 mkdocs-mermaid2-plugin = "^1.0.0"
 pymdown-extensions = "*"
 mkdocs-git-revision-date-localized-plugin = "*"
