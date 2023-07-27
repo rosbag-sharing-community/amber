@@ -15,6 +15,7 @@ from typing import Any, List, Callable
 import cv2
 import io
 import open3d
+from struct import unpack
 
 
 def compress_message(message: Message) -> Message:
@@ -59,8 +60,8 @@ def get_pointcloud_field(field_name: str, fields: List[Any]) -> Any:
 
 
 def read_float_value_from_pointcloud_data(
-    field_name: str, fields: List[Any], data: np.array
-) -> None:
+    field_name: str, fields: List[Any], data: np.array, is_bigendian: bool
+) -> Any:
     field = get_pointcloud_field(field_name, fields)
 
     def get_bytes(data: np.array, offset: int, size: int) -> bytes:
@@ -69,28 +70,52 @@ def read_float_value_from_pointcloud_data(
     # See also https://docs.ros2.org/foxy/api/sensor_msgs/msg/PointField.html
     # INT8
     if field.datatype == 1:
-        get_bytes(data, field.offset, 1)
+        if is_bigendian:
+            return unpack(">b", get_bytes(data, field.offset, 1))
+        else:
+            return unpack("<b", get_bytes(data, field.offset, 1))
     # UINT8
     elif field.datatype == 2:
-        get_bytes(data, field.offset, 1)
+        if is_bigendian:
+            return unpack(">B", get_bytes(data, field.offset, 1))
+        else:
+            return unpack("<B", get_bytes(data, field.offset, 1))
     # INT16
     elif field.datatype == 3:
-        get_bytes(data, field.offset, 2)
+        if is_bigendian:
+            return unpack(">h", get_bytes(data, field.offset, 2))
+        else:
+            return unpack("<h", get_bytes(data, field.offset, 2))
     # UINT16
     elif field.datatype == 4:
-        get_bytes(data, field.offset, 2)
+        if is_bigendian:
+            return unpack(">H", get_bytes(data, field.offset, 2))
+        else:
+            return unpack("<H", get_bytes(data, field.offset, 2))
     # INT32
     elif field.datatype == 5:
-        get_bytes(data, field.offset, 4)
+        if is_bigendian:
+            return unpack(">i", get_bytes(data, field.offset, 4))
+        else:
+            return unpack("<i", get_bytes(data, field.offset, 4))
     # UINT32
     elif field.datatype == 6:
-        get_bytes(data, field.offset, 4)
+        if is_bigendian:
+            return unpack(">I", get_bytes(data, field.offset, 4))
+        else:
+            return unpack("<I", get_bytes(data, field.offset, 4))
     # FLOAT32
     elif field.datatype == 7:
-        get_bytes(data, field.offset, 4)
+        if is_bigendian:
+            return unpack(">f", get_bytes(data, field.offset, 4))
+        else:
+            return unpack("<f", get_bytes(data, field.offset, 4))
     # FLOAT64
     elif field.datatype == 8:
-        get_bytes(data, field.offset, 8)
+        if is_bigendian:
+            return unpack(">d", get_bytes(data, field.offset, 8))
+        else:
+            return unpack("<d", get_bytes(data, field.offset, 8))
     else:
         raise MessageDecodingError(
             "Invalid data type : "
@@ -109,7 +134,19 @@ def ros_message_to_pointcloud(
         [int(len(ros_message.data) / ros_message.point_step), ros_message.point_step]
     )
     for point in points:
-        read_float_value_from_pointcloud_data("x", ros_message.fields, point)
+        pointcloud.points.append(
+            [
+                read_float_value_from_pointcloud_data(
+                    "x", ros_message.fields, point, ros_message.is_bigendian
+                ),
+                read_float_value_from_pointcloud_data(
+                    "y", ros_message.fields, point, ros_message.is_bigendian
+                ),
+                read_float_value_from_pointcloud_data(
+                    "z", ros_message.fields, point, ros_message.is_bigendian
+                ),
+            ]
+        )
     return pointcloud
 
 
