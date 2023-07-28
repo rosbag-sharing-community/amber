@@ -101,6 +101,7 @@ nav:
     - How to use?: use_rosbag_as_dataset/how_to_use.md
     - Read images: use_rosbag_as_dataset/read_images.md
     - Read images and annotation: use_rosbag_as_dataset/read_images_and_annotations.md
+    - Read pointclouds: use_rosbag_as_dataset/read_pointclouds.md 
   - Automation:
     - Automation: automation/automation.md
     - Detic image labaler: automation/detic_image_labaler.md
