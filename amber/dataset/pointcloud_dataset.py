@@ -5,7 +5,7 @@ from dataclasses import dataclass, field
 from dataclass_wizard import YAMLWizard
 from amber.exception import TaskDescriptionError
 from amber.dataset.conversion import decode_pointcloud_message
-from typing import Any, List
+from typing import Any, List, Dict
 from amber.dataset.rosbag2_dataset import Rosbag2Dataset
 from mcap.reader import NonSeekingReader
 import open3d
@@ -24,6 +24,9 @@ class ReadPointCloudConfig(YAMLWizard):  # type: ignore
 
 
 class PointcloudDataset(Rosbag2Dataset):  # type: ignore
+    pointclouds: List[torch.Tensor] = []
+    config: ReadPointCloudConfig = ReadPointCloudConfig()
+
     def __init__(
         self,
         rosbag_path: str,
@@ -47,4 +50,14 @@ class PointcloudDataset(Rosbag2Dataset):  # type: ignore
             reader = NonSeekingReader(rosbag_file)
             for schema, channel, message in reader.iter_messages():
                 if channel.topic in self.config.get_pointcloud_topics():
-                    decode_pointcloud_message(message, schema, self.config.compressed)
+                    self.pointclouds.append(
+                        decode_pointcloud_message(
+                            message, schema, self.config.compressed
+                        )
+                    )
+
+    def __len__(self) -> int:
+        return len(self.pointclouds)
+
+    def __getitem__(self, index: int) -> torch.Tensor:
+        return self.pointclouds[index]
