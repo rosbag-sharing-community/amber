@@ -1,0 +1,3 @@
+pointcloud_topics:
+  - topic_name: /wamv/sensors/lidars/lidar_wamv_sensor/points
+compressed: false

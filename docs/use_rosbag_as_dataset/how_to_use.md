@@ -15,7 +15,8 @@ In order to specify this, write yaml setting file.
 
 If you want to know wahat types of task `amber` supports, please check below.
 
-| Name                                                  | Image              | 2D Annotation      |
-|-------------------------------------------------------|--------------------|--------------------|
-| [ImagesDataset](../read_images)                       | :heavy_check_mark: |                    |
-| [ImagesAndAnnotation](../read_images_and_annotations) | :heavy_check_mark: | :heavy_check_mark: |
+| Name                                                  | Image              | 2D Annotation      | PointCloud         |
+|-------------------------------------------------------|--------------------|--------------------|--------------------|
+| [ImagesDataset](../read_images)                       | :heavy_check_mark: |                    |                    |
+| [ImagesAndAnnotation](../read_images_and_annotations) | :heavy_check_mark: | :heavy_check_mark: |                    |
+| [PointCLoudsDataset](../read_pointclouds)             |                    |                    | :heavy_check_mark: |
