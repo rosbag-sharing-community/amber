@@ -124,10 +124,17 @@ class DeticImageLabeler(Automation):  # type: ignore
         image_annotations: List[ImageAnnotation] = []
         for index, image in enumerate(dataset):
             input_width, input_height = image.shape[:2]
-            image = self.preprocess(
+            input_image = self.preprocess(
                 cv2.cvtColor(np.asarray(self.to_pil_image(image)), cv2.COLOR_BGRA2BGR)
             )
-            output_width, output_height = image.shape[:2]
+            output_width, output_height = input_image.shape[:2]
+            output = self.session.run(
+                None,
+                {
+                    "img": input_image,
+                    "im_hw": np.array([input_height, input_width]).astype(np.int64),
+                },
+            )
         return []
         # video: Any = None
         # image_annotations: List[ImageAnnotation] = []
