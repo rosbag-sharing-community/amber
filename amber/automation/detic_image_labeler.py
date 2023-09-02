@@ -159,6 +159,7 @@ class DeticImageLabeler(Automation):  # type: ignore
     def draw_predictions(
         self, image: np.ndarray, detection_results: Any, vocabulary: str
     ) -> np.ndarray:
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         height, width = image.shape[:2]
 
         boxes = detection_results["boxes"].astype(np.int64)
@@ -295,3 +296,24 @@ class DeticImageLabeler(Automation):  # type: ignore
             video.write(visualization)
         video.release()
         return []
+        # for index, image in enumerate(dataset):
+        #     self.to_pil_image(image).save(
+        #         os.path.join(
+        #             self.temporary_image_directory,
+        #             "inputs",
+        #             "input" + str(index) + ".jpeg",
+        #         )
+        #     )
+        # self.run_command()
+        # for index in range(len(dataset)):
+        #     if self.config.video_output_path != "":
+        #         opencv_image = cv2.imread(
+        #             os.path.join(
+        #                 self.temporary_image_directory,
+        #                 "outputs",
+        #                 "input" + str(index) + ".jpeg",
+        #             )
+        #         )
+        # image_annotations.append(self.get_image_annotations(index))
+        # video.write(opencv_image)
+        # return image_annotations
