@@ -1,11 +1,7 @@
-import argparse
 import os
-import sys
 
 from amber.dataset.images_dataset import ImagesDataset
 from amber.automation.automation import Automation
-
-from gradio_client import Client
 
 import amber
 from amber.automation.task_description import (
@@ -14,25 +10,31 @@ from amber.automation.task_description import (
 from amber.automation.annotation import ImageAnnotation, BoundingBoxAnnotation
 
 import os
-import docker
-import socket
 from torchvision import transforms
-import cv2
-import time
 from tqdm import tqdm
-from typing import Any, List, Tuple
+from typing import Any, List
 import shutil
-import subprocess
-import json
 from download import download
+import onnxruntime
+from PIL import Image
+from torch.nn.functional import grid_sample
+import numpy as np
+import cv2
+import json
 
 
 class DeticImageLabeler(Automation):  # type: ignore
     def __init__(self, yaml_path: str) -> None:
-        self.download_weight_and_model("Detic_C2_SwinB_896_4x_IN-21K+COCO_lvis")
+        self.weight_and_model = self.download_onnx(
+            "Detic_C2_SwinB_896_4x_IN-21K+COCO_lvis_op16"
+        )
+        self.session = onnxruntime.InferenceSession(
+            self.weight_and_model,
+            providers=["CPUExecutionProvider"],  # "CUDAExecutionProvider"],
+        )
         self.temporary_image_directory = "/tmp/detic_image_labaler"
         self.setup_directory(self.temporary_image_directory)
-        # self.to_pil_image = transforms.ToPILImage()
+        self.to_pil_image = transforms.ToPILImage()
         # self.config = DeticImageLabalerConfig.from_yaml_file(yaml_path)
         # self.config.validate()
         # self.docker_client = docker.from_env()
@@ -57,19 +59,16 @@ class DeticImageLabeler(Automation):  # type: ignore
         #     runtime=None,
         # )
 
-    def download_weight_and_model(
+    def download_onnx(
         self,
         model: str,
         base_url: str = "https://storage.googleapis.com/ailia-models/detic/",
-    ) -> Tuple[str, str]:
+    ) -> str:
         download_directory = os.path.join(amber.__path__[0], "automation", "onnx")
         weight_path = os.path.join(download_directory, model + ".onnx")
-        model_path = os.path.join(download_directory, model + ".onnx.prototxt")
         if not os.path.exists(weight_path):
             download(base_url + model + ".onnx", weight_path)
-        if not os.path.exists(model_path):
-            download(base_url + model + ".onnx.prototxt", model_path)
-        return (weight_path, model_path)
+        return weight_path
 
     def setup_directory(self, path: str) -> None:
         if not os.path.exists(path):
@@ -98,7 +97,37 @@ class DeticImageLabeler(Automation):  # type: ignore
             )
         return image_annotation
 
+    # This code was comes from https://github.com/axinc-ai/ailia-models/blob/da1c277b602606586cd83943ef6b23eb705ec604/object_detection/detic/detic.py#L276-L301
+    def preprocess(self, image: np.ndarray, detection_width: int = 800) -> np.ndarray:
+        im_h, im_w, _ = image.shape
+        image = image[:, :, ::-1]  # BGR -> RGB
+        size = detection_width
+        max_size = detection_width
+        scale = size / min(im_h, im_w)
+        if im_h < im_w:
+            oh, ow = size, scale * im_w
+        else:
+            oh, ow = scale * im_h, size
+        if max(oh, ow) > max_size:
+            scale = max_size / max(oh, ow)
+            oh = oh * scale
+            ow = ow * scale
+        ow = int(ow + 0.5)
+        oh = int(oh + 0.5)
+        image = np.asarray(Image.fromarray(image).resize((ow, oh), Image.BILINEAR))
+        image = image.transpose((2, 0, 1))  # HWC -> CHW
+        image = np.expand_dims(image, axis=0)
+        image = image.astype(np.float32)
+        return image
+
     def inference(self, dataset: ImagesDataset) -> List[ImageAnnotation]:
+        image_annotations: List[ImageAnnotation] = []
+        for index, image in enumerate(dataset):
+            input_width, input_height = image.shape[:2]
+            image = self.preprocess(
+                cv2.cvtColor(np.asarray(self.to_pil_image(image)), cv2.COLOR_BGRA2BGR)
+            )
+            output_width, output_height = image.shape[:2]
         return []
         # video: Any = None
         # image_annotations: List[ImageAnnotation] = []
