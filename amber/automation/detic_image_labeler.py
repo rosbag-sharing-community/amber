@@ -19,7 +19,7 @@ from amber.util.color import color_brightness, random_color
 import os
 from torchvision import transforms
 from tqdm import tqdm
-from typing import Any, List, Dict, Tuple, Callable
+from typing import Any, List, Dict, Tuple
 import shutil
 from download import download
 import onnxruntime
@@ -142,10 +142,7 @@ class DeticImageLabeler(Automation):  # type: ignore
 
     # This function comes from https://github.com/axinc-ai/ailia-models/blob/da1c277b602606586cd83943ef6b23eb705ec604/object_detection/detic/dataset_utils.py#L5-L11
     def get_lvis_meta_v1(self) -> Dict[str, List[str]]:
-        # Ensure that the category list is sorted by id
-        get_name: Callable[[Any], str] = lambda x: str(x["id"])
-        lvis_categories = sorted(LVIS_V1_CATEGORIES, key=get_name)
-        thing_classes = [k["synonyms"][0] for k in lvis_categories]
+        thing_classes = [k["synonyms"][0] for k in LVIS_V1_CATEGORIES]
         meta = {"thing_classes": thing_classes}
         return meta
 
