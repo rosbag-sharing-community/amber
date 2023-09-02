@@ -41,9 +41,8 @@ class DeticImageLabeler(Automation):  # type: ignore
             providers=["CPUExecutionProvider"],  # "CUDAExecutionProvider"],
         )
         self.temporary_image_directory = "/tmp/detic_image_labaler"
-        self.setup_directory(self.temporary_image_directory)
         self.to_pil_image = transforms.ToPILImage()
-        # self.config = DeticImageLabalerConfig.from_yaml_file(yaml_path)
+        self.config = DeticImageLabalerConfig.from_yaml_file(yaml_path)
         # self.config.validate()
         # self.docker_client = docker.from_env()
         # self.docker_image_name = "wamvtan/detic"
@@ -77,15 +76,6 @@ class DeticImageLabeler(Automation):  # type: ignore
         if not os.path.exists(weight_path):
             download(base_url + model + ".onnx", weight_path)
         return weight_path
-
-    def setup_directory(self, path: str) -> None:
-        if not os.path.exists(path):
-            os.makedirs(path)
-        else:
-            shutil.rmtree(path)
-            os.makedirs(path)
-        os.makedirs(os.path.join(self.temporary_image_directory, "inputs"))
-        os.makedirs(os.path.join(self.temporary_image_directory, "outputs"))
 
     def get_image_annotations(self, index: int) -> ImageAnnotation:
         image_annotation = ImageAnnotation()
@@ -272,14 +262,12 @@ class DeticImageLabeler(Automation):  # type: ignore
         return image
 
     def inference(self, dataset: ImagesDataset) -> List[ImageAnnotation]:
-        video: Any = None
         image_annotations: List[ImageAnnotation] = []
+        video: Any = None
         for index, image in enumerate(dataset):
-            input_width, input_height = image.shape[:2]
-            input_image = self.preprocess(
-                cv2.cvtColor(np.asarray(self.to_pil_image(image)), cv2.COLOR_BGRA2BGR)
-            )
-            output_width, output_height = input_image.shape[:2]
+            input_width = image.shape[2]
+            input_height = image.shape[1]
+            input_image = self.preprocess(np.asarray(self.to_pil_image(image)), 800)
             boxes, scores, classes, masks = self.session.run(
                 None,
                 {
@@ -287,39 +275,23 @@ class DeticImageLabeler(Automation):  # type: ignore
                     "im_hw": np.array([input_height, input_width]).astype(np.int64),
                 },
             )
+            print("writing image")
             detection_results = {
                 "boxes": boxes,
                 "scores": scores,
                 "classes": classes,
                 "masks": masks,
             }
-            self.draw_predictions(input_image, detection_results, "lvis")
+            visualization = self.draw_predictions(
+                np.asarray(self.to_pil_image(image)), detection_results, "lvis"
+            )
+            if video == None:
+                video = cv2.VideoWriter(
+                    self.config.video_output_path,
+                    cv2.VideoWriter_fourcc("m", "p", "4", "v"),
+                    30.0,  # FPS
+                    (visualization.shape[1], visualization.shape[0]),
+                )
+            video.write(visualization)
+        video.release()
         return []
-        # for index, image in enumerate(dataset):
-        #     self.to_pil_image(image).save(
-        #         os.path.join(
-        #             self.temporary_image_directory,
-        #             "inputs",
-        #             "input" + str(index) + ".jpeg",
-        #         )
-        #     )
-        # self.run_command()
-        # for index in range(len(dataset)):
-        #     if self.config.video_output_path != "":
-        #         opencv_image = cv2.imread(
-        #             os.path.join(
-        #                 self.temporary_image_directory,
-        #                 "outputs",
-        #                 "input" + str(index) + ".jpeg",
-        #             )
-        #         )
-        #         image_annotations.append(self.get_image_annotations(index))
-        #         if video == None:
-        #             video = cv2.VideoWriter(
-        #                 self.config.video_output_path,
-        #                 cv2.VideoWriter_fourcc("m", "p", "4", "v"),
-        #                 30.0,  # FPS
-        #                 (opencv_image.shape[1], opencv_image.shape[0]),
-        #             )
-        #         video.write(opencv_image)
-        # return image_annotations
