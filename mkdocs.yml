@@ -1,13 +1,13 @@
 # Project information
 site_name: amber
-site_url: https://hakuturu583.github.io/amber
+site_url: https://rosbag-sharing-community.github.io/amber
 site_author: Masaya Kataoka
 site_description: ''
 copyright: Copyright &copy; 2023 - Masaya Kataoka
 
 # Repository
-repo_name: hakuturu583/amber
-repo_url: https://github.com/hakuturu583/amber
+repo_name: rosbag-sharing-community/amber
+repo_url: https://github.com/rosbag-sharing-community/amber
 edit_uri: ''
 docs_dir: docs
 
