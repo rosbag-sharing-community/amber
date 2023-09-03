@@ -1,11 +1,7 @@
-import argparse
 import os
-import sys
 
 from amber.dataset.images_dataset import ImagesDataset
 from amber.automation.automation import Automation
-
-from gradio_client import Client
 
 import amber
 from amber.automation.task_description import (
@@ -13,142 +9,259 @@ from amber.automation.task_description import (
 )
 from amber.automation.annotation import ImageAnnotation, BoundingBoxAnnotation
 
+
+from amber.util.lvis.lvis_v1_categories import (
+    LVIS_CATEGORIES as LVIS_V1_CATEGORIES,
+)
+from amber.util.imagenet_21k.in21k_categories import IN21K_CATEGORIES
+from amber.util.color import color_brightness, random_color
+
 import os
-import docker
-import socket
 from torchvision import transforms
-import cv2
-import time
 from tqdm import tqdm
-from typing import Any, List
+from typing import Any, List, Dict, Tuple
 import shutil
-import subprocess
+from download import download
+import onnxruntime
+from PIL import Image
+
+# from torch.nn.functional import grid_sample
+import numpy as np
+import cv2
 import json
 
 
 class DeticImageLabeler(Automation):  # type: ignore
     def __init__(self, yaml_path: str) -> None:
-        self.temporary_image_directory = "/tmp/detic_image_labaler"
-        self.setup_directory(self.temporary_image_directory)
-        self.to_pil_image = transforms.ToPILImage()
         self.config = DeticImageLabalerConfig.from_yaml_file(yaml_path)
-        self.config.validate()
-        self.docker_client = docker.from_env()
-        self.docker_image_name = "wamvtan/detic"
-        self.docker_client.images.pull(self.docker_image_name)
-        self.container = self.docker_client.containers.run(
-            image=self.docker_image_name,
-            volumes={
-                os.path.join(self.temporary_image_directory, "inputs"): {
-                    "bind": "/workspace/Detic/inputs",
-                    "mode": "rw",
-                },
-                os.path.join(self.temporary_image_directory, "outputs"): {
-                    "bind": "/workspace/Detic/outputs",
-                    "mode": "rw",
-                },
-            },
-            device_requests=self.build_device_requests(),
-            command=["/bin/bash"],
-            detach=True,
-            tty=True,
-            runtime=None,
+        self.weight_and_model = self.download_onnx(self.config.get_onnx_filename())
+        self.session = onnxruntime.InferenceSession(
+            self.weight_and_model,
+            providers=["CPUExecutionProvider"],  # "CUDAExecutionProvider"],
         )
+        self.to_pil_image = transforms.ToPILImage()
 
-    def setup_directory(self, path: str) -> None:
-        if not os.path.exists(path):
-            os.makedirs(path)
+    def download_onnx(
+        self,
+        model: str,
+        base_url: str = "https://storage.googleapis.com/ailia-models/detic/",
+    ) -> str:
+        download_directory = os.path.join(amber.__path__[0], "automation", "onnx")
+        weight_path = os.path.join(download_directory, model)
+        if not os.path.exists(weight_path):
+            download(base_url + model, weight_path)
+        return weight_path
+
+    # This code comes from https://github.com/axinc-ai/ailia-models/blob/da1c277b602606586cd83943ef6b23eb705ec604/object_detection/detic/detic.py#L276-L301
+    def preprocess(self, image: np.ndarray, detection_width: int = 800) -> np.ndarray:
+        height, width, _ = image.shape
+        image = image[:, :, ::-1]  # BGR -> RGB
+        size = detection_width
+        max_size = detection_width
+        scale = size / min(height, width)
+        if height < width:
+            oh, ow = size, scale * width
         else:
-            shutil.rmtree(path)
-            os.makedirs(path)
-        os.makedirs(os.path.join(self.temporary_image_directory, "inputs"))
-        os.makedirs(os.path.join(self.temporary_image_directory, "outputs"))
+            oh, ow = scale * height, size
+        if max(oh, ow) > max_size:
+            scale = max_size / max(oh, ow)
+            oh = oh * scale
+            ow = ow * scale
+        ow = int(ow + 0.5)
+        oh = int(oh + 0.5)
+        image = np.asarray(Image.fromarray(image).resize((ow, oh), Image.BILINEAR))
+        image = image.transpose((2, 0, 1))  # HWC -> CHW
+        image = np.expand_dims(image, axis=0)
+        image = image.astype(np.float32)
+        return image
 
-    def build_device_requests(self) -> list[docker.types.DeviceRequest]:
-        requests = []
-        if self.config.docker_config.use_gpu:
-            requests.append(
-                docker.types.DeviceRequest(count=-1, capabilities=[["gpu"]])
+    # This function comes from https://github.com/axinc-ai/ailia-models/blob/da1c277b602606586cd83943ef6b23eb705ec604/object_detection/detic/detic.py#L153-L174
+    def mask_to_polygons(self, mask: np.ndarray) -> List[Any]:
+        # cv2.RETR_CCOMP flag retrieves all the contours and arranges them to a 2-level
+        # hierarchy. External contours (boundary) of the object are placed in hierarchy-1.
+        # Internal contours (holes) are placed in hierarchy-2.
+        # cv2.CHAIN_APPROX_NONE flag gets vertices of polygons from contours.
+        mask = np.ascontiguousarray(
+            mask
+        )  # some versions of cv2 does not support incontiguous arr
+        res = cv2.findContours(
+            mask.astype("uint8"), cv2.RETR_CCOMP, cv2.CHAIN_APPROX_NONE
+        )
+        hierarchy = res[-1]
+        if hierarchy is None:  # empty mask
+            return []
+        res = res[-2]
+        res = [x.flatten() for x in res]
+        # These coordinates from OpenCV are integers in range [0, W-1 or H-1].
+        # We add 0.5 to turn them into real-value coordinate space. A better solution
+        # would be to first +0.5 and then dilate the returned polygon by 0.5.
+        return [x + 0.5 for x in res if len(x) >= 6]
+
+    # This function comes from https://github.com/axinc-ai/ailia-models/blob/da1c277b602606586cd83943ef6b23eb705ec604/object_detection/detic/dataset_utils.py#L5-L11
+    def get_lvis_meta_v1(self) -> Dict[str, List[str]]:
+        thing_classes = [k["synonyms"][0] for k in LVIS_V1_CATEGORIES]
+        meta = {"thing_classes": thing_classes}
+        return meta
+
+    # This function comes from https://github.com/axinc-ai/ailia-models/blob/da1c277b602606586cd83943ef6b23eb705ec604/object_detection/detic/dataset_utils.py#L14-L18
+    def get_in21k_meta_v1(self) -> Dict[str, List[str]]:
+        thing_classes = IN21K_CATEGORIES
+        meta = {"thing_classes": thing_classes}
+        return meta
+
+    # This function comes from https://github.com/axinc-ai/ailia-models/blob/da1c277b602606586cd83943ef6b23eb705ec604/object_detection/detic/detic.py#L177-L269
+    def draw_predictions(
+        self, image: np.ndarray, detection_results: Any, vocabulary: str
+    ) -> np.ndarray:
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        height, width = image.shape[:2]
+
+        boxes = detection_results["boxes"].astype(np.int64)
+        scores = detection_results["scores"]
+        classes = detection_results["classes"].tolist()
+        masks = detection_results["masks"].astype(np.uint8)
+
+        class_names = (
+            self.get_lvis_meta_v1()
+            if vocabulary == "lvis"
+            else self.get_in21k_meta_v1()
+        )["thing_classes"]
+        labels = [class_names[i] for i in classes]
+        labels = ["{} {:.0f}%".format(l, s * 100) for l, s in zip(labels, scores)]
+
+        num_instances = len(boxes)
+
+        np.random.seed()
+        assigned_colors = [random_color(maximum=255) for _ in range(num_instances)]
+
+        areas = np.prod(boxes[:, 2:] - boxes[:, :2], axis=1)
+        if areas is not None:
+            sorted_idxs = np.argsort(-areas).tolist()
+            # Re-order overlapped instances in descending order.
+            boxes = boxes[sorted_idxs]
+            labels = [labels[k] for k in sorted_idxs]
+            masks = [masks[idx] for idx in sorted_idxs]
+            assigned_colors = [assigned_colors[idx] for idx in sorted_idxs]
+
+        default_font_size = int(max(np.sqrt(height * width) // 90, 10))
+
+        for i in range(num_instances):
+            color = assigned_colors[i]
+            color = (int(color[0]), int(color[1]), int(color[2]))
+            image_b = image.copy()
+
+            # draw box
+            x0, y0, x1, y1 = boxes[i]
+            cv2.rectangle(
+                image_b,
+                (x0, y0),
+                (x1, y1),
+                color=color,
+                thickness=default_font_size // 4,
             )
-        return requests
 
-    def cpu_or_gpu(self) -> str:
-        if self.config.docker_config.use_gpu:
-            return "cuda"
-        else:
-            return "cpu"
+            # draw segment
+            polygons = self.mask_to_polygons(masks[i])
+            for points in polygons:
+                points = np.array(points).reshape((1, -1, 2)).astype(np.int32)
+                cv2.fillPoly(image_b, pts=[points], color=color)
 
-    def build_command(self) -> List[str]:
-        return [
-            "/bin/bash",
-            "-c",
-            "python demo.py \
-        --config-file configs/Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size.yaml \
-        --input /workspace/Detic/inputs/*.jpeg --output outputs \
-        --vocabulary lvis \
-        --opts MODEL.WEIGHTS models/Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size.pth MODEL.DEVICE "
-            + self.cpu_or_gpu(),
-        ]
+            image = cv2.addWeighted(image, 0.5, image_b, 0.5, 0)
 
-    def __del__(self) -> None:
-        self.container.stop()
-        self.container.remove()
-        if self.config.docker_config.claenup_image_on_shutdown:
-            self.docker_client.images.remove(
-                image=self.docker_image_name, force=False, noprune=False
+        for i in range(num_instances):
+            color = assigned_colors[i]
+            color_text = color_brightness(color, brightness_factor=0.7)
+
+            color = (int(color[0]), int(color[1]), int(color[2]))
+            color_text = (int(color_text[0]), int(color_text[1]), int(color_text[2]))
+
+            x0, y0, x1, y1 = boxes[i]
+
+            SMALL_OBJECT_AREA_THRESH = 1000
+            instance_area = (y1 - y0) * (x1 - x0)
+
+            # for small objects, draw text at the side to avoid occlusion
+            text_pos = (x0, y0)  # if drawing boxes, put text on the box corner.
+            if instance_area < SMALL_OBJECT_AREA_THRESH or y1 - y0 < 40:
+                if y1 >= height - 5:
+                    text_pos = (x1, y0)
+                else:
+                    text_pos = (x0, y1)
+
+            # draw label
+            x, y = text_pos
+            text = labels[i]
+            font = cv2.FONT_HERSHEY_SIMPLEX
+            height_ratio = (y1 - y0) / np.sqrt(height * width)
+            font_scale = np.clip((height_ratio - 0.02) / 0.08 + 1, 1.2, 2) * 0.5
+            font_thickness = 1
+            text_size, _ = cv2.getTextSize(text, font, font_scale, font_thickness)
+            text_w, text_h = text_size
+            cv2.rectangle(
+                image, text_pos, (int(x + text_w * 0.6), y + text_h), (0, 0, 0), -1
+            )
+            cv2.putText(
+                image,
+                text,
+                (x, y + text_h - 5),
+                fontFace=font,
+                fontScale=font_scale * 0.6,
+                color=color_text,
+                thickness=font_thickness,
+                lineType=cv2.LINE_AA,
             )
 
-    def run_command(self) -> None:
-        _, stream = self.container.exec_run(self.build_command(), stream=True)
-        for data in stream:
-            print(data.decode())
-
-    def get_image_annotations(self, index: int) -> ImageAnnotation:
-        image_annotation = ImageAnnotation()
-        image_annotation.image_index = index
-        for annotation in json.load(
-            open(
-                os.path.join(
-                    self.temporary_image_directory,
-                    "outputs",
-                    "input" + str(index) + ".json",
-                ),
-                "r",
-            )
-        )["detections"]:
-            image_annotation.bounding_boxes.append(
-                BoundingBoxAnnotation.from_dict(annotation)
-            )
-        return image_annotation
+        return image
 
     def inference(self, dataset: ImagesDataset) -> List[ImageAnnotation]:
-        video: Any = None
         image_annotations: List[ImageAnnotation] = []
+        vocabulary = "lvis"
+        class_names = (
+            self.get_lvis_meta_v1()
+            if vocabulary == "lvis"
+            else self.get_in21k_meta_v1()
+        )["thing_classes"]
+
+        video: Any = None
         for index, image in enumerate(dataset):
-            self.to_pil_image(image).save(
-                os.path.join(
-                    self.temporary_image_directory,
-                    "inputs",
-                    "input" + str(index) + ".jpeg",
-                )
+            input_width = image.shape[2]
+            input_height = image.shape[1]
+            input_image = self.preprocess(np.asarray(self.to_pil_image(image)), 800)
+            boxes, scores, classes, masks = self.session.run(
+                None,
+                {
+                    "img": input_image,
+                    "im_hw": np.array([input_height, input_width]).astype(np.int64),
+                },
             )
-        self.run_command()
-        for index in range(len(dataset)):
-            if self.config.video_output_path != "":
-                opencv_image = cv2.imread(
-                    os.path.join(
-                        self.temporary_image_directory,
-                        "outputs",
-                        "input" + str(index) + ".jpeg",
-                    )
+            image_annotation = ImageAnnotation()
+            image_annotation.image_index = index
+            detection_results = {
+                "boxes": boxes,
+                "scores": scores,
+                "classes": classes,
+                "masks": masks,
+            }
+            for bbox_id in range(len(boxes)):
+                bounding_box = BoundingBoxAnnotation()
+                bounding_box.box.x1 = boxes[bbox_id][0]
+                bounding_box.box.y1 = boxes[bbox_id][1]
+                bounding_box.box.x2 = boxes[bbox_id][2]
+                bounding_box.box.y2 = boxes[bbox_id][3]
+                bounding_box.score = scores[bbox_id]
+                bounding_box.object_class = class_names[classes[bbox_id]]
+                image_annotation.bounding_boxes.append(bounding_box)
+            image_annotations.append(image_annotation)
+            visualization = self.draw_predictions(
+                np.asarray(self.to_pil_image(image)), detection_results, "lvis"
+            )
+            if video == None:
+                video = cv2.VideoWriter(
+                    self.config.video_output_path,
+                    cv2.VideoWriter_fourcc("m", "p", "4", "v"),
+                    30.0,  # FPS
+                    (visualization.shape[1], visualization.shape[0]),
                 )
-                image_annotations.append(self.get_image_annotations(index))
-                if video == None:
-                    video = cv2.VideoWriter(
-                        self.config.video_output_path,
-                        cv2.VideoWriter_fourcc("m", "p", "4", "v"),
-                        30.0,  # FPS
-                        (opencv_image.shape[1], opencv_image.shape[0]),
-                    )
-                video.write(opencv_image)
+            video.write(visualization)
+        video.release()
         return image_annotations

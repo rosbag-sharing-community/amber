@@ -7,17 +7,13 @@ import os
 
 
 class DeticModelType(Enum):
-    Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max_size = (
-        "Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size"
-    )
+    SwinB_896_4x = "SwinB_896_4x"
+    R50_640_4x = "R50_640_4x"
 
 
 class DeticVocabulary(Enum):
     LVIS = "lvis"
-    OPENIMAGES = "openimages"
-    OBJECT365 = "objects365"
-    COCO = "coco"
-    CUSTOM = "custom"
+    IMAGENET_21K = "imagenet_21k"
 
 
 @dataclass
@@ -29,15 +25,9 @@ class DockerConfig(YAMLWizard):  # type: ignore
 
 @dataclass
 class DeticImageLabalerConfig(YAMLWizard):  # type: ignore
-    model: DeticModelType = (
-        DeticModelType.Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max_size
-    )
+    model_type: DeticModelType = DeticModelType.SwinB_896_4x
     vocabulary: DeticVocabulary = DeticVocabulary.LVIS
-    custom_vocabulary: list[str] = field(default_factory=list)
-    config_file: str = "Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size.yaml"
-    confidence_threshold: float = 0.5
     video_output_path: str = ""  # If the text is empty, it means no video output.
-    docker_config: DockerConfig = DockerConfig()
 
     def validate(self) -> None:
         if (
@@ -48,6 +38,25 @@ class DeticImageLabalerConfig(YAMLWizard):  # type: ignore
                 "Type of the output video should be mp4, you specified "
                 + self.video_output_path
             )
+
+    def get_onnx_filename(self) -> str:
+        if self.model_type == DeticModelType.SwinB_896_4x:
+            if self.vocabulary == DeticVocabulary.LVIS:
+                return "Detic_C2_SwinB_896_4x_IN-21K+COCO_lvis_op16.onnx"
+            elif self.vocabulary == DeticVocabulary.IMAGENET_21K:
+                return "Detic_C2_SwinB_896_4x_IN-21K+COCO_in21k_op16.onnx"
+        elif self.model_type == DeticModelType.R50_640_4x:
+            if self.vocabulary == DeticVocabulary.LVIS:
+                return "Detic_C2_R50_640_4x_lvis_op16.onnx"
+            elif self.vocabulary == DeticVocabulary.IMAGENET_21K:
+                return "Detic_C2_R50_640_4x_in21k_op16.onnx"
+
+        raise TaskDescriptionError(
+            "Model type and vocablary is invalid, please check setting. You specified, model_type : "
+            + self.model_type.value
+            + " , vocabulary : ",
+            self.vocablary.value,
+        )
 
 
 @dataclass

@@ -1,4 +1,4 @@
 confidence_threshold: 0.5
 video_output_path: output.mp4
-docker_config:
-  use_gpu: false
+vocabulary: "lvis"
+model_type: "SwinB_896_4x"
