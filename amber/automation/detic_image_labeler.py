@@ -77,24 +77,6 @@ class DeticImageLabeler(Automation):  # type: ignore
             download(base_url + model + ".onnx", weight_path)
         return weight_path
 
-    def get_image_annotations(self, index: int) -> ImageAnnotation:
-        image_annotation = ImageAnnotation()
-        image_annotation.image_index = index
-        for annotation in json.load(
-            open(
-                os.path.join(
-                    self.temporary_image_directory,
-                    "outputs",
-                    "input" + str(index) + ".json",
-                ),
-                "r",
-            )
-        )["detections"]:
-            image_annotation.bounding_boxes.append(
-                BoundingBoxAnnotation.from_dict(annotation)
-            )
-        return image_annotation
-
     # This code comes from https://github.com/axinc-ai/ailia-models/blob/da1c277b602606586cd83943ef6b23eb705ec604/object_detection/detic/detic.py#L276-L301
     def preprocess(self, image: np.ndarray, detection_width: int = 800) -> np.ndarray:
         height, width, _ = image.shape
@@ -169,10 +151,7 @@ class DeticImageLabeler(Automation):  # type: ignore
             if vocabulary == "lvis"
             else self.get_in21k_meta_v1()
         )["thing_classes"]
-        # labels = [class_names[i] for i in classes] # onnx runtime
-        labels = [
-            class_names[int(i)] for i in classes
-        ]  # ailia always returns float tensor so need to add cast
+        labels = [class_names[i] for i in classes]
         labels = ["{} {:.0f}%".format(l, s * 100) for l, s in zip(labels, scores)]
 
         num_instances = len(boxes)
@@ -261,6 +240,13 @@ class DeticImageLabeler(Automation):  # type: ignore
 
     def inference(self, dataset: ImagesDataset) -> List[ImageAnnotation]:
         image_annotations: List[ImageAnnotation] = []
+        vocabulary = "lvis"
+        class_names = (
+            self.get_lvis_meta_v1()
+            if vocabulary == "lvis"
+            else self.get_in21k_meta_v1()
+        )["thing_classes"]
+
         video: Any = None
         for index, image in enumerate(dataset):
             input_width = image.shape[2]
@@ -273,13 +259,24 @@ class DeticImageLabeler(Automation):  # type: ignore
                     "im_hw": np.array([input_height, input_width]).astype(np.int64),
                 },
             )
-            print("writing image")
+            image_annotation = ImageAnnotation()
+            image_annotation.image_index = index
             detection_results = {
                 "boxes": boxes,
                 "scores": scores,
                 "classes": classes,
                 "masks": masks,
             }
+            for bbox_id in range(len(boxes)):
+                bounding_box = BoundingBoxAnnotation()
+                bounding_box.box.x1 = boxes[bbox_id][0]
+                bounding_box.box.y1 = boxes[bbox_id][1]
+                bounding_box.box.x2 = boxes[bbox_id][2]
+                bounding_box.box.y2 = boxes[bbox_id][3]
+                bounding_box.score = scores[bbox_id]
+                bounding_box.object_class = class_names[classes[bbox_id]]
+                image_annotation.bounding_boxes.append(bounding_box)
+            image_annotations.append(image_annotation)
             visualization = self.draw_predictions(
                 np.asarray(self.to_pil_image(image)), detection_results, "lvis"
             )
@@ -292,25 +289,4 @@ class DeticImageLabeler(Automation):  # type: ignore
                 )
             video.write(visualization)
         video.release()
-        return []
-        # for index, image in enumerate(dataset):
-        #     self.to_pil_image(image).save(
-        #         os.path.join(
-        #             self.temporary_image_directory,
-        #             "inputs",
-        #             "input" + str(index) + ".jpeg",
-        #         )
-        #     )
-        # self.run_command()
-        # for index in range(len(dataset)):
-        #     if self.config.video_output_path != "":
-        #         opencv_image = cv2.imread(
-        #             os.path.join(
-        #                 self.temporary_image_directory,
-        #                 "outputs",
-        #                 "input" + str(index) + ".jpeg",
-        #             )
-        #         )
-        # image_annotations.append(self.get_image_annotations(index))
-        # video.write(opencv_image)
-        # return image_annotations
+        return image_annotations
