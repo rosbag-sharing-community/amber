@@ -334,7 +334,9 @@
 <h1 id="detic-image-labaler">Detic image labaler<a class="headerlink" href="#detic-image-labaler" title="Permanent link">#</a></h1>
 <p><a href="https://github.com/facebookresearch/Detic">Detic</a> is a deep learning algorithum developed by facebook research.
 This tool generate annotation data by using detic.
-Detic can classify 21k classes.</p>
+Detic can classify 21k classes.
+This tools are running onnx converted detic models with opset=16 in <a href="https://github.com/axinc-ai/ailia-models/tree/master/object_detection/detic">this repository</a>.
+Thank you for ailia-models developers.</p>
 <h2 id="use-with-cli">Use with CLI<a class="headerlink" href="#use-with-cli" title="Permanent link">#</a></h2>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -345,8 +347,8 @@ Detic can classify 21k classes.</p>
 <p>Task description yaml for the detic_image_labaler is here.</p>
 <div class="highlight"><pre><span></span><code><span class="nt">confidence_threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.5</span><span class="w">      </span><span class="c1"># If the confidence overs the threshold, detic determines the object are exists.</span>
 <span class="nt">video_output_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">output.mp4</span><span class="w">  </span><span class="c1"># Relative path to the visualization result.</span>
-<span class="nt">docker_config</span><span class="p">:</span><span class="w">                 </span><span class="c1"># Docker configuration</span>
-<span class="w">  </span><span class="nt">use_gpu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w">               </span><span class="c1"># If true, run with CUDA</span>
+<span class="nt">vocabulary</span><span class="p">:</span><span class="w"> </span><span class="s">"lvis"</span><span class="w">             </span><span class="c1"># Vocabulary of detic, you can choose from "lvis" and "imagenet_21k"</span>
+<span class="nt">model_type</span><span class="p">:</span><span class="w"> </span><span class="s">"SwinB_896_4x"</span><span class="w">     </span><span class="c1"># Model type of detic, you can choose from "SwinB_896_4x" and "R50_640_4x"</span>
 </code></pre></div>
 <p>After executing this command, <code>output.mp4</code> movie file was generated.</p>
 <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" frameborder="0" height="315" src="https://www.youtube.com/embed/OPR3ZVzRXCM" title="YouTube video player" width="560"></iframe>
