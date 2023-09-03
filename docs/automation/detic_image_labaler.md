@@ -20,8 +20,8 @@ Task description yaml for the detic_image_labaler is here.
 ```yaml
 confidence_threshold: 0.5      # If the confidence overs the threshold, detic determines the object are exists.
 video_output_path: output.mp4  # Relative path to the visualization result.
-docker_config:                 # Docker configuration
-  use_gpu: false               # If true, run with CUDA
+vocabulary: "lvis"             # Vocabulary of detic, you can choose from "lvis" and "imagenet_21k"
+model_type: "SwinB_896_4x"     # Model type of detic, you can choose from "SwinB_896_4x" and "R50_640_4x"
 ```
 
 After executing this command, `output.mp4` movie file was generated.

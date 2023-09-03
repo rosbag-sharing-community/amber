@@ -13,7 +13,7 @@ class DeticModelType(Enum):
 
 class DeticVocabulary(Enum):
     LVIS = "lvis"
-    IMAGENET_21K = "in21k"
+    IMAGENET_21K = "imagenet_21k"
 
 
 @dataclass
