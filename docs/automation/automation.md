@@ -15,10 +15,10 @@ If you want to know detail, please read detatiled documentations.
 
 ## Support status
 
-| Name                                                | Docker Support (CPU) | Docker Support(CUDA) | Native Support | CUDA Support(Native) | Huggingface Support |
-|-----------------------------------------------------|----------------------|----------------------|----------------|----------------------|---------------------|
-| [DeticImageLabaler](../detic_image_labaler)         | :heavy_check_mark:   | :heavy_check_mark:   |                |                      |                     |
-| [NeRF 3D Reconstruction](../nerf_3d_reconstruction) |                      | :heavy_check_mark:   |                |                      |                     |
+| Name                                                | Docker Support (CPU) | Docker Support(CUDA) | Native Support     | CUDA Support(Native) | Huggingface Support |
+|-----------------------------------------------------|----------------------|----------------------|--------------------|----------------------|---------------------|
+| [DeticImageLabaler](../detic_image_labaler)         |                      |                      | :heavy_check_mark: |                      |                     |
+| [NeRF 3D Reconstruction](../nerf_3d_reconstruction) |                      | :heavy_check_mark:   |                    |                      |                     |
 
 ### Docker Support
 Support automation algorithm inside docker.
