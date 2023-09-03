@@ -3,6 +3,8 @@
 [Detic](https://github.com/facebookresearch/Detic) is a deep learning algorithum developed by facebook research.
 This tool generate annotation data by using detic.
 Detic can classify 21k classes.
+This tools are running onnx converted detic models with opset=16 in [this repository](https://github.com/axinc-ai/ailia-models/tree/master/object_detection/detic).
+Thank you for ailia-models developers.
 
 ## Use with CLI
 
