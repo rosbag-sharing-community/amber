@@ -33,38 +33,13 @@ import json
 
 class DeticImageLabeler(Automation):  # type: ignore
     def __init__(self, yaml_path: str) -> None:
-        self.weight_and_model = self.download_onnx(
-            "Detic_C2_SwinB_896_4x_IN-21K+COCO_lvis_op16"
-        )
+        self.config = DeticImageLabalerConfig.from_yaml_file(yaml_path)
+        self.weight_and_model = self.download_onnx(self.config.get_onnx_filename())
         self.session = onnxruntime.InferenceSession(
             self.weight_and_model,
             providers=["CPUExecutionProvider"],  # "CUDAExecutionProvider"],
         )
-        self.temporary_image_directory = "/tmp/detic_image_labaler"
         self.to_pil_image = transforms.ToPILImage()
-        self.config = DeticImageLabalerConfig.from_yaml_file(yaml_path)
-        # self.config.validate()
-        # self.docker_client = docker.from_env()
-        # self.docker_image_name = "wamvtan/detic"
-        # self.docker_client.images.pull(self.docker_image_name)
-        # self.container = self.docker_client.containers.run(
-        #     image=self.docker_image_name,
-        #     volumes={
-        #         os.path.join(self.temporary_image_directory, "inputs"): {
-        #             "bind": "/workspace/Detic/inputs",
-        #             "mode": "rw",
-        #         },
-        #         os.path.join(self.temporary_image_directory, "outputs"): {
-        #             "bind": "/workspace/Detic/outputs",
-        #             "mode": "rw",
-        #         },
-        #     },
-        #     device_requests=self.build_device_requests(),
-        #     command=["/bin/bash"],
-        #     detach=True,
-        #     tty=True,
-        #     runtime=None,
-        # )
 
     def download_onnx(
         self,
@@ -72,9 +47,9 @@ class DeticImageLabeler(Automation):  # type: ignore
         base_url: str = "https://storage.googleapis.com/ailia-models/detic/",
     ) -> str:
         download_directory = os.path.join(amber.__path__[0], "automation", "onnx")
-        weight_path = os.path.join(download_directory, model + ".onnx")
+        weight_path = os.path.join(download_directory, model)
         if not os.path.exists(weight_path):
-            download(base_url + model + ".onnx", weight_path)
+            download(base_url + model, weight_path)
         return weight_path
 
     # This code comes from https://github.com/axinc-ai/ailia-models/blob/da1c277b602606586cd83943ef6b23eb705ec604/object_detection/detic/detic.py#L276-L301
