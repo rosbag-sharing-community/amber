@@ -16,7 +16,7 @@ class BoundingBoxAnnotation(JSONWizard):  # type: ignore
     box: BoundingBox = BoundingBox()
     score: float = 0
     object_class: str = ""
-    clip_embeddings: Annotated[List[float], 512] = [0.0 for _ in range(512)]
+    clip_embeddings: Annotated[List[float], 512] = field(default_factory=list)
 
 
 @dataclass

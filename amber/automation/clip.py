@@ -25,10 +25,12 @@ class ClipEncoder:
                 bounding_box.clip_embeddings = self.model.encode_image(
                     self.preprocess(
                         pil_image.crop(
-                            int(bounding_box.x1),
-                            int(bounding_box.y1),
-                            int(bounding_box.x2),
-                            int(bounding_box.y2),
+                            (
+                                int(bounding_box.box.x1),
+                                int(bounding_box.box.y1),
+                                int(bounding_box.box.x2),
+                                int(bounding_box.box.y2),
+                            )
                         )
                     )
                     .unsqueeze(0)
