@@ -1,6 +1,6 @@
 # AMBER: Automated annotation and Multimodal Bag Extraction for Robotics
 
-[![ci](https://github.com//amber/actions/workflows/pytest.yaml/badge.svg)](https://github.com/rosbag-sharing-community/amber/actions/workflows/pytest.yaml)
+[![ci](https://github.com/rosbag-sharing-community/amber/actions/workflows/pytest.yaml/badge.svg)](https://github.com/rosbag-sharing-community/amber/actions/workflows/pytest.yaml)
 [![document](https://github.com/rosbag-sharing-community/amber/actions/workflows/document.yaml/badge.svg)](https://github.com/rosbag-sharing-community/amber/actions/workflows/document.yaml)
 [![codecov](https://codecov.io/gh/hakuturu583/amber/branch/master/graph/badge.svg?token=YSVVHIBDEQ)](https://codecov.io/gh/rosbag-sharing-community/amber)
 
