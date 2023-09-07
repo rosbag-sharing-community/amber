@@ -34,6 +34,7 @@ class ClipEncoder:
                     .unsqueeze(0)
                     .to(self.device)
                 ).tolist()[0]
+                assert len(bounding_box.clip_embeddings) == 512
         return annotation
 
     def get_text_embeddings(self, text: str) -> torch.Tensor:

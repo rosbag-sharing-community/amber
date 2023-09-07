@@ -2,6 +2,7 @@ import os
 
 from amber.dataset.images_dataset import ImagesDataset
 from amber.automation.automation import Automation
+from amber.automation.clip import ClipEncoder
 
 import amber
 from amber.automation.task_description import (
@@ -214,6 +215,7 @@ class DeticImageLabeler(Automation):  # type: ignore
         return image
 
     def inference(self, dataset: ImagesDataset) -> List[ImageAnnotation]:
+        clip_encoder = ClipEncoder()
         image_annotations: List[ImageAnnotation] = []
         vocabulary = "lvis"
         class_names = (
@@ -251,7 +253,9 @@ class DeticImageLabeler(Automation):  # type: ignore
                 bounding_box.score = scores[bbox_id]
                 bounding_box.object_class = class_names[classes[bbox_id]]
                 image_annotation.bounding_boxes.append(bounding_box)
-            image_annotations.append(image_annotation)
+            image_annotations.append(
+                clip_encoder.get_image_embeddings_for_objects(image, image_annotation)
+            )
             visualization = self.draw_predictions(
                 np.asarray(self.to_pil_image(image)), detection_results, "lvis"
             )
