@@ -10,6 +10,7 @@ from amber.dataset.schema import StringMessageSchema
 from amber.dataset.conversion import decode_message
 from amber.exception import RosbagSchemaError
 from mcap_ros2.decoder import Decoder
+import sys
 
 
 class Automation(ABC):
@@ -32,6 +33,7 @@ class Automation(ABC):
         rosbag_file = open(output_rosbag_path, "w+b")
         writer = Writer(output=rosbag_file)
         schema_dicts: Dict[str, Schema] = {}  # {schena name : schema}
+        first_message_timestamp: int = sys.maxsize
         for rosbag_filepath in dataset.rosbag_files:
             reader = NonSeekingReader(rosbag_filepath)
             # Copy all topics
@@ -48,6 +50,8 @@ class Automation(ABC):
                     publish_time=message.publish_time,
                     sequence=message.sequence,
                 )
+                if first_message_timestamp > message.publish_time:
+                    first_message_timestamp = message.publish_time
         for annotation in annotation_data:
             annotation_json.append(annotation.to_json())
         # Append annotation data
@@ -60,6 +64,7 @@ class Automation(ABC):
             schema=annotation_schema,
             message={"data": json.dumps(annotation_json)},
             sequence=0,
+            publish_time=first_message_timestamp,
         )
         writer.finish()
         rosbag_file.close()

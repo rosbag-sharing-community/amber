@@ -1,5 +1,5 @@
 from dataclass_wizard import JSONWizard
-from typing import List
+from typing import List, Annotated
 from dataclasses import dataclass, field
 
 
@@ -16,6 +16,7 @@ class BoundingBoxAnnotation(JSONWizard):  # type: ignore
     box: BoundingBox = BoundingBox()
     score: float = 0
     object_class: str = ""
+    clip_embeddings: Annotated[List[float], 512] = field(default_factory=list)
 
 
 @dataclass
