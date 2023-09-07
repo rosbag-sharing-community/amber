@@ -60,5 +60,10 @@ class DeticImageLabalerConfig(YAMLWizard):  # type: ignore
 
 
 @dataclass
+class ClipImageAnnotationFilterConfig(YAMLWizard):  # type: ignore
+    target_objects: list[str] = field(default_factory=list)
+
+
+@dataclass
 class ColmapPoseEstimationConfig(YAMLWizard):  # type: ignore
     docker_config: DockerConfig = DockerConfig()

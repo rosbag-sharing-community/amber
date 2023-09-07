@@ -3,8 +3,10 @@ from amber.exception import TaskDescriptionError
 import os
 from yaml import safe_load  # type: ignore
 from amber.automation.detic_image_labeler import DeticImageLabeler
+from amber.automation.clip_image_annotation_filter import ClipImageAnnotationFilter
 from amber.automation.nerf_3d_reconstruction import Nerf3DReconstruction
 from amber.dataset.images_dataset import ImagesDataset
+from amber.dataset.image_and_annotation import ImagesAndAnnotationsDataset
 from amber.importer.video import VideoImporter
 from typing import Any, Callable
 
@@ -67,6 +69,18 @@ def run_detic_image_labaler_automation(args: Any) -> None:
     )
 
 
+def run_clip_image_annotation_filter_automation(args: Any) -> None:
+    check_config_files_exists_for_automation(args)
+    task_description = {}
+    with open(args.task_description_yaml_path, "rb") as file:
+        task_description = safe_load(file)
+    filter = ClipImageAnnotationFilter(args.task_description_yaml_path)
+    dataset = ImagesAndAnnotationsDataset(
+        args.rosbag_path, args.dataset_description_yaml_path
+    )
+    filter.inference(dataset)
+
+
 def run_nerf_3d_reconstruction_automation(args: Any) -> None:
     check_config_files_exists_for_automation(args)
     task_description = {}
@@ -111,6 +125,14 @@ def main() -> None:
     )
     setup_arguments_and_parser_for_automation(
         parser_detic_image_labeler_automation, run_detic_image_labaler_automation
+    )
+    # Setup command line option for clip image annotation filter
+    parser_clip_image_annotation_filter = subparsers_automation.add_parser(
+        "clip_image_annotation_filter",
+        help="Run clip image annotation filter for rosbag.",
+    )
+    setup_arguments_and_parser_for_automation(
+        parser_clip_image_annotation_filter, run_clip_image_annotation_filter_automation
     )
     # Setup command line option for NeRF 3D reconstruction
     parser_nerf_3d_reconstruction = subparsers_automation.add_parser(
