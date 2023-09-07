@@ -2,7 +2,7 @@ import os
 
 from amber.dataset.images_dataset import ImagesDataset
 from amber.automation.automation import Automation
-from amber.automation.clip import ClipEncoder
+from amber.automation.clip_encoder import ClipEncoder
 
 import amber
 from amber.automation.task_description import (
