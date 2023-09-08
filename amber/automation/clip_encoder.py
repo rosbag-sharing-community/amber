@@ -22,6 +22,7 @@ class ClipEncoder:
         with torch.no_grad():
             pil_image = self.to_pil_image(image)
             for bounding_box in annotation.bounding_boxes:
+                print(bounding_box.box)
                 bounding_box.clip_embeddings = self.model.encode_image(
                     self.preprocess(
                         pil_image.crop(

@@ -30,6 +30,7 @@ from PIL import Image
 import numpy as np
 import cv2
 import json
+import copy
 
 
 class DeticImageLabeler(Automation):  # type: ignore
@@ -252,7 +253,7 @@ class DeticImageLabeler(Automation):  # type: ignore
                 bounding_box.box.y2 = boxes[bbox_id][3]
                 bounding_box.score = scores[bbox_id]
                 bounding_box.object_class = class_names[classes[bbox_id]]
-                image_annotation.bounding_boxes.append(bounding_box)
+                image_annotation.bounding_boxes.append(copy.deepcopy(bounding_box))
             image_annotations.append(
                 clip_encoder.get_image_embeddings_for_objects(image, image_annotation)
             )

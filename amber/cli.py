@@ -6,7 +6,7 @@ from amber.automation.detic_image_labeler import DeticImageLabeler
 from amber.automation.clip_image_annotation_filter import ClipImageAnnotationFilter
 from amber.automation.nerf_3d_reconstruction import Nerf3DReconstruction
 from amber.dataset.images_dataset import ImagesDataset
-from amber.dataset.image_and_annotation import ImagesAndAnnotationsDataset
+from amber.dataset.images_and_annotations_dataset import ImagesAndAnnotationsDataset
 from amber.importer.video import VideoImporter
 from typing import Any, Callable
 

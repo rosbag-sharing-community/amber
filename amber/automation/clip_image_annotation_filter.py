@@ -19,16 +19,19 @@ class ClipImageAnnotationFilter(Automation):  # type: ignore
     def inference(self, dataset: ImagesAndAnnotationsDataset) -> List[ImageAnnotation]:
         filtered_annotations: List[ImageAnnotation] = []
         for index, image_and_annotation in enumerate(dataset):
+            self.to_pil_image(image_and_annotation[0]).save(
+                "data/" + str(index) + ".jpeg", quality=95
+            )
             for bounding_box_index, bounding_box in enumerate(
                 image_and_annotation[1].bounding_boxes
             ):
                 self.to_pil_image(image_and_annotation[0]).crop(
                     (
                         (
-                            int(image_and_annotation[1].box.x1),
-                            int(image_and_annotation[1].box.y1),
-                            int(image_and_annotation[1].box.x2),
-                            int(image_and_annotation[1].box.y2),
+                            int(bounding_box.box.x1),
+                            int(bounding_box.box.y1),
+                            int(bounding_box.box.x2),
+                            int(bounding_box.box.y2),
                         )
                     )
                 ).save(
