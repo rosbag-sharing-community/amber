@@ -62,6 +62,9 @@ class DeticImageLabalerConfig(YAMLWizard):  # type: ignore
 @dataclass
 class ClipImageAnnotationFilterConfig(YAMLWizard):  # type: ignore
     target_objects: list[str] = field(default_factory=list)
+    min_height: int = 5
+    min_width: int = 5
+    min_area: int = 50
 
 
 @dataclass

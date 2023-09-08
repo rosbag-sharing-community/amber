@@ -1,1 +1,5 @@
 target_objects: ["red car"]
+min_width: 5
+min_height: 5
+min_area: 50
+min_cosine_similarity: 0.23

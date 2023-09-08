@@ -2,6 +2,7 @@ import torch
 from clip.clip import load, tokenize
 from torchvision import transforms
 from amber.automation.annotation import ImageAnnotation, BoundingBoxAnnotation
+import uuid
 
 
 class ClipEncoder:
@@ -22,7 +23,6 @@ class ClipEncoder:
         with torch.no_grad():
             pil_image = self.to_pil_image(image)
             for bounding_box in annotation.bounding_boxes:
-                print(bounding_box.box)
                 bounding_box.clip_embeddings = self.model.encode_image(
                     self.preprocess(
                         pil_image.crop(
@@ -43,3 +43,11 @@ class ClipEncoder:
     def get_text_embeddings(self, text: str) -> torch.Tensor:
         with torch.no_grad():
             return self.model.encode_text(tokenize([text]).to(self.device))
+
+    def get_text_embeddings_for_positive_negative_prompts(
+        self, object_name: str
+    ) -> torch.Tensor:
+        with torch.no_grad():
+            return self.model.encode_text(
+                tokenize([object_name, "Not " + object_name]).to(self.device)
+            )
