@@ -2,7 +2,7 @@ import torch
 from clip.clip import load, tokenize
 from torchvision import transforms
 from amber.automation.annotation import ImageAnnotation, BoundingBoxAnnotation
-import uuid
+from typing import Tuple
 
 
 class ClipEncoder:
@@ -46,8 +46,8 @@ class ClipEncoder:
 
     def get_text_embeddings_for_positive_negative_prompts(
         self, object_name: str
-    ) -> torch.Tensor:
-        with torch.no_grad():
-            return self.model.encode_text(
-                tokenize([object_name, "Not " + object_name]).to(self.device)
-            )
+    ) -> Tuple[torch.Tensor, torch.Tensor]:
+        return (
+            self.get_text_embeddings("A photo of " + object_name),
+            self.get_text_embeddings("Not a photo of " + object_name),
+        )

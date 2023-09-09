@@ -6,16 +6,17 @@ from amber.automation.task_description import (
     ClipImageAnnotationFilterConfig,
 )
 from torchvision import transforms
-from typing import List, Dict
+from typing import List, Dict, Tuple
 from torch.nn.functional import cosine_similarity
 import torch
+import uuid
 
 
 class ClipImageAnnotationFilter(Automation):  # type: ignore
     def __init__(self, yaml_path: str) -> None:
         self.config = ClipImageAnnotationFilterConfig.from_yaml_file(yaml_path)
         self.clip_encoder = ClipEncoder()
-        self.text_embeddings: Dict[str, torch.Tensor] = {}
+        self.text_embeddings: Dict[str, Tuple[torch.Tensor, torch.Tensor]] = {}
         for target_object in self.config.target_objects:
             self.text_embeddings[
                 target_object
@@ -38,16 +39,27 @@ class ClipImageAnnotationFilter(Automation):  # type: ignore
                     width >= self.config.min_width or height >= self.config.min_height
                 ):
                     for target_object in self.config.target_objects:
-                        image_features = torch.tensor(
-                            bounding_box.clip_embeddings, dtype=float
+                        positive = cosine_similarity(
+                            torch.tensor(bounding_box.clip_embeddings, dtype=float),
+                            self.text_embeddings[target_object][0],
                         )
-                        image_features /= image_features.norm(dim=-1, keepdim=True)
-                        text_features = self.text_embeddings[target_object]
-                        text_features /= text_features.norm(dim=-1, keepdim=True)
-                        similarity = (image_features.float() @ text_features.T).softmax(
-                            dim=-1
+                        negative = cosine_similarity(
+                            torch.tensor(bounding_box.clip_embeddings, dtype=float),
+                            self.text_embeddings[target_object][1],
                         )
-                        values, indices = similarity[0].topk(1)
-                        print("index : => " + str(indices.item()))
-                        print("value : => " + str(values.item()))
+                        if (
+                            bounding_box.object_class == "car_(automobile)"
+                            or bounding_box.object_class == "bus_(vehicle)"
+                        ):
+                            # if (positive.item() / negative.item()) > 0.98:
+                            self.to_pil_image(image_and_annotation[0]).crop(
+                                (
+                                    int(bounding_box.box.x1),
+                                    int(bounding_box.box.y1),
+                                    int(bounding_box.box.x2),
+                                    int(bounding_box.box.y2),
+                                )
+                            ).save("data/" + str(uuid.uuid4()) + ".jpeg")
+                            print(positive.item() / negative.item())
+                            print(str(positive.item()) + "," + str(negative.item()))
         return filtered_annotations

@@ -1,5 +1,5 @@
-target_objects: ["red car"]
-min_width: 5
-min_height: 5
+target_objects: ["car with full body"]
+min_width: 30
+min_height: 30
 min_area: 50
 min_cosine_similarity: 0.23
