@@ -48,10 +48,15 @@ def ros_message_to_image(ros_message: DecodedMessage) -> Image:
                     + " , it was not supported yet."
                 )
     elif "format" in dir(ros_message):
-        print(ros_message.format)
         match ros_message.format:
             case "rgb8; jpeg compressed bgr8":
-                pass
+                jpeg_data = numpy.frombuffer(
+                    ros_message.data,
+                    dtype=np.uint8,
+                    count=len(ros_message.data),
+                    offset=0,
+                )
+                return Image.fromarray(cv2.imdecode(jpeg_data, flags=cv2.IMREAD_COLOR))
             case _:
                 raise MessageDecodingError(
                     "Unsupported compressed message format. Please check rosbag data."
