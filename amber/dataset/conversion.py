@@ -56,7 +56,12 @@ def ros_message_to_image(ros_message: DecodedMessage) -> Image:
                     count=len(ros_message.data),
                     offset=0,
                 )
-                return Image.fromarray(cv2.imdecode(jpeg_data, flags=cv2.IMREAD_COLOR))
+                return Image.fromarray(
+                    cv2.cvtColor(
+                        cv2.imdecode(jpeg_data, flags=cv2.IMREAD_COLOR),
+                        cv2.COLOR_BGR2RGB,
+                    )
+                )
             case _:
                 raise MessageDecodingError(
                     "Unsupported compressed message format. Please check rosbag data."

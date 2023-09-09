@@ -28,6 +28,9 @@ class DeticImageLabalerConfig(YAMLWizard):  # type: ignore
     model_type: DeticModelType = DeticModelType.SwinB_896_4x
     vocabulary: DeticVocabulary = DeticVocabulary.LVIS
     video_output_path: str = ""  # If the text is empty, it means no video output.
+    min_height: int = 5
+    min_width: int = 5
+    min_area: int = 50
 
     def validate(self) -> None:
         if (
