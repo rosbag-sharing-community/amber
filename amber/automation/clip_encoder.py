@@ -48,6 +48,6 @@ class ClipEncoder:
         self, object_name: str
     ) -> Tuple[torch.Tensor, torch.Tensor]:
         return (
-            self.get_text_embeddings("A photo of " + object_name),
-            self.get_text_embeddings("Not a photo of " + object_name),
+            self.get_text_embeddings("A photo of a " + object_name),
+            self.get_text_embeddings("Not a photo of a " + object_name),
         )

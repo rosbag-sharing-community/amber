@@ -38,20 +38,28 @@ class ClipImageAnnotationFilter(Automation):  # type: ignore
                 if width * height >= self.config.min_area and (
                     width >= self.config.min_width or height >= self.config.min_height
                 ):
+                    clip_embeddings = torch.tensor(
+                        bounding_box.clip_embeddings, dtype=float
+                    )
+                    annotation_text_embeddings = self.clip_encoder.get_text_embeddings(
+                        "A photo of a " + bounding_box.object_class
+                    )
                     for target_object in self.config.target_objects:
                         positive = cosine_similarity(
-                            torch.tensor(bounding_box.clip_embeddings, dtype=float),
+                            clip_embeddings / torch.sum(clip_embeddings)
+                            + annotation_text_embeddings
+                            / torch.sum(annotation_text_embeddings)
+                            * bounding_box.score,
                             self.text_embeddings[target_object][0],
                         )
                         negative = cosine_similarity(
-                            torch.tensor(bounding_box.clip_embeddings, dtype=float),
+                            clip_embeddings / torch.sum(clip_embeddings)
+                            - annotation_text_embeddings
+                            / torch.sum(annotation_text_embeddings)
+                            * bounding_box.score,
                             self.text_embeddings[target_object][1],
                         )
-                        if (
-                            bounding_box.object_class == "car_(automobile)"
-                            or bounding_box.object_class == "bus_(vehicle)"
-                        ):
-                            # if (positive.item() / negative.item()) > 0.98:
+                        if (positive.item() / negative.item()) > 1.1:
                             self.to_pil_image(image_and_annotation[0]).crop(
                                 (
                                     int(bounding_box.box.x1),
