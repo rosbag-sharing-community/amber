@@ -1,4 +1,4 @@
-target_objects: ["car with full body"]
+target_objects: ["passenger car with red color."]
 min_width: 30
 min_height: 30
 min_area: 50
