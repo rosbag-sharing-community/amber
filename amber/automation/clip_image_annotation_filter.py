@@ -31,32 +31,22 @@ class ClipImageAnnotationFilter(Automation):  # type: ignore
 
     def inference_with_lvis_vocabulary(
         self,
-        image: torch.Tensor,
         clip_embeddings: torch.Tensor,
         bounding_box: BoundingBoxAnnotation,
-        image_number: int,
-    ) -> None:
+    ) -> bool:
         result = self.clip_encoder.classify_with_custom_vocabulary(
             clip_embeddings, self.config.target_objects
         )
         if result != None:
-            self.to_pil_image(image).crop(
-                (
-                    int(bounding_box.box.x1),
-                    int(bounding_box.box.y1),
-                    int(bounding_box.box.x2),
-                    int(bounding_box.box.y2),
-                )
-            ).save("data/" + str(image_number) + ".jpeg")
-            image_number = image_number + 1
+            return True
+        else:
+            return False
 
     def inference_with_bert(
         self,
-        image: torch.Tensor,
         clip_embeddings: torch.Tensor,
         bounding_box: BoundingBoxAnnotation,
-        image_number: int,
-    ) -> None:
+    ) -> bool:
         annotation_text_embeddings = self.clip_encoder.get_text_embeddings(
             "A photo of a " + bounding_box.object_class
         )
@@ -89,15 +79,6 @@ class ClipImageAnnotationFilter(Automation):  # type: ignore
                 and positive.item() >= 0.5
                 and clip_similarity.item() >= 0.25
             ):
-                self.to_pil_image(image).crop(
-                    (
-                        int(bounding_box.box.x1),
-                        int(bounding_box.box.y1),
-                        int(bounding_box.box.x2),
-                        int(bounding_box.box.y2),
-                    )
-                ).save("data/" + str(image_number) + ".jpeg")
-                print("Image Number : " + str(image_number))
                 print("P/N ratio : " + str(positive.item() / negative.item()))
                 print("Score : " + str(bounding_box.score))
                 print("Class : " + str(bounding_box.object_class))
@@ -113,7 +94,8 @@ class ClipImageAnnotationFilter(Automation):  # type: ignore
                 )
                 print("Positive : " + str(positive.item()))
                 print(str(positive.item()) + "," + str(negative.item()))
-                print("")
+                return True
+        return False
 
     def inference(self, dataset: ImagesAndAnnotationsDataset) -> List[ImageAnnotation]:
         print(self.config)
@@ -131,25 +113,22 @@ class ClipImageAnnotationFilter(Automation):  # type: ignore
                     clip_embeddings = torch.tensor(
                         bounding_box.clip_embeddings, dtype=float
                     )
+                    is_detected: bool = False
                     if (
                         self.config.classify_method
                         == ClipClassifyMethod.CLIP_WITH_LVIS_AND_CUSTOM_VOCABULARY
                     ):
-                        self.inference_with_lvis_vocabulary(
-                            image_and_annotation[0],
+                        is_detected = self.inference_with_lvis_vocabulary(
                             clip_embeddings,
                             bounding_box,
-                            image_number,
                         )
                     elif (
                         self.config.classify_method
                         == ClipClassifyMethod.CONSIDER_ANNOTATION_WITH_BERT
                     ):
-                        self.inference_with_bert(
-                            image_and_annotation[0],
+                        is_detected = self.inference_with_bert(
                             clip_embeddings,
                             bounding_box,
-                            image_number,
                         )
                     else:
                         raise RuntimeError(
@@ -157,5 +136,16 @@ class ClipImageAnnotationFilter(Automation):  # type: ignore
                             + self.config.classify_method.value
                             + " does not support."
                         )
-                    image_number = image_number + 1
+                    if is_detected:
+                        print("Image Number : " + str(image_number))
+                        self.to_pil_image(image_and_annotation[0]).crop(
+                            (
+                                int(bounding_box.box.x1),
+                                int(bounding_box.box.y1),
+                                int(bounding_box.box.x2),
+                                int(bounding_box.box.y2),
+                            )
+                        ).save("data/" + str(image_number) + ".jpeg")
+                        print("")
+                        image_number = image_number + 1
         return filtered_annotations
