@@ -12,6 +12,7 @@ from typing import List, Dict, Tuple
 from torch.nn.functional import cosine_similarity
 import torch
 from amber.exception import RuntimeError
+import copy
 
 
 class ClipImageAnnotationFilter(Automation):  # type: ignore
@@ -102,6 +103,7 @@ class ClipImageAnnotationFilter(Automation):  # type: ignore
         filtered_annotations: List[ImageAnnotation] = []
         image_number = 0
         for index, image_and_annotation in enumerate(dataset):
+            print("Loading Image : " + str(index))
             for bounding_box_index, bounding_box in enumerate(
                 image_and_annotation[1].bounding_boxes
             ):
@@ -138,7 +140,15 @@ class ClipImageAnnotationFilter(Automation):  # type: ignore
                         )
                     if is_detected:
                         print("Image Number : " + str(image_number))
-                        self.to_pil_image(image_and_annotation[0]).crop(
+                        print(
+                            (
+                                int(bounding_box.box.x1),
+                                int(bounding_box.box.y1),
+                                int(bounding_box.box.x2),
+                                int(bounding_box.box.y2),
+                            )
+                        )
+                        self.to_pil_image(copy.deepcopy(image_and_annotation[0])).crop(
                             (
                                 int(bounding_box.box.x1),
                                 int(bounding_box.box.y1),
