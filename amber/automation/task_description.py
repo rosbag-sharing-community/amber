@@ -62,12 +62,20 @@ class DeticImageLabalerConfig(YAMLWizard):  # type: ignore
         )
 
 
+class ClipClassifyMethod(Enum):
+    CLIP_WITH_LVIS_AND_CUSTOM_VOCABULARY = "clip_with_lvis_and_custom_vocabulary"
+    CONSIDER_ANNOTATION_WITH_BERT = "consider_annotation_with_bert"
+
+
 @dataclass
 class ClipImageAnnotationFilterConfig(YAMLWizard):  # type: ignore
     target_objects: list[str] = field(default_factory=list)
     min_height: int = 5
     min_width: int = 5
     min_area: int = 50
+    classify_method: ClipClassifyMethod = (
+        ClipClassifyMethod.CONSIDER_ANNOTATION_WITH_BERT
+    )
 
 
 @dataclass
