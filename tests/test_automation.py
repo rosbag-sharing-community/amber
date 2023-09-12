@@ -38,6 +38,23 @@ def test_clip_image_annotation_filter() -> None:
     annotations = filter.inference(dataset)
 
 
+def test_clip_image_annotation_filter_with_lvis() -> None:
+    current_path = Path(os.path.dirname(os.path.realpath(__file__)))
+    filter = ClipImageAnnotationFilter(
+        str(current_path / "automation" / "clip_image_annotation_filter_with_lvis.yaml")
+    )
+    dataset = ImagesAndAnnotationsDataset(
+        str(current_path / "rosbag" / "ford_with_annotation" / "bounding_box.mcap"),
+        str(
+            current_path
+            / "rosbag"
+            / "ford_with_annotation"
+            / "read_images_and_bounding_box.yaml"
+        ),
+    )
+    annotations = filter.inference(dataset)
+
+
 @pytest.mark.skipif(
     not torch.cuda.is_available(), reason="NeRF is too heavy for CPU machine."
 )  # type: ignore

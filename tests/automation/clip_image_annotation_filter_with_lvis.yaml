@@ -1,0 +1,5 @@
+target_objects: ["passenger car."]
+min_width: 30
+min_height: 30
+min_area: 50
+classify_method: clip_with_lvis_and_custom_vocabulary
