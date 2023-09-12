@@ -76,25 +76,29 @@ class ClipImageAnnotationFilter(Automation):  # type: ignore
                 self.text_embeddings[target_object][1],
             )
             if (
-                positive.item() > 2.0 * negative.item()
-                and positive.item() >= 0.5
-                and clip_similarity.item() >= 0.25
+                positive.item()
+                > self.config.consider_annotation_with_bert_config.positive_nagative_ratio
+                * negative.item()
+                and positive.item()
+                >= self.config.consider_annotation_with_bert_config.min_clip_cosine_similarity_with_bert
+                and clip_similarity.item()
+                >= self.config.consider_annotation_with_bert_config.min_clip_cosine_similarity
             ):
-                print("P/N ratio : " + str(positive.item() / negative.item()))
-                print("Score : " + str(bounding_box.score))
-                print("Class : " + str(bounding_box.object_class))
-                print(clip_similarity)
-                print(cosine_similarity(clip_embeddings, annotation_text_embeddings))
-                print(
-                    "Prompt Similarity : "
-                    + str(
-                        self.text_encoder.cosine_similarity(
-                            bounding_box.object_class, target_object
-                        )
-                    )
-                )
-                print("Positive : " + str(positive.item()))
-                print(str(positive.item()) + "," + str(negative.item()))
+                # print("P/N ratio : " + str(positive.item() / negative.item()))
+                # print("Score : " + str(bounding_box.score))
+                # print("Class : " + str(bounding_box.object_class))
+                # print(clip_similarity)
+                # print(cosine_similarity(clip_embeddings, annotation_text_embeddings))
+                # print(
+                #     "Prompt Similarity : "
+                #     + str(
+                #         self.text_encoder.cosine_similarity(
+                #             bounding_box.object_class, target_object
+                #         )
+                #     )
+                # )
+                # print("Positive : " + str(positive.item()))
+                # print(str(positive.item()) + "," + str(negative.item()))
                 return True
         return False
 
@@ -139,23 +143,23 @@ class ClipImageAnnotationFilter(Automation):  # type: ignore
                             + " does not support."
                         )
                     if is_detected:
-                        print("Image Number : " + str(image_number))
-                        print(
-                            (
-                                int(bounding_box.box.x1),
-                                int(bounding_box.box.y1),
-                                int(bounding_box.box.x2),
-                                int(bounding_box.box.y2),
-                            )
-                        )
-                        self.to_pil_image(copy.deepcopy(image_and_annotation[0])).crop(
-                            (
-                                int(bounding_box.box.x1),
-                                int(bounding_box.box.y1),
-                                int(bounding_box.box.x2),
-                                int(bounding_box.box.y2),
-                            )
-                        ).save("data/" + str(image_number) + ".jpeg")
-                        print("")
+                        # print("Image Number : " + str(image_number))
+                        # print(
+                        #     (
+                        #         int(bounding_box.box.x1),
+                        #         int(bounding_box.box.y1),
+                        #         int(bounding_box.box.x2),
+                        #         int(bounding_box.box.y2),
+                        #     )
+                        # )
+                        # self.to_pil_image(copy.deepcopy(image_and_annotation[0])).crop(
+                        #     (
+                        #         int(bounding_box.box.x1),
+                        #         int(bounding_box.box.y1),
+                        #         int(bounding_box.box.x2),
+                        #         int(bounding_box.box.y2),
+                        #     )
+                        # ).save("data/" + str(image_number) + ".jpeg")
+                        # print("")
                         image_number = image_number + 1
         return filtered_annotations

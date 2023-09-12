@@ -68,6 +68,13 @@ class ClipClassifyMethod(Enum):
 
 
 @dataclass
+class ConsiderAnnotationWithBerfConfig(YAMLWizard):  # type: ignore
+    positive_nagative_ratio: float = 2.0
+    min_clip_cosine_similarity: float = 0.25
+    min_clip_cosine_similarity_with_bert: float = 0.5
+
+
+@dataclass
 class ClipImageAnnotationFilterConfig(YAMLWizard):  # type: ignore
     target_objects: list[str] = field(default_factory=list)
     min_height: int = 5
@@ -75,6 +82,9 @@ class ClipImageAnnotationFilterConfig(YAMLWizard):  # type: ignore
     min_area: int = 50
     classify_method: ClipClassifyMethod = (
         ClipClassifyMethod.CONSIDER_ANNOTATION_WITH_BERT
+    )
+    consider_annotation_with_bert_config: ConsiderAnnotationWithBerfConfig = (
+        ConsiderAnnotationWithBerfConfig()
     )
 
 
