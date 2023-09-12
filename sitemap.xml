@@ -16,6 +16,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://rosbag-sharing-community.github.io/amber/automation/clip_image_annotation_filter/</loc>
+         <lastmod>2023-09-12</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://rosbag-sharing-community.github.io/amber/automation/detic_image_labaler/</loc>
          <lastmod>2023-09-12</lastmod>
          <changefreq>daily</changefreq>

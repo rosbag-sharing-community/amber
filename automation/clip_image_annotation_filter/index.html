@@ -6,12 +6,12 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <meta content="Masaya Kataoka" name="author"/>
-<link href="https://rosbag-sharing-community.github.io/amber/automation/detic_image_labaler/" rel="canonical"/>
-<link href="../automation/" rel="prev"/>
-<link href="../clip_image_annotation_filter/" rel="next"/>
+<link href="https://rosbag-sharing-community.github.io/amber/automation/clip_image_annotation_filter/" rel="canonical"/>
+<link href="../detic_image_labaler/" rel="prev"/>
+<link href="../nerf_3d_reconstruction/" rel="next"/>
 <link href="../../assets/images/favicon.png" rel="icon"/>
 <meta content="mkdocs-1.5.2, mkdocs-material-9.2.6" name="generator"/>
-<title>Detic image labaler - amber</title>
+<title>Clip image annotation filter - amber</title>
 <link href="../../assets/stylesheets/main.0e669242.min.css" rel="stylesheet"/>
 <link href="../../assets/stylesheets/palette.85d0ee34.min.css" rel="stylesheet"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -25,7 +25,7 @@
 <input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
 <label class="md-overlay" for="__drawer"></label>
 <div data-md-component="skip">
-<a class="md-skip" href="#detic-image-labaler">
+<a class="md-skip" href="#clip-image-annotation-filter">
           Skip to content
         </a>
 </div>
@@ -49,7 +49,7 @@
 <div class="md-header__topic" data-md-component="header-topic">
 <span class="md-ellipsis">
             
-              Detic image labaler
+              Clip image annotation filter
             
           </span>
 </div>
@@ -251,17 +251,24 @@
   </span>
 </a>
 </li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../detic_image_labaler/">
+<span class="md-ellipsis">
+    Detic image labaler
+  </span>
+</a>
+</li>
 <li class="md-nav__item md-nav__item--active">
 <input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
 <label class="md-nav__link md-nav__link--active" for="__toc">
 <span class="md-ellipsis">
-    Detic image labaler
+    Clip image annotation filter
   </span>
 <span class="md-nav__icon md-icon"></span>
 </label>
 <a class="md-nav__link md-nav__link--active" href="./">
 <span class="md-ellipsis">
-    Detic image labaler
+    Clip image annotation filter
   </span>
 </a>
 <nav aria-label="Table of contents" class="md-nav md-nav--secondary">
@@ -274,6 +281,29 @@
 <a class="md-nav__link" href="#use-with-cli">
     Use with CLI
   </a>
+<nav aria-label="Use with CLI" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#algorithms">
+    Algorithms
+  </a>
+<nav aria-label="Algorithms" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#consider_annotation_with_bert">
+    consider_annotation_with_bert
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#clip_with_lvis_and_custom_vocabulary">
+    clip_with_lvis_and_custom_vocabulary
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
 </li>
 <li class="md-nav__item">
 <a class="md-nav__link" href="#use-with-python-api">
@@ -282,13 +312,6 @@
 </li>
 </ul>
 </nav>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../clip_image_annotation_filter/">
-<span class="md-ellipsis">
-    Clip image annotation filter
-  </span>
-</a>
 </li>
 <li class="md-nav__item">
 <a class="md-nav__link" href="../nerf_3d_reconstruction/">
@@ -338,39 +361,100 @@
 </div>
 <div class="md-content" data-md-component="content">
 <article class="md-content__inner md-typeset">
-<h1 id="detic-image-labaler">Detic image labaler<a class="headerlink" href="#detic-image-labaler" title="Permanent link">#</a></h1>
-<p><a href="https://github.com/facebookresearch/Detic">Detic</a> is a deep learning algorithum developed by facebook research.
-This tool generate annotation data by using detic.
-Detic can classify 21k classes.
-This tools are running onnx converted detic models with opset=16 in <a href="https://github.com/axinc-ai/ailia-models/tree/master/object_detection/detic">this repository</a>.
-Thank you for ailia-models developers.</p>
-<h2 id="use-with-cli">Use with CLI<a class="headerlink" href="#use-with-cli" title="Permanent link">#</a></h2>
+<h1 id="clip-image-annotation-filter">Clip image annotation filter<a class="headerlink" href="#clip-image-annotation-filter" title="Permanent link">#</a></h1>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>This sample command is written with the assumption that it will be executed in the root directory of the amber package.</p>
+<p>This feature is just experimental and very low quality.</p>
 </div>
-<div class="highlight"><pre><span></span><code>amber<span class="w"> </span>automation<span class="w"> </span>detic_image_labeler<span class="w"> </span>tests/automation/detic_image_labeler.yaml<span class="w"> </span>tests/rosbag/ford/read_image.yaml<span class="w"> </span>tests/rosbag/ford/ford.mcap<span class="w"> </span>output.mcap
+<p>You can query object from annotated rosbags by prompt by using <a href="https://github.com/openai/CLIP">OpenAI CLIP</a>.</p>
+<h2 id="use-with-cli">Use with CLI<a class="headerlink" href="#use-with-cli" title="Permanent link">#</a></h2>
+<div class="highlight"><pre><span></span><code>amber<span class="w"> </span>automation<span class="w"> </span>clip_image_annotation_filter<span class="w"> </span>tests/automation/clip_image_annotation_filter.yaml<span class="w"> </span>tests/rosbag/ford_with_annotation/read_images_and_bounding_box.yaml<span class="w"> </span>tests/rosbag/ford_with_annotation/bounding_box.mcap<span class="w"> </span>output.mcap
 </code></pre></div>
 <p>Task description yaml for the detic_image_labaler is here.</p>
-<div class="highlight"><pre><span></span><code><span class="nt">confidence_threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.5</span><span class="w">      </span><span class="c1"># If the confidence overs the threshold, detic determines the object are exists.</span>
-<span class="nt">video_output_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">output.mp4</span><span class="w">  </span><span class="c1"># Relative path to the visualization result.</span>
-<span class="nt">vocabulary</span><span class="p">:</span><span class="w"> </span><span class="s">"lvis"</span><span class="w">             </span><span class="c1"># Vocabulary of detic, you can choose from "lvis" and "imagenet_21k"</span>
-<span class="nt">model_type</span><span class="p">:</span><span class="w"> </span><span class="s">"SwinB_896_4x"</span><span class="w">     </span><span class="c1"># Model type of detic, you can choose from "SwinB_896_4x" and "R50_640_4x"</span>
+<div class="highlight"><pre><span></span><code><span class="nt">target_objects</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"passenger</span><span class="nv"> </span><span class="s">car."</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="c1"># Target object you want to find.</span>
+
+<span class="c1"># If the width of the bounding box overs min_width or the height of the bounding box overs min_height of the bounding box, it recoganize as candidate bounding box.</span>
+<span class="nt">min_width</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span><span class="w"> </span><span class="c1"># min width of the object in pixels.</span>
+<span class="nt">min_height</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span><span class="w"> </span><span class="c1"># min height of the object in pixels.</span>
+<span class="nt">min_area</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">50</span><span class="w"> </span><span class="c1"># min area of the object in pixels.</span>
+
+<span class="c1"># Classification method, you can choose from two method.</span>
+<span class="c1"># You can choose from clip_with_lvis_and_custom_vocabulary, consider_annotation_with_bert</span>
+<span class="nt">classify_method</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">consider_annotation_with_bert</span>
+<span class="c1"># Configuration parameter for consider_annotation_with_bert, this value was used when you choose `consider_annotation_with_bert`</span>
+<span class="nt">consider_annotation_with_bert_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">positive_nagative_ratio</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0</span><span class="w"> </span><span class="c1"># Ratio of the cosine similarity of positive and negative prompt. Negative prompt is "Not a photo of $target_object".</span>
+<span class="w">  </span><span class="nt">min_clip_cosine_similarity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.25</span><span class="w"> </span><span class="c1"># Minimum values of cosine similarity with clip text/image embeddings.</span>
+<span class="w">  </span><span class="nt">min_clip_cosine_similarity_with_berf</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.3</span><span class="w"> </span><span class="c1"># Minimum values of cosine similarity with clip text embeddings and image enbeddings consider prompt similarity using bert.</span>
 </code></pre></div>
-<p>After executing this command, <code>output.mp4</code> movie file was generated.</p>
-<iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" frameborder="0" height="315" src="https://www.youtube.com/embed/OPR3ZVzRXCM" title="YouTube video player" width="560"></iframe>
+<h3 id="algorithms">Algorithms<a class="headerlink" href="#algorithms" title="Permanent link">#</a></h3>
+<h4 id="consider_annotation_with_bert">consider_annotation_with_bert<a class="headerlink" href="#consider_annotation_with_bert" title="Permanent link">#</a></h4>
+<p>python script of the <code>consider_annotation_with_bert</code> is below.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Pure clip cosine similarity.</span>
+<span class="n">clip_similarity</span> <span class="o">=</span> <span class="n">cosine_similarity</span><span class="p">(</span>
+    <span class="n">clip_embeddings</span> <span class="o">/</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">clip_embeddings</span><span class="p">),</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">text_embeddings</span><span class="p">[</span><span class="n">target_object</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+<span class="p">)</span>
+<span class="c1"># Clip cosine similarity considering bert embeddings.</span>
+<span class="n">positive</span> <span class="o">=</span> <span class="n">cosine_similarity</span><span class="p">(</span>
+    <span class="n">clip_embeddings</span> <span class="o">/</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">clip_embeddings</span><span class="p">)</span>
+    <span class="o">+</span> <span class="n">annotation_text_embeddings</span>
+    <span class="o">/</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">annotation_text_embeddings</span><span class="p">)</span>
+    <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">text_encoder</span><span class="o">.</span><span class="n">cosine_similarity</span><span class="p">(</span>
+        <span class="n">bounding_box</span><span class="o">.</span><span class="n">object_class</span><span class="p">,</span> <span class="n">target_object</span>
+    <span class="p">),</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">text_embeddings</span><span class="p">[</span><span class="n">target_object</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+<span class="p">)</span>
+<span class="c1"># Pure clip cosine similarity with negative prompt.</span>
+<span class="n">negative</span> <span class="o">=</span> <span class="n">cosine_similarity</span><span class="p">(</span>
+    <span class="n">clip_embeddings</span> <span class="o">/</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">clip_embeddings</span><span class="p">),</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">text_embeddings</span><span class="p">[</span><span class="n">target_object</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+<span class="p">)</span>
+</code></pre></div>
+<h4 id="clip_with_lvis_and_custom_vocabulary">clip_with_lvis_and_custom_vocabulary<a class="headerlink" href="#clip_with_lvis_and_custom_vocabulary" title="Permanent link">#</a></h4>
+<p>Embed all object categories in lvis and append custom vocabulary to the text embedding tensor.
+Then, find most nearest category.</p>
+<div class="highlight"><pre><span></span><code><span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lvis_text_embeddings</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+        <span class="c1"># Make text embeddings from all lvis objects.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lvis_text_embeddings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">encode_text</span><span class="p">(</span>
+            <span class="n">tokenize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lvis_prompts</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="p">)</span>
+<span class="n">prompts</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="c1"># Construct a prompt for target object.</span>
+<span class="k">for</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">texts</span><span class="p">:</span>
+    <span class="n">prompts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"A photo of a "</span> <span class="o">+</span> <span class="n">text</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+    <span class="n">text_embeddings</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lvis_text_embeddings</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">encode_text</span><span class="p">(</span><span class="n">tokenize</span><span class="p">(</span><span class="n">prompts</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)),</span>
+        <span class="p">],</span>
+        <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">image_embeddings</span> <span class="o">/=</span> <span class="n">image_embeddings</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdim</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">text_embeddings</span> <span class="o">/=</span> <span class="n">text_embeddings</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdim</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="c1"># Find nearby category. This code is based on OpenAI official implementation.</span>
+    <span class="c1"># See also https://github.com/openai/CLIP/tree/main#zero-shot-prediction</span>
+    <span class="n">similarity</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">image_embeddings</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span> <span class="o">@</span> <span class="n">text_embeddings</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">values</span><span class="p">,</span> <span class="n">indices</span> <span class="o">=</span> <span class="n">similarity</span><span class="o">.</span><span class="n">topk</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">value</span><span class="p">,</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">indices</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lvis_classes</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">texts</span><span class="p">[</span><span class="n">index</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lvis_classes</span><span class="p">)],</span> <span class="n">value</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
+</code></pre></div>
 <h2 id="use-with-python-api">Use with Python API<a class="headerlink" href="#use-with-python-api" title="Permanent link">#</a></h2>
 <div class="highlight"><pre><span></span><code><span class="n">current_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)))</span>
-<span class="n">labeler</span> <span class="o">=</span> <span class="n">DeticImageLabeler</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">current_path</span> <span class="o">/</span> <span class="s2">"automation"</span> <span class="o">/</span> <span class="s2">"detic_image_labeler.yaml"</span><span class="p">))</span>
-<span class="n">dataset</span> <span class="o">=</span> <span class="n">ImagesDataset</span><span class="p">(</span>
-    <span class="nb">str</span><span class="p">(</span><span class="n">current_path</span> <span class="o">/</span> <span class="s2">"rosbag"</span> <span class="o">/</span> <span class="s2">"ford"</span> <span class="o">/</span> <span class="s2">"ford.mcap"</span><span class="p">),</span>
-    <span class="nb">str</span><span class="p">(</span><span class="n">current_path</span> <span class="o">/</span> <span class="s2">"rosbag"</span> <span class="o">/</span> <span class="s2">"ford"</span> <span class="o">/</span> <span class="s2">"read_image.yaml"</span><span class="p">),</span>
+<span class="nb">filter</span> <span class="o">=</span> <span class="n">ClipImageAnnotationFilter</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">current_path</span> <span class="o">/</span> <span class="s2">"automation"</span> <span class="o">/</span> <span class="s2">"clip_image_annotation_filter.yaml"</span><span class="p">))</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">ImagesAndAnnotationsDataset</span><span class="p">(</span>
+    <span class="nb">str</span><span class="p">(</span><span class="n">current_path</span> <span class="o">/</span> <span class="s2">"rosbag"</span> <span class="o">/</span> <span class="s2">"ford_with_annotation"</span> <span class="o">/</span> <span class="s2">"bounding_box.mcap"</span><span class="p">),</span>
+    <span class="nb">str</span><span class="p">(</span><span class="n">current_path</span> <span class="o">/</span> <span class="s2">"rosbag"</span> <span class="o">/</span> <span class="s2">"ford_with_annotation"</span> <span class="o">/</span> <span class="s2">"read_images_and_bounding_box.yaml"</span><span class="p">),</span>
 <span class="p">)</span>
-<span class="n">labeler</span><span class="o">.</span><span class="n">inference</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+<span class="n">annotations</span> <span class="o">=</span> <span class="nb">filter</span><span class="o">.</span><span class="n">inference</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
 </code></pre></div>
-<p><code>detic_image_labeler.yaml</code> and <code>read_image.yaml</code> are exactly same when you use detic_image_labaler with CLI.</p>
-<p>After executing this command, <code>output.mp4</code> movie file was generated.</p>
-<iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" frameborder="0" height="315" src="https://www.youtube.com/embed/OPR3ZVzRXCM" title="YouTube video player" width="560"></iframe>
 <hr/>
 <div class="md-source-file">
 <small>
