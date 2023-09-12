@@ -75,6 +75,12 @@ class ClipImageAnnotationFilter(Automation):  # type: ignore
                 # ),
                 self.text_embeddings[target_object][1],
             )
+            # print("P/N ratio : " + str(positive.item() / negative.item()))
+            # print("Score : " + str(bounding_box.score))
+            # print("Class : " + str(bounding_box.object_class))
+            # print("Clip Cosine Similarity with bert: " + str(positive.item()))
+            # print("Clip Cosine Similarity without bert: " + str(clip_similarity.item()))
+            # print("")
             if (
                 positive.item()
                 > self.config.consider_annotation_with_bert_config.positive_nagative_ratio
@@ -84,21 +90,6 @@ class ClipImageAnnotationFilter(Automation):  # type: ignore
                 and clip_similarity.item()
                 >= self.config.consider_annotation_with_bert_config.min_clip_cosine_similarity
             ):
-                # print("P/N ratio : " + str(positive.item() / negative.item()))
-                # print("Score : " + str(bounding_box.score))
-                # print("Class : " + str(bounding_box.object_class))
-                # print(clip_similarity)
-                # print(cosine_similarity(clip_embeddings, annotation_text_embeddings))
-                # print(
-                #     "Prompt Similarity : "
-                #     + str(
-                #         self.text_encoder.cosine_similarity(
-                #             bounding_box.object_class, target_object
-                #         )
-                #     )
-                # )
-                # print("Positive : " + str(positive.item()))
-                # print(str(positive.item()) + "," + str(negative.item()))
                 return True
         return False
 
@@ -107,6 +98,8 @@ class ClipImageAnnotationFilter(Automation):  # type: ignore
         filtered_annotations: List[ImageAnnotation] = []
         image_number = 0
         for index, image_and_annotation in enumerate(dataset):
+            annotation = ImageAnnotation()
+            annotation.image_index = index
             print("Loading Image : " + str(index))
             for bounding_box_index, bounding_box in enumerate(
                 image_and_annotation[1].bounding_boxes
@@ -161,5 +154,6 @@ class ClipImageAnnotationFilter(Automation):  # type: ignore
                         #     )
                         # ).save("data/" + str(image_number) + ".jpeg")
                         # print("")
+                        annotation.bounding_boxes.append(copy.deepcopy(bounding_box))
                         image_number = image_number + 1
         return filtered_annotations

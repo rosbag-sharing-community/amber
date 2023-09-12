@@ -1,4 +1,9 @@
-target_objects: ["passenger car with red color."]
+target_objects: ["passenger car."]
 min_width: 30
 min_height: 30
 min_area: 50
+classify_method: consider_annotation_with_bert
+consider_annotation_with_bert_config:
+  positive_nagative_ratio: 1.0
+  min_clip_cosine_similarity: 0.25
+  min_clip_cosine_similarity_with_berf: 0.3
