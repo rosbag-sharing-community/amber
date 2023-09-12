@@ -6,6 +6,9 @@ from typing import Tuple, List, Optional
 from amber.util.lvis.lvis_v1_categories import (
     LVIS_CATEGORIES as LVIS_V1_CATEGORIES,
 )
+import tensorboardX
+import torchvision
+from PIL import Image
 
 
 class ClipEncoder:
@@ -92,7 +95,27 @@ class ClipEncoder:
             self.get_text_embeddings("Not a photo of a " + object_name),
         )
 
+    def visualize_image_embeddings(self, images: List[torch.Tensor]) -> None:
+        label_images = torch.zeros(0)
+        image_embeddings = torch.zeros(0)
+        for image in images:
+            image_embeddings = torch.cat(
+                (image_embeddings, self.get_image_embeddings(image))
+            )
+            label_images = torch.cat(
+                (
+                    label_images,
+                    torchvision.transforms.functional.to_tensor(
+                        self.to_pil_image(image).resize((50, 50))
+                    ),
+                )
+            )
+        writer = tensorboardX.SummaryWriter()
+        writer.add_embedding(
+            image_embeddings.view(39, 512), label_img=label_images.view(39, 3, 50, 50)
+        )
+        writer.close()
+
 
 if __name__ == "__main__":
-    encoder = ClipEncoder()
-    encoder.classify_with_custom_vocabulary(torch.ones(1, 512), ["Red car."])
+    pass
