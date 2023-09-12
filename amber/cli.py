@@ -4,11 +4,13 @@ import os
 from yaml import safe_load  # type: ignore
 from amber.automation.detic_image_labeler import DeticImageLabeler
 from amber.automation.clip_image_annotation_filter import ClipImageAnnotationFilter
-from amber.automation.clip_encoder import ClipEncoder
 from amber.automation.nerf_3d_reconstruction import Nerf3DReconstruction
 from amber.dataset.images_dataset import ImagesDataset
 from amber.dataset.images_and_annotations_dataset import ImagesAndAnnotationsDataset
 from amber.importer.video import VideoImporter
+from amber.visualization.clip_embeddings_visualization import (
+    ClipEmbeddingsVisualization,
+)
 from typing import Any, Callable, List
 import torch
 
@@ -144,14 +146,11 @@ def check_config_files_exists_for_visualize(args: Any) -> None:
 
 def run_visualize_image(args: Any) -> None:
     check_config_files_exists_for_visualize(args)
-    encoder = ClipEncoder()
     dataset = ImagesAndAnnotationsDataset(
         args.rosbag_path, args.dataset_description_yaml_path
     )
-    images: List[torch.Tensor] = []
-    for index, image_and_annotation in enumerate(dataset):
-        images.append(image_and_annotation[0])
-    encoder.visualize_image_embeddings(images)
+    visualization = ClipEmbeddingsVisualization()
+    visualization.visualize(dataset)
 
 
 def main() -> None:
