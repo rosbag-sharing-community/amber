@@ -78,7 +78,13 @@ def run_clip_image_annotation_filter_automation(args: Any) -> None:
     dataset = ImagesAndAnnotationsDataset(
         args.rosbag_path, args.dataset_description_yaml_path
     )
-    filter.inference(dataset)
+    annotations = filter.inference(dataset)
+    filter.write(
+        dataset,
+        "/clip_image_annotation_filter/annotation",
+        annotations,
+        args.output_rosbag_path,
+    )
 
 
 def run_nerf_3d_reconstruction_automation(args: Any) -> None:
