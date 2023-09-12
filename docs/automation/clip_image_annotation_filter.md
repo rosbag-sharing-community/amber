@@ -3,7 +3,7 @@
 !!! warning
     This feature is just experimental and very low quality.
 
-You can query object from annotated rosbags by prompt.
+You can query object from annotated rosbags by prompt by using [OpenAI CLIP](https://github.com/openai/CLIP).
 
 ## Use with CLI
 
@@ -31,7 +31,10 @@ consider_annotation_with_bert_config:
   min_clip_cosine_similarity_with_berf: 0.3 # Minimum values of cosine similarity with clip text embeddings and image enbeddings consider prompt similarity using bert.
 ```
 
-### consider_annotation_with_bert
+### Algorithms
+#### consider_annotation_with_bert
+
+python script of the `consider_annotation_with_bert` is below.
 
 ```python
 # Pure clip cosine similarity.
@@ -52,17 +55,11 @@ positive = cosine_similarity(
 # Pure clip cosine similarity with negative prompt.
 negative = cosine_similarity(
     clip_embeddings / torch.sum(clip_embeddings),
-    # - annotation_text_embeddings
-    # / torch.sum(annotation_text_embeddings)
-    # * bounding_box.score
-    # * self.text_encoder.cosine_similarity(
-    #     bounding_box.object_class, target_object
-    # ),
     self.text_embeddings[target_object][1],
 )
 ```
 
-### clip_with_lvis_and_custom_vocabulary
+#### clip_with_lvis_and_custom_vocabulary
 
 Embed all object categories in lvis and append custom vocabulary to the text embedding tensor.
 Then, find most nearest category.
@@ -70,10 +67,12 @@ Then, find most nearest category.
 ```python
 if self.lvis_text_embeddings == None:
     with torch.no_grad():
+        # Make text embeddings from all lvis objects.
         self.lvis_text_embeddings = self.model.encode_text(
             tokenize(self.lvis_prompts).to(self.device)
         )
 prompts: List[str] = []
+# Construct a prompt for target object.
 for text in texts:
     prompts.append("A photo of a " + text)
 with torch.no_grad():
@@ -86,6 +85,8 @@ with torch.no_grad():
     )
     image_embeddings /= image_embeddings.norm(dim=-1, keepdim=True)
     text_embeddings /= text_embeddings.norm(dim=-1, keepdim=True)
+    # Find nearby category. This code is based on OpenAI official implementation.
+    # See also https://github.com/openai/CLIP/tree/main#zero-shot-prediction
     similarity = (
         image_embeddings.to(torch.float32) @ text_embeddings.to(torch.float32).T
     ).softmax(dim=-1)

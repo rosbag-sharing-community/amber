@@ -105,6 +105,7 @@ nav:
   - Automation:
     - Automation: automation/automation.md
     - Detic image labaler: automation/detic_image_labaler.md
+    - Clip image annotation filter: automation/clip_image_annotation_filter.md
     - NeRF 3D Reconstruction: automation/nerf_3d_reconstruction.md
   - Import:
     - Import: import/import.md
