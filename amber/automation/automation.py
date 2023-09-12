@@ -65,6 +65,7 @@ class Automation(ABC):
             message={"data": json.dumps(annotation_json)},
             sequence=0,
             publish_time=first_message_timestamp,
+            log_time=first_message_timestamp,
         )
         writer.finish()
         rosbag_file.close()

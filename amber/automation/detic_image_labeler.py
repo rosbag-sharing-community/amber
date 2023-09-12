@@ -2,7 +2,7 @@ import os
 
 from amber.dataset.images_dataset import ImagesDataset
 from amber.automation.automation import Automation
-from amber.automation.clip import ClipEncoder
+from amber.automation.clip_encoder import ClipEncoder
 
 import amber
 from amber.automation.task_description import (
@@ -30,6 +30,7 @@ from PIL import Image
 import numpy as np
 import cv2
 import json
+import copy
 
 
 class DeticImageLabeler(Automation):  # type: ignore
@@ -252,7 +253,15 @@ class DeticImageLabeler(Automation):  # type: ignore
                 bounding_box.box.y2 = boxes[bbox_id][3]
                 bounding_box.score = scores[bbox_id]
                 bounding_box.object_class = class_names[classes[bbox_id]]
-                image_annotation.bounding_boxes.append(bounding_box)
+                if (
+                    abs(bounding_box.box.x2 - bounding_box.box.x1)
+                    >= self.config.min_width
+                    or abs(bounding_box.box.y2 - bounding_box.box.y1)
+                    >= self.config.min_height
+                ) and abs(bounding_box.box.x2 - bounding_box.box.x1) * abs(
+                    bounding_box.box.y2 - bounding_box.box.y1
+                ) >= self.config.min_area:
+                    image_annotation.bounding_boxes.append(copy.deepcopy(bounding_box))
             image_annotations.append(
                 clip_encoder.get_image_embeddings_for_objects(image, image_annotation)
             )

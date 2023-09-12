@@ -6,6 +6,7 @@ from enum import Enum
 @dataclass
 class ImageTopicConfig(YAMLWizard):  # type: ignore
     topic_name: str = ""
+    compressed_image: bool = False
 
 
 class PointCloudType(Enum):

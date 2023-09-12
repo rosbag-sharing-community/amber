@@ -1,8 +1,10 @@
 from amber.automation.detic_image_labeler import DeticImageLabeler
+from amber.automation.clip_image_annotation_filter import ClipImageAnnotationFilter
 from amber.automation.nerf_3d_reconstruction import Nerf3DReconstruction
 from pathlib import Path
 import os
 from amber.dataset.images_dataset import ImagesDataset
+from amber.dataset.images_and_annotations_dataset import ImagesAndAnnotationsDataset
 import torch
 import pytest
 
@@ -17,6 +19,40 @@ def test_detic_auto_labeler() -> None:
         str(current_path / "rosbag" / "ford" / "read_image.yaml"),
     )
     labeler.inference(dataset)
+
+
+def test_clip_image_annotation_filter() -> None:
+    current_path = Path(os.path.dirname(os.path.realpath(__file__)))
+    filter = ClipImageAnnotationFilter(
+        str(current_path / "automation" / "clip_image_annotation_filter.yaml")
+    )
+    dataset = ImagesAndAnnotationsDataset(
+        str(current_path / "rosbag" / "ford_with_annotation" / "bounding_box.mcap"),
+        str(
+            current_path
+            / "rosbag"
+            / "ford_with_annotation"
+            / "read_images_and_bounding_box.yaml"
+        ),
+    )
+    annotations = filter.inference(dataset)
+
+
+def test_clip_image_annotation_filter_with_lvis() -> None:
+    current_path = Path(os.path.dirname(os.path.realpath(__file__)))
+    filter = ClipImageAnnotationFilter(
+        str(current_path / "automation" / "clip_image_annotation_filter_with_lvis.yaml")
+    )
+    dataset = ImagesAndAnnotationsDataset(
+        str(current_path / "rosbag" / "ford_with_annotation" / "bounding_box.mcap"),
+        str(
+            current_path
+            / "rosbag"
+            / "ford_with_annotation"
+            / "read_images_and_bounding_box.yaml"
+        ),
+    )
+    annotations = filter.inference(dataset)
 
 
 @pytest.mark.skipif(

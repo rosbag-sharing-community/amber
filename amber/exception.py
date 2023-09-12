@@ -8,3 +8,7 @@ class MessageDecodingError(Exception):
 
 class RosbagSchemaError(Exception):
     pass
+
+
+class RuntimeError(Exception):
+    pass

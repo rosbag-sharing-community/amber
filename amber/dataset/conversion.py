@@ -29,23 +29,47 @@ def decompress_message(message: Message) -> Message:
 
 
 def ros_message_to_image(ros_message: DecodedMessage) -> Image:
-    match ros_message.encoding:
-        case "rgb8":
-            return Image.frombytes(
-                "RGB", (ros_message.width, ros_message.height), ros_message.data
-            )
-        case "8UC3":
-            image = Image.frombytes(
-                "RGB", (ros_message.width, ros_message.height), ros_message.data
-            )
-            b, g, r = image.split()
-            return Image.merge("RGB", (r, g, b))
-        case _:
-            raise MessageDecodingError(
-                "image_encodings in sensor_msgs/msg/Image is "
-                + ros_message.encoding
-                + " , it was not supported yet."
-            )
+    if "encoding" in dir(ros_message):
+        match ros_message.encoding:
+            case "rgb8":
+                return Image.frombytes(
+                    "RGB", (ros_message.width, ros_message.height), ros_message.data
+                )
+            case "8UC3":
+                image = Image.frombytes(
+                    "RGB", (ros_message.width, ros_message.height), ros_message.data
+                )
+                b, g, r = image.split()
+                return Image.merge("RGB", (r, g, b))
+            case _:
+                raise MessageDecodingError(
+                    "image_encodings in sensor_msgs/msg/Image is "
+                    + ros_message.encoding
+                    + " , it was not supported yet."
+                )
+    elif "format" in dir(ros_message):
+        match ros_message.format:
+            case "rgb8; jpeg compressed bgr8":
+                jpeg_data = numpy.frombuffer(
+                    ros_message.data,
+                    dtype=np.uint8,
+                    count=len(ros_message.data),
+                    offset=0,
+                )
+                return Image.fromarray(
+                    cv2.cvtColor(
+                        cv2.imdecode(jpeg_data, flags=cv2.IMREAD_COLOR),
+                        cv2.COLOR_BGR2RGB,
+                    )
+                )
+            case _:
+                raise MessageDecodingError(
+                    "Unsupported compressed message format. Please check rosbag data."
+                )
+    else:
+        raise MessageDecodingError(
+            "The image message should have a sensor_msgs/msg/Image or sensor_msgs/msg/CompressedImage type."
+        )
 
 
 def get_pointcloud_field(field_name: str, fields: List[Any]) -> Any:
