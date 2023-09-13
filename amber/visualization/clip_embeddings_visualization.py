@@ -7,15 +7,33 @@ import torch
 from torchvision import transforms
 import tensorboardX
 
+from dataclasses import dataclass, field
+from dataclass_wizard import YAMLWizard
+from enum import Enum
+
+
+class VisualizationTarget(Enum):
+    IMAGE_EMBEDDINGS = "image_embeddings"
+
+
+@dataclass
+class ClipEmbeddingVisualizationConfig(YAMLWizard):  # type: ignore
+    label_image_size: int = 50
+    max_visualization_items: int = 1000
+    target: VisualizationTarget = VisualizationTarget.IMAGE_EMBEDDINGS
+
 
 class ClipEmbeddingsVisualization:
-    def __init__(self) -> None:
+    def __init__(self, config: ClipEmbeddingVisualizationConfig) -> None:
+        self.config = config
         self.encoder = ClipEncoder()
         self.image_embeddings = torch.zeros(0)
         self.label_images = torch.zeros(0)
         self.transform = transforms.Compose(
             [
-                transforms.Resize((50, 50)),
+                transforms.Resize(
+                    (self.config.label_image_size, self.config.label_image_size)
+                ),
                 transforms.ToTensor(),
             ]
         )
@@ -57,6 +75,11 @@ class ClipEmbeddingsVisualization:
         writer = tensorboardX.SummaryWriter()
         writer.add_embedding(
             self.image_embeddings.view(self.num_objects, 512),
-            label_img=self.label_images.view(self.num_objects, 3, 50, 50),
+            label_img=self.label_images.view(
+                self.num_objects,
+                3,
+                self.config.label_image_size,
+                self.config.label_image_size,
+            ),
         )
         writer.close()
