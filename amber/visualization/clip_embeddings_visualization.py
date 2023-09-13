@@ -24,8 +24,8 @@ class ClipEmbeddingVisualizationConfig(YAMLWizard):  # type: ignore
 
 
 class ClipEmbeddingsVisualization:
-    def __init__(self, config: ClipEmbeddingVisualizationConfig) -> None:
-        self.config = config
+    def __init__(self, yaml_path: str) -> None:
+        self.config = ClipEmbeddingVisualizationConfig.from_yaml_file(yaml_path)
         self.encoder = ClipEncoder()
         self.image_embeddings = torch.zeros(0)
         self.label_images = torch.zeros(0)

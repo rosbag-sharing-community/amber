@@ -45,6 +45,11 @@ def setup_arguments_and_parser_for_visualization(
     parser_visualization: Any, func: Callable[[Any], None]
 ) -> None:
     parser_visualization.add_argument(
+        "task_description_yaml_path",
+        help="Path to the yaml description file path",
+        default="",
+    )
+    parser_visualization.add_argument(
         "dataset_description_yaml_path",
         help="Path to the yaml description file path for dataset",
         default="",
@@ -78,9 +83,6 @@ def check_config_files_exists_for_automation(args: Any) -> None:
 
 def run_detic_image_labaler_automation(args: Any) -> None:
     check_config_files_exists_for_automation(args)
-    task_description = {}
-    with open(args.task_description_yaml_path, "rb") as file:
-        task_description = safe_load(file)
     labeler = DeticImageLabeler(args.task_description_yaml_path)
     dataset = ImagesDataset(args.rosbag_path, args.dataset_description_yaml_path)
     annotations = labeler.inference(dataset)
@@ -91,9 +93,6 @@ def run_detic_image_labaler_automation(args: Any) -> None:
 
 def run_clip_image_annotation_filter_automation(args: Any) -> None:
     check_config_files_exists_for_automation(args)
-    task_description = {}
-    with open(args.task_description_yaml_path, "rb") as file:
-        task_description = safe_load(file)
     filter = ClipImageAnnotationFilter(args.task_description_yaml_path)
     dataset = ImagesAndAnnotationsDataset(
         args.rosbag_path, args.dataset_description_yaml_path
@@ -138,6 +137,12 @@ def run_video_import(args: Any) -> None:
 
 
 def check_config_files_exists_for_visualize(args: Any) -> None:
+    if not os.path.exists(args.task_description_yaml_path):
+        raise TaskDescriptionError(
+            "Task description yaml path : "
+            + args.task_description_yaml_path
+            + " does not exist."
+        )
     if not os.path.exists(args.dataset_description_yaml_path):
         raise TaskDescriptionError(
             "Specified config : " + args.config + " does not exist."
