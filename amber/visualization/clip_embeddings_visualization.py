@@ -10,6 +10,7 @@ import tensorboardX
 from dataclasses import dataclass, field
 from dataclass_wizard import YAMLWizard
 from enum import Enum
+import random
 
 
 class VisualizationTarget(Enum):
@@ -37,7 +38,7 @@ class ClipEmbeddingsVisualization:
                 transforms.ToTensor(),
             ]
         )
-        self.num_objects = 0
+        self.current_object_index: int = 0
         self.to_pil_image = transforms.ToPILImage()
 
     def add_image_embedding(
@@ -46,37 +47,49 @@ class ClipEmbeddingsVisualization:
         with torch.no_grad():
             pil_image = self.to_pil_image(image)
             for bounding_box in annotation.bounding_boxes:
-                cropped_image = pil_image.crop(
-                    (
-                        int(bounding_box.box.x1),
-                        int(bounding_box.box.y1),
-                        int(bounding_box.box.x2),
-                        int(bounding_box.box.y2),
+                if self.current_object_index in self.target_object_index:
+                    cropped_image = pil_image.crop(
+                        (
+                            int(bounding_box.box.x1),
+                            int(bounding_box.box.y1),
+                            int(bounding_box.box.x2),
+                            int(bounding_box.box.y2),
+                        )
                     )
-                )
-                self.image_embeddings = torch.cat(
-                    (
-                        self.image_embeddings,
-                        self.encoder.model.encode_image(
-                            self.encoder.preprocess(cropped_image)
-                            .unsqueeze(0)
-                            .to(self.encoder.device)
-                        ),
+                    self.image_embeddings = torch.cat(
+                        (
+                            self.image_embeddings,
+                            self.encoder.model.encode_image(
+                                self.encoder.preprocess(cropped_image)
+                                .unsqueeze(0)
+                                .to(self.encoder.device)
+                            ),
+                        )
                     )
-                )
-                self.label_images = torch.cat(
-                    (self.label_images, self.transform(cropped_image))
-                )
-                self.num_objects = self.num_objects + 1
+                    self.label_images = torch.cat(
+                        (self.label_images, self.transform(cropped_image))
+                    )
+                self.current_object_index = self.current_object_index + 1
 
     def visualize(self, dataset: ImagesAndAnnotationsDataset) -> None:
+        self.num_objects = 0
+        for index, image_and_annotation in enumerate(dataset):
+            for bounding_box in image_and_annotation[1].bounding_boxes:
+                self.num_objects = self.num_objects + 1
+        if self.num_objects >= self.config.max_visualization_items:
+            self.target_object_index = random.sample(
+                list(range(self.num_objects)), self.config.max_visualization_items
+            )
+        else:
+            self.target_object_index = list(range(self.num_objects))
+        self.current_object_index = 0
         for index, image_and_annotation in enumerate(dataset):
             self.add_image_embedding(image_and_annotation[0], image_and_annotation[1])
         writer = tensorboardX.SummaryWriter()
         writer.add_embedding(
-            self.image_embeddings.view(self.num_objects, 512),
+            self.image_embeddings.view(len(self.target_object_index), 512),
             label_img=self.label_images.view(
-                self.num_objects,
+                len(self.target_object_index),
                 3,
                 self.config.label_image_size,
                 self.config.label_image_size,
