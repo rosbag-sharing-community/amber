@@ -154,7 +154,7 @@ def run_visualize_image(args: Any) -> None:
     dataset = ImagesAndAnnotationsDataset(
         args.rosbag_path, args.dataset_description_yaml_path
     )
-    visualization = ClipEmbeddingsVisualization()
+    visualization = ClipEmbeddingsVisualization(args.task_description_yaml_path)
     visualization.visualize(dataset)
 
 
