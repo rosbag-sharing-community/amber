@@ -41,16 +41,16 @@ pyparsing = "*"
 boto3 = "^1.20.0"
 urllib3 = "^1.26.0"
 torch = [
-    {version = "^2.0.1+cu118", source = "torch_cu118", extras =["gpu"]},
-    {version = "^2.0.1", extras =["cpu"]}
+    {version = "^2.0.1+cu118", source = "torch_cu118", extras =["gpu"], optional = true},
+    {version = "^2.0.1", extras =["cpu"], optional = true}
 ]
 torchvision = [
-    {version = "^0.15.2+cu118", source = "torch_cu118", extras =["gpu"]},
-    {version = "^0.15.2", extras =["cpu"]}
+    {version = "^0.15.2+cu118", source = "torch_cu118", extras =["gpu"], optional = true},
+    {version = "^0.15.2", extras =["cpu"], optional = true}
 ]
 torchaudio = [
-    {version = "^2.0.2+cu118", source = "torch_cu118", extras =["gpu"]},
-    {version = "^2.0.2", extras =["cpu"]}
+    {version = "^2.0.2+cu118", source = "torch_cu118", extras =["gpu"], optional = true},
+    {version = "^2.0.2", extras =["cpu"], optional = true}
 ]
 open3d = "^0.17.0"
 scikit-learn = "^1.3.0"
