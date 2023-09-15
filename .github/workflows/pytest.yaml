@@ -72,7 +72,7 @@ jobs:
         with:
           poetry-version: ${{ matrix.poetry-version }}
       - name: install
-        run: poetry install --E ${{ matrix.cpu_or_gpu }}
+        run: poetry install -E ${{ matrix.cpu_or_gpu }}
       - name: build
         run: poetry build
       - uses: actions/upload-artifact@v3
