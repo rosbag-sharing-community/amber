@@ -59,6 +59,8 @@ jobs:
         python-version: ["3.10.6"]
         poetry-version: ["1.5.1"]
         os: [ubuntu-22.04]
+        cpu_or_gpu:
+          ["cpu", "gpu"]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
@@ -69,6 +71,8 @@ jobs:
       - uses: abatilo/actions-poetry@v2
         with:
           poetry-version: ${{ matrix.poetry-version }}
+      - name: install
+        run: poetry install --E ${{ matrix.cpu_or_gpu }}
       - name: build
         run: poetry build
       - uses: actions/upload-artifact@v3
