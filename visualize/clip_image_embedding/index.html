@@ -6,12 +6,12 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <meta content="Masaya Kataoka" name="author"/>
-<link href="https://rosbag-sharing-community.github.io/amber/use_rosbag_as_dataset/how_to_use/" rel="canonical"/>
-<link href="../../tips/" rel="prev"/>
-<link href="../read_images/" rel="next"/>
+<link href="https://rosbag-sharing-community.github.io/amber/visualize/clip_image_embedding/" rel="canonical"/>
+<link href="../visualize/" rel="prev"/>
+<link href="../../import/import/" rel="next"/>
 <link href="../../assets/images/favicon.png" rel="icon"/>
 <meta content="mkdocs-1.5.2, mkdocs-material-9.2.6" name="generator"/>
-<title>How to use? - amber</title>
+<title>CLIP image embedding - amber</title>
 <link href="../../assets/stylesheets/main.0e669242.min.css" rel="stylesheet"/>
 <link href="../../assets/stylesheets/palette.85d0ee34.min.css" rel="stylesheet"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -25,7 +25,7 @@
 <input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
 <label class="md-overlay" for="__drawer"></label>
 <div data-md-component="skip">
-<a class="md-skip" href="#how-to-use">
+<a class="md-skip" href="#visualize-clip-image-embedding">
           Skip to content
         </a>
 </div>
@@ -49,7 +49,7 @@
 <div class="md-header__topic" data-md-component="header-topic">
 <span class="md-ellipsis">
             
-              How to use?
+              CLIP image embedding
             
           </span>
 </div>
@@ -121,8 +121,8 @@
 
       </a>
 </li>
-<li class="md-tabs__item md-tabs__item--active">
-<a class="md-tabs__link" href="./">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../use_rosbag_as_dataset/how_to_use/">
           
   
   Use rosbag as dataset
@@ -137,8 +137,8 @@
 
         </a>
 </li>
-<li class="md-tabs__item">
-<a class="md-tabs__link" href="../../visualize/visualize/">
+<li class="md-tabs__item md-tabs__item--active">
+<a class="md-tabs__link" href="../visualize/">
           
   
   Visualize
@@ -193,68 +193,43 @@
   </span>
 </a>
 </li>
-<li class="md-nav__item md-nav__item--active md-nav__item--nested">
-<input checked="" class="md-nav__toggle md-toggle" id="__nav_3" type="checkbox"/>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_3" type="checkbox"/>
 <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
 <span class="md-ellipsis">
     Use rosbag as dataset
   </span>
 <span class="md-nav__icon md-icon"></span>
 </label>
-<nav aria-expanded="true" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
 <label class="md-nav__title" for="__nav_3">
 <span class="md-nav__icon md-icon"></span>
             Use rosbag as dataset
           </label>
 <ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item md-nav__item--active">
-<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
-<label class="md-nav__link md-nav__link--active" for="__toc">
-<span class="md-ellipsis">
-    How to use?
-  </span>
-<span class="md-nav__icon md-icon"></span>
-</label>
-<a class="md-nav__link md-nav__link--active" href="./">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../use_rosbag_as_dataset/how_to_use/">
 <span class="md-ellipsis">
     How to use?
   </span>
 </a>
-<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
-<label class="md-nav__title" for="__toc">
-<span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#prepare-rosbag-data">
-    Prepare rosbag data
-  </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#use-rosbag-as-dataset">
-    Use rosbag as dataset
-  </a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../read_images/">
+<a class="md-nav__link" href="../../use_rosbag_as_dataset/read_images/">
 <span class="md-ellipsis">
     Read images
   </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../read_images_and_annotations/">
+<a class="md-nav__link" href="../../use_rosbag_as_dataset/read_images_and_annotations/">
 <span class="md-ellipsis">
     Read images and annotation
   </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../read_pointclouds/">
+<a class="md-nav__link" href="../../use_rosbag_as_dataset/read_pointclouds/">
 <span class="md-ellipsis">
     Read pointclouds
   </span>
@@ -308,33 +283,58 @@
 </ul>
 </nav>
 </li>
-<li class="md-nav__item md-nav__item--nested">
-<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_5" type="checkbox"/>
+<li class="md-nav__item md-nav__item--active md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_5" type="checkbox"/>
 <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
 <span class="md-ellipsis">
     Visualize
   </span>
 <span class="md-nav__icon md-icon"></span>
 </label>
-<nav aria-expanded="false" aria-labelledby="__nav_5_label" class="md-nav" data-md-level="1">
+<nav aria-expanded="true" aria-labelledby="__nav_5_label" class="md-nav" data-md-level="1">
 <label class="md-nav__title" for="__nav_5">
 <span class="md-nav__icon md-icon"></span>
             Visualize
           </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../visualize/visualize/">
+<a class="md-nav__link" href="../visualize/">
 <span class="md-ellipsis">
     Visualize
   </span>
 </a>
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../visualize/clip_image_embedding/">
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    CLIP image embedding
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
 <span class="md-ellipsis">
     CLIP image embedding
   </span>
 </a>
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#use-with-cli">
+    Use with CLI
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#use-with-python-api">
+    Use with Python API
+  </a>
+</li>
+</ul>
+</nav>
 </li>
 </ul>
 </nav>
@@ -377,49 +377,34 @@
 </div>
 <div class="md-content" data-md-component="content">
 <article class="md-content__inner md-typeset">
-<h1 id="how-to-use">How to use?<a class="headerlink" href="#how-to-use" title="Permanent link">#</a></h1>
-<h2 id="prepare-rosbag-data">Prepare rosbag data<a class="headerlink" href="#prepare-rosbag-data" title="Permanent link">#</a></h2>
+<h1 id="visualize-clip-image-embedding">Visualize CLIP Image embedding<a class="headerlink" href="#visualize-clip-image-embedding" title="Permanent link">#</a></h1>
+<h2 id="use-with-cli">Use with CLI<a class="headerlink" href="#use-with-cli" title="Permanent link">#</a></h2>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>Currently, some limitations are exists.
-rosbag2 should be mcap format.
-only zstd message compression supports.</p>
+<p>This sample command is written with the assumption that it will be executed in the root directory of the amber package.</p>
 </div>
-<h2 id="use-rosbag-as-dataset">Use rosbag as dataset<a class="headerlink" href="#use-rosbag-as-dataset" title="Permanent link">#</a></h2>
-<p>Rosbag includes multimodal data, such as image/pointcloud/audio/etc...
-So, you need to describe what data you want to extract from rosbag.
-In order to specify this, write yaml setting file.</p>
-<p>If you want to know wahat types of task <code>amber</code> supports, please check below.</p>
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Image</th>
-<th>2D Annotation</th>
-<th>PointCloud</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><a href="../read_images">ImagesDataset</a></td>
-<td><img alt="✔️" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/2714.png" title=":heavy_check_mark:"/></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td><a href="../read_images_and_annotations">ImagesAndAnnotation</a></td>
-<td><img alt="✔️" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/2714.png" title=":heavy_check_mark:"/></td>
-<td><img alt="✔️" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/2714.png" title=":heavy_check_mark:"/></td>
-<td></td>
-</tr>
-<tr>
-<td><a href="../read_pointclouds">PointCLoudsDataset</a></td>
-<td></td>
-<td></td>
-<td><img alt="✔️" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/2714.png" title=":heavy_check_mark:"/></td>
-</tr>
-</tbody>
-</table>
+<div class="highlight"><pre><span></span><code>amber<span class="w"> </span>visualize<span class="w"> </span>image_embedding<span class="w"> </span>tests/visualization/clip_image_visualization.yaml<span class="w"> </span>tests/rosbag/ford_with_annotation/read_images_and_bounding_box.yaml<span class="w"> </span>tests/rosbag/ford_with_annotation/bounding_box.mcap
+tensorboard<span class="w"> </span>--host<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span>--port<span class="w"> </span><span class="m">6006</span><span class="w"> </span>--logdir<span class="w"> </span>runs
+</code></pre></div>
+<p>After executing tensorboard, access <a href="http://0.0.0.0:6006#projector">http://0.0.0.0:6006#projector</a> by your browser.</p>
+<p>In tensorboard, you can see the embedding space of the CLIP.</p>
+<iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" frameborder="0" height="315" src="https://www.youtube.com/embed/RbLG4dcH23U?si=DzX4yQdx4n3Qe-aI" title="YouTube video player" width="560"></iframe>
+<h2 id="use-with-python-api">Use with Python API<a class="headerlink" href="#use-with-python-api" title="Permanent link">#</a></h2>
+<div class="highlight"><pre><span></span><code><span class="n">current_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)))</span>
+<span class="n">visualization</span> <span class="o">=</span> <span class="n">ClipEmbeddingsVisualization</span><span class="p">(</span>
+    <span class="nb">str</span><span class="p">(</span><span class="n">current_path</span> <span class="o">/</span> <span class="s2">"visualization"</span> <span class="o">/</span> <span class="s2">"clip_image_visualization.yaml"</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">ImagesAndAnnotationsDataset</span><span class="p">(</span>
+    <span class="nb">str</span><span class="p">(</span><span class="n">current_path</span> <span class="o">/</span> <span class="s2">"rosbag"</span> <span class="o">/</span> <span class="s2">"ford_with_annotation"</span> <span class="o">/</span> <span class="s2">"bounding_box.mcap"</span><span class="p">),</span>
+    <span class="nb">str</span><span class="p">(</span>
+        <span class="n">current_path</span>
+        <span class="o">/</span> <span class="s2">"rosbag"</span>
+        <span class="o">/</span> <span class="s2">"ford_with_annotation"</span>
+        <span class="o">/</span> <span class="s2">"read_images_and_bounding_box.yaml"</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+<span class="n">visualization</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+</code></pre></div>
 <hr/>
 <div class="md-source-file">
 <small>

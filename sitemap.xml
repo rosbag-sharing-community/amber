@@ -60,4 +60,14 @@
          <lastmod>2023-09-15</lastmod>
          <changefreq>daily</changefreq>
     </url>
+    <url>
+         <loc>https://rosbag-sharing-community.github.io/amber/visualize/clip_image_embedding/</loc>
+         <lastmod>2023-09-15</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://rosbag-sharing-community.github.io/amber/visualize/visualize/</loc>
+         <lastmod>2023-09-15</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
 </urlset>
