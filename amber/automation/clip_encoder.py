@@ -6,6 +6,7 @@ from typing import Tuple, List, Optional
 from amber.util.lvis.lvis_v1_categories import (
     LVIS_CATEGORIES as LVIS_V1_CATEGORIES,
 )
+import tensorboardX
 
 
 class ClipEncoder:
@@ -94,5 +95,4 @@ class ClipEncoder:
 
 
 if __name__ == "__main__":
-    encoder = ClipEncoder()
-    encoder.classify_with_custom_vocabulary(torch.ones(1, 512), ["Red car."])
+    pass

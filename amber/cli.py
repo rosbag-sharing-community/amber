@@ -8,7 +8,11 @@ from amber.automation.nerf_3d_reconstruction import Nerf3DReconstruction
 from amber.dataset.images_dataset import ImagesDataset
 from amber.dataset.images_and_annotations_dataset import ImagesAndAnnotationsDataset
 from amber.importer.video import VideoImporter
-from typing import Any, Callable
+from amber.visualization.clip_embeddings_visualization import (
+    ClipEmbeddingsVisualization,
+)
+from typing import Any, Callable, List
+import torch
 
 
 def setup_arguments_and_parser_for_automation(
@@ -37,6 +41,27 @@ def setup_arguments_and_parser_for_automation(
     parser_automation.set_defaults(handler=func)
 
 
+def setup_arguments_and_parser_for_visualization(
+    parser_visualization: Any, func: Callable[[Any], None]
+) -> None:
+    parser_visualization.add_argument(
+        "task_description_yaml_path",
+        help="Path to the yaml description file path",
+        default="",
+    )
+    parser_visualization.add_argument(
+        "dataset_description_yaml_path",
+        help="Path to the yaml description file path for dataset",
+        default="",
+    )
+    parser_visualization.add_argument(
+        "rosbag_path",
+        help="Path to the target rosbag path",
+        default="",
+    )
+    parser_visualization.set_defaults(handler=func)
+
+
 def check_config_files_exists_for_automation(args: Any) -> None:
     if not os.path.exists(args.task_description_yaml_path):
         raise TaskDescriptionError(
@@ -58,9 +83,6 @@ def check_config_files_exists_for_automation(args: Any) -> None:
 
 def run_detic_image_labaler_automation(args: Any) -> None:
     check_config_files_exists_for_automation(args)
-    task_description = {}
-    with open(args.task_description_yaml_path, "rb") as file:
-        task_description = safe_load(file)
     labeler = DeticImageLabeler(args.task_description_yaml_path)
     dataset = ImagesDataset(args.rosbag_path, args.dataset_description_yaml_path)
     annotations = labeler.inference(dataset)
@@ -71,9 +93,6 @@ def run_detic_image_labaler_automation(args: Any) -> None:
 
 def run_clip_image_annotation_filter_automation(args: Any) -> None:
     check_config_files_exists_for_automation(args)
-    task_description = {}
-    with open(args.task_description_yaml_path, "rb") as file:
-        task_description = safe_load(file)
     filter = ClipImageAnnotationFilter(args.task_description_yaml_path)
     dataset = ImagesAndAnnotationsDataset(
         args.rosbag_path, args.dataset_description_yaml_path
@@ -117,6 +136,28 @@ def run_video_import(args: Any) -> None:
     VideoImporter(args.video, args.config).write()
 
 
+def check_config_files_exists_for_visualize(args: Any) -> None:
+    if not os.path.exists(args.task_description_yaml_path):
+        raise TaskDescriptionError(
+            "Task description yaml path : "
+            + args.task_description_yaml_path
+            + " does not exist."
+        )
+    if not os.path.exists(args.dataset_description_yaml_path):
+        raise TaskDescriptionError(
+            "Specified config : " + args.config + " does not exist."
+        )
+
+
+def run_visualize_image(args: Any) -> None:
+    check_config_files_exists_for_visualize(args)
+    dataset = ImagesAndAnnotationsDataset(
+        args.rosbag_path, args.dataset_description_yaml_path
+    )
+    visualization = ClipEmbeddingsVisualization(args.task_description_yaml_path)
+    visualization.visualize(dataset)
+
+
 def main() -> None:
     parser = ArgumentParser()
     subparsers = parser.add_subparsers()
@@ -146,6 +187,19 @@ def main() -> None:
     )
     setup_arguments_and_parser_for_automation(
         parser_nerf_3d_reconstruction, run_nerf_3d_reconstruction_automation
+    )
+
+    # Setup command line options for visualization command
+    parser_visualization = subparsers.add_parser(
+        "visualize", help="Visualize rosbag data."
+    )
+    # Setup command line options for visualize image_embedding command
+    subparsers_visualization = parser_visualization.add_subparsers()
+    parser_visualization = subparsers_visualization.add_parser(
+        "image_embedding", help="Visualize image embeddings in rosbag data."
+    )
+    setup_arguments_and_parser_for_visualization(
+        parser_visualization, run_visualize_image
     )
 
     # Setup command line option for import command
