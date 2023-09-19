@@ -14,3 +14,6 @@ rosbag
 
 # tensorbord directory
 runs
+
+# coverage
+tests/coverage.xml
