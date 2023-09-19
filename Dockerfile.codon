@@ -15,4 +15,5 @@ ENV PATH $PATH:/root/.codon/bin
 COPY . /amber
 WORKDIR /amber
 COPY --from=poetry /amber/requirements.txt ./
-RUN pip install -r requirements.txt
+RUN pip install git+https://github.com/openai/CLIP.git
+RUN pip install -I -r requirements.txt
