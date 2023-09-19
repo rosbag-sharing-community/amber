@@ -1,0 +1,18 @@
+FROM python:3.10-slim-buster AS poetry
+
+RUN pip install poetry
+RUN mkdir /amber
+WORKDIR /amber
+COPY pyproject.toml poetry.lock ./
+RUN poetry export -f requirements.txt --output requirements.txt
+
+FROM python:3.10-buster
+ENV PYTHONUNBUFFERED 1
+
+RUN /bin/bash -c "$(curl -fsSL https://exaloop.io/install.sh)"
+ENV PATH $PATH:/root/.codon/bin
+
+COPY . /amber
+WORKDIR /amber
+COPY --from=poetry /amber/requirements.txt ./
+RUN pip install -r requirements.txt
