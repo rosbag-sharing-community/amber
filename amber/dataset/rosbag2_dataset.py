@@ -1,8 +1,8 @@
 import os
 from torch.utils.data import Dataset
-from typing import Any, List
+from typing import Any, List, Optional
 from yaml import safe_load  # type: ignore
-from amber.exception import TaskDescriptionError
+from amber.exception import CertificationError
 from dataclasses import dataclass
 from dataclass_wizard import JSONWizard
 import glob
@@ -51,9 +51,13 @@ def download_rosbag(
     download_dir: str = "/tmp/amber/remote_bags",
     is_public: bool = True,
     false_overwrite: bool = False,
-    aws_access_key_id: str = os.environ["AWS_ACCESS_KEY_ID"],
-    aws_secret_access_key: str = os.environ["AWS_SECRET_ACCESS_KEY"],
+    aws_access_key_id: Optional[str] = os.getenv("AWS_ACCESS_KEY_ID"),
+    aws_secret_access_key: Optional[str] = os.getenv("AWS_SECRET_ACCESS_KEY"),
 ) -> str:
+    if aws_access_key_id is None:
+        raise CertificationError("You should specify aws access key.")
+    if aws_secret_access_key is None:
+        raise CertificationError("You should specify aws secret access key.")
     if is_public:
         s3 = boto3.client(
             "s3",
