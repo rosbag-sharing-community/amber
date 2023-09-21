@@ -1,6 +1,7 @@
 _skbuild
 dist
 poetry.lock
+requirements.txt
 __pycache__
 .coverage
 

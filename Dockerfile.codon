@@ -16,4 +16,4 @@ COPY . /amber
 WORKDIR /amber
 COPY --from=poetry /amber/requirements.txt ./
 RUN pip install git+https://github.com/openai/CLIP.git
-RUN pip install -I -r requirements.txt
+RUN pip install --ignore-installed clip -r requirements.txt
