@@ -61,11 +61,7 @@ class ClipEmbeddingsVisualization:
                     self.image_embeddings = torch.cat(
                         (
                             self.image_embeddings,
-                            self.encoder.model.encode_image(
-                                self.encoder.preprocess(cropped_image)
-                                .unsqueeze(0)
-                                .to(self.encoder.device)
-                            ),
+                            self.encoder.get_single_image_embeddings(cropped_image),
                         )
                     )
                     self.label_images = torch.cat(
@@ -77,7 +73,7 @@ class ClipEmbeddingsVisualization:
         self.text_embeddings = torch.cat(
             (
                 self.text_embeddings,
-                self.encoder.get_text_embeddings("A photo of a " + object_name),
+                self.encoder.get_single_text_embeddings("A photo of a " + object_name),
             )
         )
 

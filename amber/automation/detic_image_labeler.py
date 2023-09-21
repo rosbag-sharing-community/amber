@@ -263,7 +263,9 @@ class DeticImageLabeler(Automation):  # type: ignore
                 ) >= self.config.min_area:
                     image_annotation.bounding_boxes.append(copy.deepcopy(bounding_box))
             image_annotations.append(
-                clip_encoder.get_image_embeddings_for_objects(image, image_annotation)
+                clip_encoder.get_single_image_embeddings_for_objects(
+                    self.to_pil_image(image), image_annotation
+                )
             )
             visualization = self.draw_predictions(
                 np.asarray(self.to_pil_image(image)), detection_results, "lvis"

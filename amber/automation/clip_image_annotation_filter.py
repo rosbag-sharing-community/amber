@@ -24,7 +24,7 @@ class ClipImageAnnotationFilter(Automation):  # type: ignore
         for target_object in self.config.target_objects:
             self.text_embeddings[
                 target_object
-            ] = self.clip_encoder.get_text_embeddings_for_positive_negative_prompts(
+            ] = self.clip_encoder.get_single_text_embeddings_for_positive_negative_prompts(
                 target_object
             )
         self.to_pil_image = transforms.ToPILImage()
@@ -48,7 +48,7 @@ class ClipImageAnnotationFilter(Automation):  # type: ignore
         clip_embeddings: torch.Tensor,
         bounding_box: BoundingBoxAnnotation,
     ) -> bool:
-        annotation_text_embeddings = self.clip_encoder.get_text_embeddings(
+        annotation_text_embeddings = self.clip_encoder.get_single_text_embeddings(
             "A photo of a " + bounding_box.object_class
         )
         for target_object in self.config.target_objects:
