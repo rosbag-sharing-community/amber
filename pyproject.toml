@@ -50,10 +50,10 @@ addict = "^2.4.0"
 pandas = "^2.0.3"
 onnxruntime-gpu = "^1.15.1"
 download = "^0.3.5"
-clip = {git = "https://github.com/openai/CLIP.git"}
 tensorboardx = "^2.6.2.2"
 sentence-transformers = "^2.2.2"
 tensorboard = "^2.14.0"
+transformers = "^4.33.2"
 
 [tool.poetry.group.dev]
 optional = true
