@@ -12,3 +12,7 @@ class RosbagSchemaError(Exception):
 
 class RuntimeError(Exception):
     pass
+
+
+class CertificationError(Exception):
+    pass
