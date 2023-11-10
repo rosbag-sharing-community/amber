@@ -2,72 +2,72 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://rosbag-sharing-community.github.io/amber/</loc>
-         <lastmod>2023-11-09</lastmod>
+         <lastmod>2023-11-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://rosbag-sharing-community.github.io/amber/tips/</loc>
-         <lastmod>2023-11-09</lastmod>
+         <lastmod>2023-11-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://rosbag-sharing-community.github.io/amber/automation/automation/</loc>
-         <lastmod>2023-11-09</lastmod>
+         <lastmod>2023-11-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://rosbag-sharing-community.github.io/amber/automation/clip_image_annotation_filter/</loc>
-         <lastmod>2023-11-09</lastmod>
+         <lastmod>2023-11-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://rosbag-sharing-community.github.io/amber/automation/detic_image_labaler/</loc>
-         <lastmod>2023-11-09</lastmod>
+         <lastmod>2023-11-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://rosbag-sharing-community.github.io/amber/automation/nerf_3d_reconstruction/</loc>
-         <lastmod>2023-11-09</lastmod>
+         <lastmod>2023-11-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://rosbag-sharing-community.github.io/amber/import/import/</loc>
-         <lastmod>2023-11-09</lastmod>
+         <lastmod>2023-11-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://rosbag-sharing-community.github.io/amber/import/video/</loc>
-         <lastmod>2023-11-09</lastmod>
+         <lastmod>2023-11-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://rosbag-sharing-community.github.io/amber/use_rosbag_as_dataset/how_to_use/</loc>
-         <lastmod>2023-11-09</lastmod>
+         <lastmod>2023-11-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://rosbag-sharing-community.github.io/amber/use_rosbag_as_dataset/read_images/</loc>
-         <lastmod>2023-11-09</lastmod>
+         <lastmod>2023-11-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://rosbag-sharing-community.github.io/amber/use_rosbag_as_dataset/read_images_and_annotations/</loc>
-         <lastmod>2023-11-09</lastmod>
+         <lastmod>2023-11-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://rosbag-sharing-community.github.io/amber/use_rosbag_as_dataset/read_pointclouds/</loc>
-         <lastmod>2023-11-09</lastmod>
+         <lastmod>2023-11-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://rosbag-sharing-community.github.io/amber/visualize/clip_image_embedding/</loc>
-         <lastmod>2023-11-09</lastmod>
+         <lastmod>2023-11-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://rosbag-sharing-community.github.io/amber/visualize/visualize/</loc>
-         <lastmod>2023-11-09</lastmod>
+         <lastmod>2023-11-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
