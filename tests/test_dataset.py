@@ -10,6 +10,7 @@ import os
 from PIL import Image
 from pathlib import Path
 import pytest
+from datetime import datetime
 
 
 def test_read_image_vrx() -> None:
@@ -33,6 +34,8 @@ def test_read_image_vrx() -> None:
                 ),
             )
             count = count + 1
+    assert dataset.get_first_timestamp() == datetime(1970, 1, 1, 9, 0, 3, 604000)
+    assert dataset.get_last_timestamp() == datetime(1970, 1, 1, 9, 0, 3, 604000)
 
 
 def test_read_image_ford() -> None:
@@ -57,6 +60,8 @@ def test_read_image_ford() -> None:
             )
             assert dataset.get_metadata(count).topic == "/image_front_left"
             count = count + 1
+    assert dataset.get_first_timestamp() == datetime(2017, 8, 4, 13, 48, 43, 820895)
+    assert dataset.get_last_timestamp() == datetime(2017, 8, 4, 13, 49, 10, 155844)
 
 
 @pytest.mark.skipif(

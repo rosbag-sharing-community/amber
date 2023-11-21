@@ -43,6 +43,14 @@ class Rosbag2Dataset(Dataset):  # type: ignore
     def get_metadata(self, index: int) -> MessageMetaData:
         return self.message_metadata[index]
 
+    def get_first_timestamp(self) -> datetime:
+        assert len(self.message_metadata) != 0
+        return min(self.message_metadata, key=lambda x: x.publish_time).publish_time
+
+    def get_last_timestamp(self) -> datetime:
+        assert len(self.message_metadata) != 0
+        return max(self.message_metadata, key=lambda x: x.publish_time).publish_time
+
 
 def download_rosbag(
     bucket_name: str,

@@ -11,6 +11,8 @@ from amber.dataset.conversion import decode_message
 from amber.exception import RosbagSchemaError
 from mcap_ros2.decoder import Decoder
 import sys
+from datetime import datetime
+from amber.unit.time import Time, TimeUnit
 
 
 class Automation(ABC):
@@ -33,7 +35,6 @@ class Automation(ABC):
         rosbag_file = open(output_rosbag_path, "w+b")
         writer = Writer(output=rosbag_file)
         schema_dicts: Dict[str, Schema] = {}  # {schena name : schema}
-        first_message_timestamp: int = sys.maxsize
         for rosbag_filepath in dataset.rosbag_files:
             reader = NonSeekingReader(rosbag_filepath)
             # Copy all topics
@@ -50,8 +51,6 @@ class Automation(ABC):
                     publish_time=message.publish_time,
                     sequence=message.sequence,
                 )
-                if first_message_timestamp > message.publish_time:
-                    first_message_timestamp = message.publish_time
         for annotation in annotation_data:
             annotation_json.append(annotation.to_json())
         # Append annotation data
@@ -59,13 +58,21 @@ class Automation(ABC):
             StringMessageSchema.name, StringMessageSchema.schema_text
         )
         annotation_schema.id = len(schema_dicts) + 1
+        stamp: int = int(
+            Time(
+                (
+                    dataset.get_first_timestamp() - datetime.fromtimestamp(0)
+                ).total_seconds(),
+                TimeUnit.SECOND,
+            ).get(TimeUnit.NANOSECOND)
+        )
         writer.write_message(
             topic=topic,
             schema=annotation_schema,
             message={"data": json.dumps(annotation_json)},
             sequence=0,
-            publish_time=first_message_timestamp,
-            log_time=first_message_timestamp,
+            publish_time=stamp,
+            log_time=stamp,
         )
         writer.finish()
         rosbag_file.close()
