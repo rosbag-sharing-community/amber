@@ -55,6 +55,16 @@ class PointcloudDataset(Rosbag2Dataset):  # type: ignore
                             message, schema, self.config.compressed
                         )
                     )
+                    self.message_metadata.append(
+                        MessageMetaData.from_dict(
+                            {
+                                "sequence": message.sequence,
+                                "topic": channel.topic,
+                                "rosbag_path": rosbag_file,
+                            }
+                        )
+                    )
+        assert len(self.pointclouds) == len(self.message_metadata)
 
     def __len__(self) -> int:
         return len(self.pointclouds)
