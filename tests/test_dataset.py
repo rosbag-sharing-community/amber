@@ -121,5 +121,9 @@ def test_read_pointcloud() -> None:
     count = 0
     for i_batch, sample_batched in enumerate(dataloader):
         for sample in sample_batched:
+            assert (
+                dataset.get_metadata(count).topic
+                == "/wamv/sensors/lidars/lidar_wamv_sensor/points"
+            )
             count = count + 1
     assert count == 46
