@@ -53,10 +53,10 @@ class ImagesDataset(Rosbag2Dataset):  # type: ignore
                     self.images.append(
                         decode_image_message(message, schema, self.config.compressed)
                     )
+                    print(dir(message))
                     self.message_metadata.append(
                         MessageMetaData.from_dict(
                             {
-                                "sequence": message.sequence,
                                 "topic": channel.topic,
                                 "rosbag_path": rosbag_file,
                             }

@@ -55,6 +55,7 @@ def test_read_image_ford() -> None:
                     )
                 ),
             )
+            assert dataset.get_metadata(count).topic == "/image_front_left"
             count = count + 1
 
 

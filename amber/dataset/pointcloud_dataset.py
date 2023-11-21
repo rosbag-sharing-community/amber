@@ -58,7 +58,6 @@ class PointcloudDataset(Rosbag2Dataset):  # type: ignore
                     self.message_metadata.append(
                         MessageMetaData.from_dict(
                             {
-                                "sequence": message.sequence,
                                 "topic": channel.topic,
                                 "rosbag_path": rosbag_file,
                             }

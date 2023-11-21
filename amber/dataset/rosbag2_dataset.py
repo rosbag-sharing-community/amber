@@ -12,7 +12,6 @@ import requests  # type: ignore
 
 @dataclass
 class MessageMetaData(JSONWizard):  # type: ignore
-    sequence: int = 0
     topic: str = ""
     rosbag_path: str = ""
 
