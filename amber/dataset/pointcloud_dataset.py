@@ -3,12 +3,13 @@ from amber.dataset.topic_config import PointcloudTopicConfig
 import torch
 from dataclasses import dataclass, field
 from dataclass_wizard import YAMLWizard
-from amber.exception import TaskDescriptionError
+from amber.unit.time import Time, TimeUnit
 from amber.dataset.conversion import decode_pointcloud_message
 from typing import Any, List, Dict
 from amber.dataset.rosbag2_dataset import Rosbag2Dataset
 from mcap.reader import NonSeekingReader
 import open3d
+from datetime import datetime
 
 
 @dataclass
@@ -58,6 +59,11 @@ class PointcloudDataset(Rosbag2Dataset):  # type: ignore
                     self.message_metadata.append(
                         MessageMetaData.from_dict(
                             {
+                                "publish_time": datetime.fromtimestamp(
+                                    Time(message.publish_time, TimeUnit.NANOSECOND).get(
+                                        TimeUnit.SECOND
+                                    )
+                                ),
                                 "topic": channel.topic,
                                 "rosbag_path": rosbag_file,
                             }

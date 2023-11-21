@@ -54,6 +54,7 @@ torchaudio = {version = "^2.0.2+cu118", source = "torch_cu118"}
 torchvision = {version = "^0.15.2+cu118", source = "torch_cu118"}
 transformers = "^4.33.2"
 urllib3 = "^1.26.0"
+datetime = "^5.3"
 
 [tool.poetry.group.dev]
 optional = true

@@ -8,12 +8,14 @@ from dataclass_wizard import JSONWizard
 import glob
 import boto3
 import requests  # type: ignore
+from datetime import datetime
 
 
 @dataclass
 class MessageMetaData(JSONWizard):  # type: ignore
     topic: str = ""
     rosbag_path: str = ""
+    publish_time: publish_time = datetime.fromtimestamp(0)  # Unix epoch time
 
 
 class Rosbag2Dataset(Dataset):  # type: ignore
