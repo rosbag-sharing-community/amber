@@ -34,8 +34,8 @@ def test_read_image_vrx() -> None:
                 ),
             )
             count = count + 1
-    assert dataset.get_first_timestamp() == datetime(1970, 1, 1, 9, 0, 3, 604000)
-    assert dataset.get_last_timestamp() == datetime(1970, 1, 1, 9, 0, 3, 604000)
+    assert dataset.get_first_timestamp() == datetime(1970, 1, 1, 0, 0, 3, 604000)
+    assert dataset.get_last_timestamp() == datetime(1970, 1, 1, 0, 0, 3, 604000)
 
 
 def test_read_image_ford() -> None:
