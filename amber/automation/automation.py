@@ -11,7 +11,7 @@ from amber.dataset.conversion import decode_message
 from amber.exception import RosbagSchemaError
 from mcap_ros2.decoder import Decoder
 import sys
-from datetime import datetime
+import datetime
 from amber.unit.time import Time, TimeUnit
 
 
@@ -61,7 +61,8 @@ class Automation(ABC):
         stamp: int = int(
             Time(
                 (
-                    dataset.get_first_timestamp() - datetime.fromtimestamp(0)
+                    dataset.get_first_timestamp()
+                    - datetime.datetime.fromtimestamp(0, tz=datetime.timezone.utc)
                 ).total_seconds(),
                 TimeUnit.SECOND,
             ).get(TimeUnit.NANOSECOND)

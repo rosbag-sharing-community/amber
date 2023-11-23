@@ -8,7 +8,7 @@ from typing import Any, List
 from amber.dataset.rosbag2_dataset import Rosbag2Dataset
 from mcap.reader import NonSeekingReader
 from amber.unit.time import Time, TimeUnit
-from datetime import datetime
+import datetime
 
 
 @dataclass
@@ -57,10 +57,11 @@ class ImagesDataset(Rosbag2Dataset):  # type: ignore
                     self.message_metadata.append(
                         MessageMetaData.from_dict(
                             {
-                                "publish_time": datetime.fromtimestamp(
+                                "publish_time": datetime.datetime.fromtimestamp(
                                     Time(message.publish_time, TimeUnit.NANOSECOND).get(
                                         TimeUnit.SECOND
-                                    )
+                                    ),
+                                    tz=datetime.timezone.utc,
                                 ),
                                 "topic": channel.topic,
                                 "rosbag_path": rosbag_file,

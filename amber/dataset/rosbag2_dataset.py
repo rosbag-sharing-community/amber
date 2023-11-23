@@ -8,14 +8,16 @@ from dataclass_wizard import JSONWizard
 import glob
 import boto3
 import requests  # type: ignore
-from datetime import datetime
+import datetime
 
 
 @dataclass
 class MessageMetaData(JSONWizard):  # type: ignore
     topic: str = ""
     rosbag_path: str = ""
-    publish_time: publish_time = datetime.fromtimestamp(0)  # Unix epoch time
+    publish_time: datetime.datetime = datetime.datetime.fromtimestamp(
+        0, datetime.timezone.utc
+    )  # Unix epoch time
 
 
 class Rosbag2Dataset(Dataset):  # type: ignore
@@ -43,11 +45,11 @@ class Rosbag2Dataset(Dataset):  # type: ignore
     def get_metadata(self, index: int) -> MessageMetaData:
         return self.message_metadata[index]
 
-    def get_first_timestamp(self) -> datetime:
+    def get_first_timestamp(self) -> datetime.datetime:
         assert len(self.message_metadata) != 0
         return min(self.message_metadata, key=lambda x: x.publish_time).publish_time
 
-    def get_last_timestamp(self) -> datetime:
+    def get_last_timestamp(self) -> datetime.datetime:
         assert len(self.message_metadata) != 0
         return max(self.message_metadata, key=lambda x: x.publish_time).publish_time
 

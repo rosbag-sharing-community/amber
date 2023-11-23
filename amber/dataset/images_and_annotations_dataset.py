@@ -10,7 +10,7 @@ from typing import Any, List, Dict, Tuple
 from amber.dataset.rosbag2_dataset import Rosbag2Dataset
 from mcap.reader import NonSeekingReader
 import json
-from datetime import datetime
+import datetime
 
 
 @dataclass
@@ -64,10 +64,11 @@ class ImagesAndAnnotationsDataset(Rosbag2Dataset):  # type: ignore
                     self.message_metadata.append(
                         MessageMetaData.from_dict(
                             {
-                                "publish_time": datetime.fromtimestamp(
+                                "publish_time": datetime.datetime.fromtimestamp(
                                     Time(message.publish_time, TimeUnit.NANOSECOND).get(
                                         TimeUnit.SECOND
-                                    )
+                                    ),
+                                    tz=datetime.timezone.utc,
                                 ),
                                 "topic": channel.topic,
                                 "rosbag_path": rosbag_file,
