@@ -32,9 +32,11 @@ class ClipImageAnnotationFilter(Automation):  # type: ignore
 
     def inference_with_lvis_vocabulary(
         self,
-        clip_embeddings: torch.Tensor,
         bounding_box: BoundingBoxAnnotation,
     ) -> bool:
+        clip_embeddings: torch.Tensor = torch.tensor(
+            bounding_box.clip_embeddings, dtype=float
+        )
         result = self.clip_encoder.classify_with_custom_vocabulary(
             clip_embeddings, self.config.target_objects
         )
@@ -45,11 +47,13 @@ class ClipImageAnnotationFilter(Automation):  # type: ignore
 
     def inference_with_bert(
         self,
-        clip_embeddings: torch.Tensor,
         bounding_box: BoundingBoxAnnotation,
     ) -> bool:
         annotation_text_embeddings = self.clip_encoder.get_single_text_embeddings(
             "A photo of a " + bounding_box.object_class
+        )
+        clip_embeddings: torch.Tensor = torch.tensor(
+            bounding_box.clip_embeddings, dtype=float
         )
         for target_object in self.config.target_objects:
             clip_similarity = cosine_similarity(
@@ -109,26 +113,17 @@ class ClipImageAnnotationFilter(Automation):  # type: ignore
                 if width * height >= self.config.min_area and (
                     width >= self.config.min_width or height >= self.config.min_height
                 ):
-                    clip_embeddings = torch.tensor(
-                        bounding_box.clip_embeddings, dtype=float
-                    )
                     is_detected: bool = False
                     if (
                         self.config.classify_method
                         == ClipClassifyMethod.CLIP_WITH_LVIS_AND_CUSTOM_VOCABULARY
                     ):
-                        is_detected = self.inference_with_lvis_vocabulary(
-                            clip_embeddings,
-                            bounding_box,
-                        )
+                        is_detected = self.inference_with_lvis_vocabulary(bounding_box)
                     elif (
                         self.config.classify_method
                         == ClipClassifyMethod.CONSIDER_ANNOTATION_WITH_BERT
                     ):
-                        is_detected = self.inference_with_bert(
-                            clip_embeddings,
-                            bounding_box,
-                        )
+                        is_detected = self.inference_with_bert(bounding_box)
                     else:
                         raise RuntimeError(
                             "Classify method "
