@@ -35,6 +35,7 @@ def test_clip_image_annotation_filter() -> None:
             / "read_images_and_bounding_box.yaml"
         ),
     )
+    assert len(dataset) == 39
     annotations = filter.inference(dataset)
 
 
@@ -52,6 +53,7 @@ def test_clip_image_annotation_filter_with_lvis() -> None:
             / "read_images_and_bounding_box.yaml"
         ),
     )
+    assert len(dataset) == 39
     annotations = filter.inference(dataset)
 
 

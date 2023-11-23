@@ -104,7 +104,6 @@ class ClipImageAnnotationFilter(Automation):  # type: ignore
         for index, image_and_annotation in enumerate(dataset):
             annotation = ImageAnnotation()
             annotation.image_index = index
-            # print("Loading Image : " + str(index))
             for bounding_box_index, bounding_box in enumerate(
                 image_and_annotation[1].bounding_boxes
             ):
