@@ -10,6 +10,7 @@ import os
 from PIL import Image
 from pathlib import Path
 import pytest
+import datetime
 
 
 def test_read_image_vrx() -> None:
@@ -33,6 +34,12 @@ def test_read_image_vrx() -> None:
                 ),
             )
             count = count + 1
+    assert dataset.get_first_timestamp() == datetime.datetime(
+        1970, 1, 1, 0, 0, 3, 604000, tzinfo=datetime.timezone.utc
+    )
+    assert dataset.get_last_timestamp() == datetime.datetime(
+        1970, 1, 1, 0, 0, 3, 604000, tzinfo=datetime.timezone.utc
+    )
 
 
 def test_read_image_ford() -> None:
@@ -55,7 +62,14 @@ def test_read_image_ford() -> None:
                     )
                 ),
             )
+            assert dataset.get_metadata(count).topic == "/image_front_left"
             count = count + 1
+    assert dataset.get_first_timestamp() == datetime.datetime(
+        2017, 8, 4, 4, 48, 43, 820895, tzinfo=datetime.timezone.utc
+    )
+    assert dataset.get_last_timestamp() == datetime.datetime(
+        2017, 8, 4, 4, 49, 10, 155844, tzinfo=datetime.timezone.utc
+    )
 
 
 @pytest.mark.skipif(
@@ -120,5 +134,9 @@ def test_read_pointcloud() -> None:
     count = 0
     for i_batch, sample_batched in enumerate(dataloader):
         for sample in sample_batched:
+            assert (
+                dataset.get_metadata(count).topic
+                == "/wamv/sensors/lidars/lidar_wamv_sensor/points"
+            )
             count = count + 1
     assert count == 46

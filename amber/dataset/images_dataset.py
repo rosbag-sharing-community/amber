@@ -3,11 +3,12 @@ from amber.dataset.topic_config import ImageTopicConfig
 import torch
 from dataclasses import dataclass, field
 from dataclass_wizard import YAMLWizard
-from amber.exception import TaskDescriptionError
 from amber.dataset.conversion import decode_image_message
 from typing import Any, List
 from amber.dataset.rosbag2_dataset import Rosbag2Dataset
 from mcap.reader import NonSeekingReader
+from amber.unit.time import Time, TimeUnit
+import datetime
 
 
 @dataclass
@@ -56,7 +57,12 @@ class ImagesDataset(Rosbag2Dataset):  # type: ignore
                     self.message_metadata.append(
                         MessageMetaData.from_dict(
                             {
-                                "sequence": message.sequence,
+                                "publish_time": datetime.datetime.fromtimestamp(
+                                    Time(message.publish_time, TimeUnit.NANOSECOND).get(
+                                        TimeUnit.SECOND
+                                    ),
+                                    tz=datetime.timezone.utc,
+                                ),
                                 "topic": channel.topic,
                                 "rosbag_path": rosbag_file,
                             }
