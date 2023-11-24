@@ -54,8 +54,9 @@ threadpoolctl = "^3.2.0"
 torch = {version = "^2.0.1+cu118", source = "torch_cu118"}
 torchaudio = {version = "^2.0.2+cu118", source = "torch_cu118"}
 torchvision = {version = "^0.15.2+cu118", source = "torch_cu118"}
-transformers = "^4.33.2"
+transformers = ">=4.25.0,<4.27"
 urllib3 = "^1.26.0"
+salesforce-lavis = "^1.0.2"
 
 [tool.poetry.group.dev]
 optional = true
