@@ -5,6 +5,7 @@ from pathlib import Path
 import os
 from amber.dataset.images_dataset import ImagesDataset
 from amber.dataset.images_and_annotations_dataset import ImagesAndAnnotationsDataset
+from amber.dataset.rosbag2_dataset import download_rosbag
 import torch
 import pytest
 
@@ -21,13 +22,24 @@ def test_detic_auto_labeler() -> None:
     labeler.inference(dataset)
 
 
+@pytest.mark.skipif(
+    (not os.getenv("AWS_ACCESS_KEY_ID")) or (not os.getenv("AWS_SECRET_ACCESS_KEY")),
+    reason="Do you have access rights to the test data?",
+)  # type: ignore
 def test_clip_image_annotation_filter() -> None:
     current_path = Path(os.path.dirname(os.path.realpath(__file__)))
     filter = ClipImageAnnotationFilter(
         str(current_path / "automation" / "clip_image_annotation_filter.yaml")
     )
     dataset = ImagesAndAnnotationsDataset(
-        str(current_path / "rosbag" / "ford_with_annotation" / "bounding_box.mcap"),
+        download_rosbag(
+            bucket_name="amber-test-rosbag",
+            remote_rosbag_directory="ford_with_annotation",
+            remote_rosbag_filename="bounding_box.mcap",
+            endpoint_url="https://s3.us-west-1.wasabisys.com",
+            is_public=True,
+            download_dir=str(current_path / "rosbag"),
+        ),
         str(
             current_path
             / "rosbag"
@@ -35,16 +47,28 @@ def test_clip_image_annotation_filter() -> None:
             / "read_images_and_bounding_box.yaml"
         ),
     )
+    assert len(dataset) == 39
     annotations = filter.inference(dataset)
 
 
+@pytest.mark.skipif(
+    (not os.getenv("AWS_ACCESS_KEY_ID")) or (not os.getenv("AWS_SECRET_ACCESS_KEY")),
+    reason="Do you have access rights to the test data?",
+)  # type: ignore
 def test_clip_image_annotation_filter_with_lvis() -> None:
     current_path = Path(os.path.dirname(os.path.realpath(__file__)))
     filter = ClipImageAnnotationFilter(
         str(current_path / "automation" / "clip_image_annotation_filter_with_lvis.yaml")
     )
     dataset = ImagesAndAnnotationsDataset(
-        str(current_path / "rosbag" / "ford_with_annotation" / "bounding_box.mcap"),
+        download_rosbag(
+            bucket_name="amber-test-rosbag",
+            remote_rosbag_directory="ford_with_annotation",
+            remote_rosbag_filename="bounding_box.mcap",
+            endpoint_url="https://s3.us-west-1.wasabisys.com",
+            is_public=True,
+            download_dir=str(current_path / "rosbag"),
+        ),
         str(
             current_path
             / "rosbag"
@@ -52,6 +76,7 @@ def test_clip_image_annotation_filter_with_lvis() -> None:
             / "read_images_and_bounding_box.yaml"
         ),
     )
+    assert len(dataset) == 39
     annotations = filter.inference(dataset)
 
 
