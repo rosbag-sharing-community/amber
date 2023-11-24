@@ -10,7 +10,7 @@ import torch
 import pytest
 
 
-def test_detic_auto_labeler() -> None:
+def test_detic_image_labeler() -> None:
     current_path = Path(os.path.dirname(os.path.realpath(__file__)))
     labeler = DeticImageLabeler(
         str(current_path / "automation" / "detic_image_labeler.yaml")
@@ -19,7 +19,12 @@ def test_detic_auto_labeler() -> None:
         str(current_path / "rosbag" / "ford" / "ford.mcap"),
         str(current_path / "rosbag" / "ford" / "read_image.yaml"),
     )
-    labeler.inference(dataset)
+    labeler.write(
+        dataset,
+        "/detic_image_labeler/annotation",
+        labeler.inference(dataset),
+        str(current_path / "rosbag" / "ford" / "output.mcap"),
+    )
 
 
 @pytest.mark.skipif(
