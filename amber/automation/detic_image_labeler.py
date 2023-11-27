@@ -227,6 +227,7 @@ class DeticImageLabeler(Automation):  # type: ignore
 
         video: Any = None
         for index, image in enumerate(dataset):
+            print("Labeling image " + str(index) + "/" + str(len(dataset)))
             input_width = image.shape[2]
             input_height = image.shape[1]
             input_image = self.preprocess(np.asarray(self.to_pil_image(image)), 800)
