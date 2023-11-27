@@ -27,3 +27,9 @@ def test_blip2_encoder() -> None:
     ) > encoder.get_cosine_similarity_from_image_file_and_text(
         image_of_speed_limit, "The speed limit is 40."
     )
+    assert encoder.get_cosine_similarity_from_image_file_and_text(
+        image_of_speed_limit, "The speed limit is 35."
+    ) > encoder.get_cosine_similarity_from_image_file_and_text(
+        image_of_speed_limit, "The speed limit is 50."
+    )
+    encoder.encode_image_from_file(image_of_speed_limit)
