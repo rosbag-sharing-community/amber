@@ -82,6 +82,22 @@ class Blip2Encoder:
             self.image_processor(transforms.ToTensor()(Image.open(image_path)))
         )
 
+    def get_cosine_similarity_from_image_and_text(
+        self, image: torch.Tensor, text: str
+    ) -> float:
+        text_embedding = self.encode_text(text)
+        image_embedding = self.encode_image(image)
+        sim: float = 0.0
+        sim, _ = torch.max(torch.bmm(image_embedding, text_embedding.unsqueeze(-1)))
+        return sim
+
+    def get_cosine_similarity_from_image_file_and_text(
+        self, image_path: Path, text: str
+    ) -> float:
+        return self.get_cosine_similarity_from_image_and_text(
+            self.image_processor(transforms.ToTensor()(Image.open(image_path))), text
+        )
+
 
 if __name__ == "__main__":
     pass
