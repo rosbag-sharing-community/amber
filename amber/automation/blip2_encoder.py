@@ -84,5 +84,4 @@ class Blip2Encoder:
 
 
 if __name__ == "__main__":
-    encoder = Blip2Encoder()
-    # print(embedding.shape)
+    pass
