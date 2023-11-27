@@ -88,7 +88,9 @@ class Blip2Encoder:
         text_embedding = self.encode_text(text)
         image_embedding = self.encode_image(image)
         sim: float = 0.0
-        sim, _ = torch.max(torch.bmm(image_embedding, text_embedding.unsqueeze(-1)))
+        sim, _ = torch.max(
+            torch.bmm(image_embedding, text_embedding.unsqueeze(-1)), dim=1
+        )
         return sim
 
     def get_cosine_similarity_from_image_file_and_text(
