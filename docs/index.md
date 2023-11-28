@@ -7,7 +7,7 @@ Your rosbag2 become dataset!
 
 1. Prepare rosbag2 with mcap format.
 2. Prepare task description yaml file.
-3. Enjyo your ML life with Robots!
+3. Enjoy your ML life with Robots!
 
 ## How to setup?
 
