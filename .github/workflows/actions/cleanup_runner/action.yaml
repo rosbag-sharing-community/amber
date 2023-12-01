@@ -15,7 +15,7 @@ runs:
       docker rmi $(docker image ls -q --filter "reference=node*")
       docker rmi $(docker image ls -q --filter "reference=debian*")
       docker rmi $(docker image ls -q --filter "reference=alpine*")
-      docker rmi $(docker image ls -q --filter "reference=ubuntu:18.04")
+      docker rmi $(docker image ls -q --filter "reference=ubuntu:22.04")
       docker rmi $(docker image ls -q --filter "reference=ubuntu:20.04")
       sudo apt purge \
         ansible \
