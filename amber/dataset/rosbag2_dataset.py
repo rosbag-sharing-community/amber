@@ -63,11 +63,10 @@ class Rosbag2Dataset(Dataset):  # type: ignore
                     last_publish_timestamp_in_sample = self.get_metadata(i).publish_time
                 elif (
                     last_publish_timestamp_in_sample + data_duration
-                    >= self.get_metadata(i).publish_time
+                    <= self.get_metadata(i).publish_time
                 ):
                     indices.append(i)
                     last_publish_timestamp_in_sample = self.get_metadata(i).publish_time
-        print(indices)
         return indices
 
     def get_metadata(self, index: int) -> MessageMetaData:
