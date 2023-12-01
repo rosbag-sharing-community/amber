@@ -42,32 +42,33 @@ class Rosbag2Dataset(Dataset):  # type: ignore
         self.task_description_yaml_path = task_description_yaml_path
         self.message_metadata.clear()
 
-    def sample_data_by_timestamp(
+    def get_sample_data_index_by_timestamp(
         self,
         start_time: datetime.datetime,
         end_time: datetime.datetime,
         data_duration: datetime.timedelta,
-    ) -> List[Any]:
+    ) -> List[int]:
         last_publish_timestamp_in_sample: datetime.datetime = (
             datetime.datetime.fromtimestamp(0, datetime.timezone.utc)
         )  # Unix epoch time
-        data_in_target_duration: List[Any] = []
+        indices: List[int] = []
         assert len(self.message_metadata) == len(self)
         for i in range(len(self.message_metadata)):
             if (
                 self.get_metadata(i).publish_time > start_time
                 and self.get_metadata(i).publish_time < end_time
             ):
-                if len(data_in_target_duration) == 0:
-                    data_in_target_duration.append(self.__getitem__(i))
+                if len(indices) == 0:
+                    indices.append(i)
                     last_publish_timestamp_in_sample = self.get_metadata(i).publish_time
                 elif (
                     last_publish_timestamp_in_sample + data_duration
-                    >= last_publish_timestamp_in_sample
+                    >= self.get_metadata(i).publish_time
                 ):
-                    data_in_target_duration.append(self.__getitem__(i))
+                    indices.append(i)
                     last_publish_timestamp_in_sample = self.get_metadata(i).publish_time
-        return data_in_target_duration
+        print(indices)
+        return indices
 
     def get_metadata(self, index: int) -> MessageMetaData:
         return self.message_metadata[index]

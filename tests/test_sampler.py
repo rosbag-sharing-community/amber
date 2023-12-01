@@ -3,6 +3,7 @@ from amber.dataset.images_dataset import ImagesDataset
 import os
 from pathlib import Path
 from amber.unit.time import Time, TimeUnit
+import torch
 
 
 def test_read_images_ford_with_timestamp_sampler() -> None:
@@ -13,4 +14,7 @@ def test_read_images_ford_with_timestamp_sampler() -> None:
     )
     assert len(dataset) == 39
     sampler = TimestampSampler(dataset, Time(5, TimeUnit.SECOND))
-    # dataloader = DataLoader(dataset, batch_size=1, shuffle=False, num_workers=0)
+    dataloader = torch.utils.data.DataLoader(dataset, batch_sampler=sampler)
+    for i_batch, sample_batched in enumerate(dataloader):
+        print(i_batch)
+        pass
