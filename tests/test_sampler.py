@@ -13,8 +13,18 @@ def test_read_images_ford_with_timestamp_sampler() -> None:
         str(current_path / "rosbag" / "ford" / "read_image.yaml"),
     )
     assert len(dataset) == 39
-    sampler = TimestampSampler(dataset, Time(5, TimeUnit.SECOND))
-    dataloader = torch.utils.data.DataLoader(dataset, batch_sampler=sampler)
-    for i_batch, sample_batched in enumerate(dataloader):
-        print(i_batch)
-        pass
+    dataloader_no_batched = torch.utils.data.DataLoader(
+        dataset, batch_sampler=TimestampSampler(dataset, Time(5, TimeUnit.SECOND))
+    )
+    for i_batch, sample_batched in enumerate(dataloader_no_batched):
+        if i_batch == 0:
+            assert len(sample_batched) == 5
+        assert i_batch == 0
+    dataloader_batched = torch.utils.data.DataLoader(
+        dataset,
+        batch_sampler=TimestampSampler(
+            dataset, Time(1, TimeUnit.SECOND), Time(5, TimeUnit.SECOND)
+        ),
+    )
+    for i_batch, sample_batched in enumerate(dataloader_batched):
+        assert len(sample_batched) <= 4

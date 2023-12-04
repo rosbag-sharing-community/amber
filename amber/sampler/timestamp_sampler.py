@@ -4,6 +4,7 @@ from amber.unit.time import Time, TimeUnit
 from torch.utils.data import DataLoader
 from typing import Any, Optional, List, Iterator
 from datetime import timedelta, datetime
+import pandas
 
 
 class TimestampSampler(BatchSampler):  # type: ignore
@@ -31,18 +32,33 @@ class TimestampSampler(BatchSampler):  # type: ignore
                 ]
             )
         else:
-            return iter([])
+            if len(self) <= 0:
+                raise RuntimeError(
+                    "Something completely unexpected thing happened in making batch from timestamp."
+                )
+            start_timestamps = pandas.date_range(
+                start=self.dataset.get_first_timestamp(),
+                periods=len(self),
+                freq=str(int(self.data_timestamp_duration.get(TimeUnit.SECOND))) + "S",
+            )
+            indices: List[List[int]] = []
+            for start_timestamp in start_timestamps:
+                indices.append(
+                    self.dataset.get_sample_data_index_by_timestamp(
+                        start_timestamp,
+                        start_timestamp
+                        + timedelta(seconds=self.batch_duration.get(TimeUnit.SECOND)),
+                        timedelta(
+                            seconds=self.data_timestamp_duration.get(TimeUnit.SECOND)
+                        ),
+                    )
+                )
+            return iter(indices)
 
     def __len__(self) -> int:
         if self.batch_duration == None:
-            return len(
-                self.dataset.get_sample_data_index_by_timestamp(
-                    self.dataset.get_first_timestamp(),
-                    self.dataset.get_last_timestamp(),
-                    timedelta(
-                        seconds=self.data_timestamp_duration.get(TimeUnit.SECOND)
-                    ),
-                )
-            )
+            return 1
         else:
-            return 0
+            return (
+                self.dataset.get_last_timestamp() - self.dataset.get_first_timestamp()
+            ).seconds
