@@ -1,5 +1,5 @@
 from amber.sampler.timestamp_sampler import TimestampSampler
-from amber.dataset.images_dataset import ImagesDataset
+from amber.dataset.images_dataset import ImagesDataset, ReadImagesConfig
 import os
 from pathlib import Path
 from amber.unit.time import Time, TimeUnit
@@ -10,7 +10,9 @@ def test_read_images_ford_with_timestamp_sampler() -> None:
     current_path = Path(os.path.dirname(os.path.realpath(__file__)))
     dataset = ImagesDataset(
         str(current_path / "rosbag" / "ford" / "ford.mcap"),
-        str(current_path / "rosbag" / "ford" / "read_image.yaml"),
+        ReadImagesConfig.from_yaml_file(
+            str(current_path / "rosbag" / "ford" / "read_image.yaml")
+        ),
     )
     assert len(dataset) == 39
     dataloader_no_batched = torch.utils.data.DataLoader(
