@@ -389,7 +389,14 @@ Example task description yaml file is here.</p>
 <span class="nt">annotation_topic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/detic_image_labeler/annotation</span>
 <span class="nt">compressed</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="n">dataset</span> <span class="o">=</span> <span class="n">ImagesAndAnnotationsDataset</span><span class="p">(</span><span class="s2">"(path to rosbag .mcap file)"</span><span class="p">,</span> <span class="s2">"(path to rosbag yaml description file)"</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">amber.dataset.images_and_annotations_dataset</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">ImagesAndAnnotationsDataset</span><span class="p">,</span>
+    <span class="n">ReadImagesAndAnnotationsConfig</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">ImagesAndAnnotationsDataset</span><span class="p">(</span>
+  <span class="s2">"(path to rosbag .mcap file)"</span><span class="p">,</span>
+  <span class="n">ReadImagesAndAnnotationsConfig</span><span class="o">.</span><span class="n">from_yaml_file</span><span class="p">(</span><span class="s2">"(path to rosbag yaml description file)"</span><span class="p">))</span>
 </code></pre></div>
 <h2 id="supported-annotation-type">Supported annotation type<a class="headerlink" href="#supported-annotation-type" title="Permanent link">#</a></h2>
 <table>

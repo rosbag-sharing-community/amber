@@ -368,7 +368,14 @@ Example task description yaml file is here.</p>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">topic_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/wamv/sensors/cameras/front_right_camera_sensor/image_raw</span>
 <span class="nt">compressed</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="n">dataset</span> <span class="o">=</span> <span class="n">ImagesDataset</span><span class="p">(</span><span class="s2">"(path to rosbag .mcap file)"</span><span class="p">,</span> <span class="s2">"(path to rosbag yaml description file)"</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">amber.dataset.images_and_annotations_dataset</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">ImagesDataset</span><span class="p">,</span>
+    <span class="n">ReadImagesConfig</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">ImagesDataset</span><span class="p">(</span>
+  <span class="s2">"(path to rosbag .mcap file)"</span><span class="p">,</span>
+  <span class="n">ReadImagesConfig</span><span class="o">.</span><span class="n">from_yaml_paht</span><span class="p">(</span><span class="s2">"(path to rosbag yaml description file)"</span><span class="p">))</span>
 </code></pre></div>
 <hr/>
 <div class="md-source-file">
