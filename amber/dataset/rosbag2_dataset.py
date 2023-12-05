@@ -42,6 +42,33 @@ class Rosbag2Dataset(Dataset):  # type: ignore
         self.task_description_yaml_path = task_description_yaml_path
         self.message_metadata.clear()
 
+    def get_sample_data_index_by_timestamp(
+        self,
+        start_time: datetime.datetime,
+        end_time: datetime.datetime,
+        data_duration: datetime.timedelta,
+    ) -> List[int]:
+        last_publish_timestamp_in_sample: datetime.datetime = (
+            datetime.datetime.fromtimestamp(0, datetime.timezone.utc)
+        )  # Unix epoch time
+        indices: List[int] = []
+        assert len(self.message_metadata) == len(self)
+        for i in range(len(self.message_metadata)):
+            if (
+                self.get_metadata(i).publish_time > start_time
+                and self.get_metadata(i).publish_time < end_time
+            ):
+                if len(indices) == 0:
+                    indices.append(i)
+                    last_publish_timestamp_in_sample = self.get_metadata(i).publish_time
+                elif (
+                    last_publish_timestamp_in_sample + data_duration
+                    <= self.get_metadata(i).publish_time
+                ):
+                    indices.append(i)
+                    last_publish_timestamp_in_sample = self.get_metadata(i).publish_time
+        return indices
+
     def get_metadata(self, index: int) -> MessageMetaData:
         return self.message_metadata[index]
 
