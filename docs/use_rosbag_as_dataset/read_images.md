@@ -11,5 +11,12 @@ compressed: true
 ```
 
 ```python
-dataset = ImagesDataset("(path to rosbag .mcap file)", "(path to rosbag yaml description file)")
+from amber.dataset.images_and_annotations_dataset import (
+    ImagesDataset,
+    ReadImagesConfig,
+)
+
+dataset = ImagesDataset(
+  "(path to rosbag .mcap file)",
+  ReadImagesConfig.from_yaml_paht("(path to rosbag yaml description file)"))
 ```
