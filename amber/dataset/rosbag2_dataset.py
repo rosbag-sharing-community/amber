@@ -27,7 +27,6 @@ class Rosbag2Dataset(Dataset):  # type: ignore
     def __init__(
         self,
         rosbag_path: str,
-        task_description_yaml_path: str,
         compressed: bool,
         transform: Any = None,
         target_transform: Any = None,
@@ -39,7 +38,6 @@ class Rosbag2Dataset(Dataset):  # type: ignore
         self.compressed = compressed
         self.transform = transform
         self.target_transform = target_transform
-        self.task_description_yaml_path = task_description_yaml_path
         self.message_metadata.clear()
 
     def get_sample_data_index_by_timestamp(
