@@ -6,12 +6,12 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <meta content="Masaya Kataoka" name="author"/>
-<link href="https://rosbag-sharing-community.github.io/amber/use_rosbag_as_dataset/read_images_and_annotations/" rel="canonical"/>
-<link href="../read_images/" rel="prev"/>
-<link href="../read_pointclouds/" rel="next"/>
+<link href="https://rosbag-sharing-community.github.io/amber/use_rosbag_as_dataset/timestamp_sampler/" rel="canonical"/>
+<link href="../read_pointclouds/" rel="prev"/>
+<link href="../../automation/automation/" rel="next"/>
 <link href="../../assets/images/favicon.png" rel="icon"/>
 <meta content="mkdocs-1.5.3, mkdocs-material-9.4.14" name="generator"/>
-<title>Read images and annotation - amber</title>
+<title>Sampling data by timestamp - amber</title>
 <link href="../../assets/stylesheets/main.fad675c6.min.css" rel="stylesheet"/>
 <link href="../../assets/stylesheets/palette.356b1318.min.css" rel="stylesheet"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -25,7 +25,7 @@
 <input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
 <label class="md-overlay" for="__drawer"></label>
 <div data-md-component="skip">
-<a class="md-skip" href="#read-images-and-annotations">
+<a class="md-skip" href="#timestampsampler">
           Skip to content
         </a>
 </div>
@@ -49,7 +49,7 @@
 <div class="md-header__topic" data-md-component="header-topic">
 <span class="md-ellipsis">
             
-              Read images and annotation
+              Sampling data by timestamp
             
           </span>
 </div>
@@ -221,17 +221,31 @@
   </span>
 </a>
 </li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../read_images_and_annotations/">
+<span class="md-ellipsis">
+    Read images and annotation
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../read_pointclouds/">
+<span class="md-ellipsis">
+    Read pointclouds
+  </span>
+</a>
+</li>
 <li class="md-nav__item md-nav__item--active">
 <input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
 <label class="md-nav__link md-nav__link--active" for="__toc">
 <span class="md-ellipsis">
-    Read images and annotation
+    Sampling data by timestamp
   </span>
 <span class="md-nav__icon md-icon"></span>
 </label>
 <a class="md-nav__link md-nav__link--active" href="./">
 <span class="md-ellipsis">
-    Read images and annotation
+    Sampling data by timestamp
   </span>
 </a>
 <nav aria-label="Table of contents" class="md-nav md-nav--secondary">
@@ -241,28 +255,21 @@
     </label>
 <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#supported-annotation-type">
+<a class="md-nav__link" href="#description">
 <span class="md-ellipsis">
-      Supported annotation type
+      Description
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#example">
+<span class="md-ellipsis">
+      Example
     </span>
 </a>
 </li>
 </ul>
 </nav>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../read_pointclouds/">
-<span class="md-ellipsis">
-    Read pointclouds
-  </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../timestamp_sampler/">
-<span class="md-ellipsis">
-    Sampling data by timestamp
-  </span>
-</a>
 </li>
 </ul>
 </nav>
@@ -381,43 +388,40 @@
 </div>
 <div class="md-content" data-md-component="content">
 <article class="md-content__inner md-typeset">
-<h1 id="read-images-and-annotations">Read images and annotations<a class="headerlink" href="#read-images-and-annotations" title="Permanent link">#</a></h1>
-<p>ImagesAndAnnotationsDataset Class provides image and annotations.
-Example task description yaml file is here.</p>
-<div class="highlight"><pre><span></span><code><span class="nt">image_topics</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">topic_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/image_front_left</span>
-<span class="nt">annotation_topic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/detic_image_labeler/annotation</span>
-<span class="nt">compressed</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<h1 id="timestampsampler">TimestampSampler<a class="headerlink" href="#timestampsampler" title="Permanent link">#</a></h1>
+<h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">#</a></h2>
+<p>TimeStampSampler is a type of BatchSampler.
+This sampler has the ability to sample data at a fixed time interval and to create batches of data at fixed time intervals.</p>
+<p>TimeStampSampler can be used in combination with rosbag dataset as follows.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>TimeStampSampler creates batches using timestamps recorded in rosbag, so cannot be used with common data sets.</p>
+</div>
+<div class="highlight"><pre><span></span><code><span class="n">dataloader_batched</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span>
+    <span class="n">dataset</span><span class="p">,</span>
+    <span class="n">batch_sampler</span><span class="o">=</span><span class="n">TimestampSampler</span><span class="p">(</span>
+        <span class="n">dataset</span><span class="p">,</span> <span class="n">Time</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="n">SECOND</span><span class="p">),</span> <span class="n">Time</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="n">SECOND</span><span class="p">)</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+<span class="k">for</span> <span class="n">i_batch</span><span class="p">,</span> <span class="n">sample_batched</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">dataloader_batched</span><span class="p">):</span>
+    <span class="k">pass</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="n">dataset</span> <span class="o">=</span> <span class="n">ImagesAndAnnotationsDataset</span><span class="p">(</span><span class="s2">"(path to rosbag .mcap file)"</span><span class="p">,</span> <span class="s2">"(path to rosbag yaml description file)"</span><span class="p">)</span>
-</code></pre></div>
-<h2 id="supported-annotation-type">Supported annotation type<a class="headerlink" href="#supported-annotation-type" title="Permanent link">#</a></h2>
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Support status</th>
-<th>Remarks</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Bounding Box</td>
-<td><img alt="✔️" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/2714.png" title=":heavy_check_mark:"/></td>
-<td></td>
-</tr>
-<tr>
-<td>Polygon</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Mask</td>
-<td></td>
-<td></td>
-</tr>
-</tbody>
-</table>
+<p>The first argument given to the constructor of TimeStampSampler is the dataset, the second argument is how many seconds of data to sample, and the third argument is how many seconds to create a batch.</p>
+<p>The behavior of the second and third arguments is shown in the figure below.</p>
+<p><img alt='"Not Found"' src="../TimestampSampler.png"/></p>
+<p>If None is passed as the third argument, TimeStampSampler will sample all data and create one large batch.</p>
+<p>First, the first data is left in the batch, and the data until the time specified in the second argument has elapsed is removed from the batch.</p>
+<p>If the data for which the time specified in the second argument has elapsed is confirmed, the data from that time until the time specified in the second argument has elapsed is removed from the batch.</p>
+<p>The above operation is performed until the last data is reached.</p>
+<h2 id="example">Example<a class="headerlink" href="#example" title="Permanent link">#</a></h2>
+<p><img alt='"Not Found"' src="../TimestampSamplerBatched.png"/></p>
+<p>Let's take the case where data_timestamp_duration = 0.5sec and batch_duration = 0.8sec as an example</p>
+<p>Decompose the recorded data from the timestamps [0.0, 0.5, 1.0, 1.4, 2.0] into batches of 0.8sec each.</p>
+<p>[0.0, 0.5], [1.0, 1.4], [2.0].</p>
+<p>Compute the time difference for the data inside each decomposed batch.</p>
+<p>For [0.0, 0.5], since more than 0.5 seconds have passed since the first data (0.0 seconds), both data remain in the batch.</p>
+<p>For [1.0, 1.4], only the first data remains in the batch because only 0.4 seconds have elapsed since the first data (1.0 seconds).</p>
+<p>For [2.0], there is only one data in the batch, so only the first data remains.</p>
 <hr/>
 <div class="md-source-file">
 <small>

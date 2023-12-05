@@ -61,6 +61,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://rosbag-sharing-community.github.io/amber/use_rosbag_as_dataset/timestamp_sampler/</loc>
+         <lastmod>2023-12-05</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://rosbag-sharing-community.github.io/amber/visualize/clip_image_embedding/</loc>
          <lastmod>2023-12-05</lastmod>
          <changefreq>daily</changefreq>

@@ -240,6 +240,13 @@
     </span>
 </a>
 </li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sampling-data-from-dataset">
+<span class="md-ellipsis">
+      Sampling data from dataset.
+    </span>
+</a>
+</li>
 </ul>
 </nav>
 </li>
@@ -261,6 +268,13 @@
 <a class="md-nav__link" href="../read_pointclouds/">
 <span class="md-ellipsis">
     Read pointclouds
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../timestamp_sampler/">
+<span class="md-ellipsis">
+    Sampling data by timestamp
   </span>
 </a>
 </li>
@@ -424,12 +438,17 @@ In order to specify this, write yaml setting file.</p>
 </tr>
 </tbody>
 </table>
+<h2 id="sampling-data-from-dataset">Sampling data from dataset.<a class="headerlink" href="#sampling-data-from-dataset" title="Permanent link">#</a></h2>
+<p>The rosbags record a variety of time series data, but when inputting this data into machine learning, you may want to sample based on conditions rather than inputting everything.<br/>
+Amber implements samplers for rosbags to make it easier to perform time series processing.</p>
+<p>Currently, only timestamp sampler supports.<br/>
+If you want to know details, see <a href="../timestamp_sampler">documentation</a>.</p>
 <hr/>
 <div class="md-source-file">
 <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 1, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 5, 2023</span>
 </small>
 </div>
 </article>
