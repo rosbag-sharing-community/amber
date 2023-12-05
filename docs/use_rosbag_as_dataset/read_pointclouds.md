@@ -14,5 +14,5 @@ from amber.dataset.pointcloud_dataset import PointcloudDataset, ReadPointCloudCo
 
 dataset = PointcloudDataset(
   "(path to rosbag .mcap file)",
-  ReadPointCloudConfig.from_yaml_path("(path to rosbag yaml description file)"))
+  ReadPointCloudConfig.from_yaml_file("(path to rosbag yaml description file)"))
 ```

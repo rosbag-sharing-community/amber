@@ -89,7 +89,7 @@ def run_detic_image_labaler_automation(args: Any) -> None:
     labeler = DeticImageLabeler(args.task_description_yaml_path)
     dataset = ImagesDataset(
         args.rosbag_path,
-        ReadImagesAndAnnotationsConfig.from_yaml_path(
+        ReadImagesAndAnnotationsConfig.from_yaml_file(
             args.dataset_description_yaml_path
         ),
     )
@@ -104,7 +104,7 @@ def run_clip_image_annotation_filter_automation(args: Any) -> None:
     filter = ClipImageAnnotationFilter(args.task_description_yaml_path)
     dataset = ImagesAndAnnotationsDataset(
         args.rosbag_path,
-        ReadImagesAndAnnotationsConfig.from_yaml_path(
+        ReadImagesAndAnnotationsConfig.from_yaml_file(
             args.dataset_description_yaml_path
         ),
     )
@@ -125,7 +125,7 @@ def run_nerf_3d_reconstruction_automation(args: Any) -> None:
     reconstruction = Nerf3DReconstruction(args.task_description_yaml_path)
     dataset = ImagesDataset(
         args.rosbag_path,
-        ReadImagesConfig.from_yaml_path(args.dataset_description_yaml_path),
+        ReadImagesConfig.from_yaml_file(args.dataset_description_yaml_path),
     )
     reconstruction.inference(dataset)
 
@@ -147,7 +147,7 @@ def check_config_files_exists_for_import(args: Any) -> None:
 
 def run_video_import(args: Any) -> None:
     check_config_files_exists_for_import(args)
-    VideoImporter(args.video, VideoImporterConfig.from_yaml_path(args.config)).write()
+    VideoImporter(args.video, VideoImporterConfig.from_yaml_file(args.config)).write()
 
 
 def check_config_files_exists_for_visualize(args: Any) -> None:
@@ -167,7 +167,7 @@ def run_visualize_image(args: Any) -> None:
     check_config_files_exists_for_visualize(args)
     dataset = ImagesAndAnnotationsDataset(
         args.rosbag_path,
-        ReadImagesAndAnnotationsConfig.from_yaml_path(
+        ReadImagesAndAnnotationsConfig.from_yaml_file(
             args.dataset_description_yaml_path
         ),
     )
