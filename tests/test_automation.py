@@ -3,8 +3,11 @@ from amber.automation.clip_image_annotation_filter import ClipImageAnnotationFil
 from amber.automation.nerf_3d_reconstruction import Nerf3DReconstruction
 from pathlib import Path
 import os
-from amber.dataset.images_dataset import ImagesDataset
-from amber.dataset.images_and_annotations_dataset import ImagesAndAnnotationsDataset
+from amber.dataset.images_dataset import ImagesDataset, ReadImagesConfig
+from amber.dataset.images_and_annotations_dataset import (
+    ImagesAndAnnotationsDataset,
+    ReadImagesAndAnnotationsConfig,
+)
 from amber.dataset.rosbag2_dataset import download_rosbag
 import torch
 import pytest
@@ -17,7 +20,9 @@ def test_detic_image_labeler() -> None:
     )
     dataset = ImagesDataset(
         str(current_path / "rosbag" / "ford" / "ford.mcap"),
-        str(current_path / "rosbag" / "ford" / "read_image.yaml"),
+        ReadImagesConfig.from_yaml_file(
+            str(current_path / "rosbag" / "ford" / "read_image.yaml")
+        ),
     )
     labeler.write(
         dataset,
@@ -45,11 +50,13 @@ def test_clip_image_annotation_filter() -> None:
             is_public=True,
             download_dir=str(current_path / "rosbag"),
         ),
-        str(
-            current_path
-            / "rosbag"
-            / "ford_with_annotation"
-            / "read_images_and_bounding_box.yaml"
+        ReadImagesAndAnnotationsConfig.from_yaml_file(
+            str(
+                current_path
+                / "rosbag"
+                / "ford_with_annotation"
+                / "read_images_and_bounding_box.yaml"
+            )
         ),
     )
     assert len(dataset) == 39
@@ -74,11 +81,13 @@ def test_clip_image_annotation_filter_with_lvis() -> None:
             is_public=True,
             download_dir=str(current_path / "rosbag"),
         ),
-        str(
-            current_path
-            / "rosbag"
-            / "ford_with_annotation"
-            / "read_images_and_bounding_box.yaml"
+        ReadImagesAndAnnotationsConfig.from_yaml_file(
+            str(
+                current_path
+                / "rosbag"
+                / "ford_with_annotation"
+                / "read_images_and_bounding_box.yaml"
+            )
         ),
     )
     assert len(dataset) == 39
@@ -95,6 +104,8 @@ def test_nerf_3d_reconstruction() -> None:
     )
     dataset = ImagesDataset(
         str(current_path / "rosbag" / "soccer_goal"),
-        str(current_path / "rosbag" / "soccer_goal" / "read_image.yaml"),
+        ReadImagesConfig.from_yaml_file(
+            str(current_path / "rosbag" / "soccer_goal" / "read_image.yaml")
+        ),
     )
     labeler.inference(dataset)

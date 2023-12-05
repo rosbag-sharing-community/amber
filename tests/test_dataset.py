@@ -1,6 +1,9 @@
-from amber.dataset.images_dataset import ImagesDataset
-from amber.dataset.images_and_annotations_dataset import ImagesAndAnnotationsDataset
-from amber.dataset.pointcloud_dataset import PointcloudDataset
+from amber.dataset.images_dataset import ImagesDataset, ReadImagesConfig
+from amber.dataset.images_and_annotations_dataset import (
+    ImagesAndAnnotationsDataset,
+    ReadImagesAndAnnotationsConfig,
+)
+from amber.dataset.pointcloud_dataset import PointcloudDataset, ReadPointCloudConfig
 from amber.dataset.rosbag2_dataset import download_rosbag
 from amber.dataset.conversion import image_to_tensor
 from torch.utils.data import DataLoader
@@ -17,7 +20,9 @@ def test_read_image_vrx() -> None:
     current_path = Path(os.path.dirname(os.path.realpath(__file__)))
     dataset = ImagesDataset(
         str(current_path / "rosbag" / "vrx" / "vrx.mcap"),
-        str(current_path / "rosbag" / "vrx" / "read_image.yaml"),
+        ReadImagesConfig.from_yaml_file(
+            str(current_path / "rosbag" / "vrx" / "read_image.yaml")
+        ),
     )
     assert len(dataset) == 2
     dataloader = DataLoader(dataset, batch_size=1, shuffle=False, num_workers=0)
@@ -46,7 +51,9 @@ def test_read_image_ford() -> None:
     current_path = Path(os.path.dirname(os.path.realpath(__file__)))
     dataset = ImagesDataset(
         str(current_path / "rosbag" / "ford" / "ford.mcap"),
-        str(current_path / "rosbag" / "ford" / "read_image.yaml"),
+        ReadImagesConfig.from_yaml_file(
+            str(current_path / "rosbag" / "ford" / "read_image.yaml")
+        ),
     )
     assert len(dataset) == 39
     dataloader = DataLoader(dataset, batch_size=1, shuffle=False, num_workers=0)
@@ -103,11 +110,13 @@ def test_read_images_with_bounding_box_ford() -> None:
             is_public=True,
             download_dir=str(current_path / "rosbag"),
         ),
-        str(
-            current_path
-            / "rosbag"
-            / "ford_with_annotation"
-            / "read_images_and_bounding_box.yaml"
+        ReadImagesAndAnnotationsConfig.from_yaml_file(
+            str(
+                current_path
+                / "rosbag"
+                / "ford_with_annotation"
+                / "read_images_and_bounding_box.yaml"
+            )
         ),
     )
 
@@ -127,7 +136,9 @@ def test_read_pointcloud() -> None:
             is_public=True,
             download_dir=str(current_path / "rosbag"),
         ),
-        str(current_path / "rosbag" / "vrx" / "read_pointcloud.yaml"),
+        ReadPointCloudConfig.from_yaml_file(
+            str(current_path / "rosbag" / "vrx" / "read_pointcloud.yaml")
+        ),
     )
     assert len(dataset) == 46
     dataloader = DataLoader(dataset, batch_size=1, shuffle=False, num_workers=0)

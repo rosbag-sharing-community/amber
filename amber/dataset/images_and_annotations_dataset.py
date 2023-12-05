@@ -34,18 +34,15 @@ class ImagesAndAnnotationsDataset(Rosbag2Dataset):  # type: ignore
     def __init__(
         self,
         rosbag_path: str,
-        task_description_yaml_path: str,
+        config: ReadImagesAndAnnotationsConfig,
         transform: Any = None,
         target_transform: Any = None,
     ):
         self.images.clear()
-        self.config = ReadImagesAndAnnotationsConfig.from_yaml_file(
-            task_description_yaml_path
-        )
+        self.config = config
         print(self.config)
         super().__init__(
             rosbag_path,
-            task_description_yaml_path,
             self.config.compressed,
             transform,
             target_transform,
