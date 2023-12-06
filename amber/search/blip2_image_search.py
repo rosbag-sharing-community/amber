@@ -30,7 +30,9 @@ class Blip2ImageSearch:
                     os.path.join(rosbag_directory.absolute().as_posix(), mcap_file),
                     ReadImagesConfig.from_yaml_file(
                         os.path.join(
-                            rosbag_directory.absolute().as_posix(), "dataset.yaml"
+                            rosbag_directory.absolute().as_posix(),
+                            os.path.dirname(mcap_file),
+                            "dataset.yaml",
                         )
                     ),
                 )
@@ -39,7 +41,7 @@ class Blip2ImageSearch:
     def preprocess_video(self) -> None:
         self.client.recreate_collection(
             collection_name="rosbag",
-            vectors_config=VectorParams(size=254, distance=Distance.COSINE),
+            vectors_config=VectorParams(size=256, distance=Distance.COSINE),
         )
         image_save_directory = "/tmp/blip2_image_search"
         shutil.rmtree(image_save_directory, ignore_errors=True)
@@ -63,9 +65,12 @@ class Blip2ImageSearch:
                     for i in range(image_features[0].shape[0]):
                         points.append(
                             PointStruct(
-                                id=str(image_id) + "_" + str(i),
+                                id=str(uuid.uuid4()),
                                 vector=image_features[0][i].tolist(),
-                                payload={"image_path": image_path},
+                                payload={
+                                    "image_path": image_path,
+                                    "image_id": image_id,
+                                },
                             )
                         )
                         self.client.upsert(
