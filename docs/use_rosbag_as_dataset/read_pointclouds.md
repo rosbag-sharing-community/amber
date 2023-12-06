@@ -10,5 +10,9 @@ compressed: false
 ```
 
 ```python
-dataset = PointcloudDataset("(path to rosbag .mcap file)", "(path to rosbag yaml description file)")
+from amber.dataset.pointcloud_dataset import PointcloudDataset, ReadPointCloudConfig
+
+dataset = PointcloudDataset(
+  "(path to rosbag .mcap file)",
+  ReadPointCloudConfig.from_yaml_file("(path to rosbag yaml description file)"))
 ```

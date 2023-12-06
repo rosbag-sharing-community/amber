@@ -11,7 +11,14 @@ compressed: false
 ```
 
 ```python
-dataset = ImagesAndAnnotationsDataset("(path to rosbag .mcap file)", "(path to rosbag yaml description file)")
+from amber.dataset.images_and_annotations_dataset import (
+    ImagesAndAnnotationsDataset,
+    ReadImagesAndAnnotationsConfig,
+)
+
+dataset = ImagesAndAnnotationsDataset(
+  "(path to rosbag .mcap file)",
+  ReadImagesAndAnnotationsConfig.from_yaml_file("(path to rosbag yaml description file)"))
 ```
 
 ## Supported annotation type

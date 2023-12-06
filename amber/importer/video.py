@@ -18,13 +18,12 @@ class VideoImporterConfig(YAMLWizard):  # type: ignore
 
 
 class VideoImporter:
-    def __init__(self, video_path: str, yaml_path: str) -> None:
-        self.yaml_path = yaml_path
+    def __init__(self, video_path: str, config: VideoImporterConfig) -> None:
+        self.config: VideoImporterConfig = config
         self.capture = cv2.VideoCapture(video_path)
 
     def write(self) -> None:
-        config = VideoImporterConfig.from_yaml_file(self.yaml_path)
-        with open(config.rosbag_path, "wb") as f:
+        with open(self.config.rosbag_path, "wb") as f:
             writer = McapWriter(f)
             schema = writer.register_msgdef(
                 ImageMessageSchema.name, ImageMessageSchema.schema_text
@@ -37,7 +36,7 @@ class VideoImporter:
             for i in tqdm(range(int(self.capture.get(cv2.CAP_PROP_FRAME_COUNT)))):
                 ret, cv_image = self.capture.read()
                 writer.write_message(
-                    topic=config.topic_name,
+                    topic=self.config.topic_name,
                     schema=schema,
                     message=build_message_from_image(
                         cv_image,

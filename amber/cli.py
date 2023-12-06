@@ -5,9 +5,12 @@ from yaml import safe_load  # type: ignore
 from amber.automation.detic_image_labeler import DeticImageLabeler
 from amber.automation.clip_image_annotation_filter import ClipImageAnnotationFilter
 from amber.automation.nerf_3d_reconstruction import Nerf3DReconstruction
-from amber.dataset.images_dataset import ImagesDataset
-from amber.dataset.images_and_annotations_dataset import ImagesAndAnnotationsDataset
-from amber.importer.video import VideoImporter
+from amber.dataset.images_dataset import ImagesDataset, ReadImagesConfig
+from amber.dataset.images_and_annotations_dataset import (
+    ImagesAndAnnotationsDataset,
+    ReadImagesAndAnnotationsConfig,
+)
+from amber.importer.video import VideoImporter, VideoImporterConfig
 from amber.visualization.clip_embeddings_visualization import (
     ClipEmbeddingsVisualization,
 )
@@ -84,7 +87,12 @@ def check_config_files_exists_for_automation(args: Any) -> None:
 def run_detic_image_labaler_automation(args: Any) -> None:
     check_config_files_exists_for_automation(args)
     labeler = DeticImageLabeler(args.task_description_yaml_path)
-    dataset = ImagesDataset(args.rosbag_path, args.dataset_description_yaml_path)
+    dataset = ImagesDataset(
+        args.rosbag_path,
+        ReadImagesAndAnnotationsConfig.from_yaml_file(
+            args.dataset_description_yaml_path
+        ),
+    )
     annotations = labeler.inference(dataset)
     labeler.write(
         dataset, "/detic_image_labeler/annotation", annotations, args.output_rosbag_path
@@ -95,7 +103,10 @@ def run_clip_image_annotation_filter_automation(args: Any) -> None:
     check_config_files_exists_for_automation(args)
     filter = ClipImageAnnotationFilter(args.task_description_yaml_path)
     dataset = ImagesAndAnnotationsDataset(
-        args.rosbag_path, args.dataset_description_yaml_path
+        args.rosbag_path,
+        ReadImagesAndAnnotationsConfig.from_yaml_file(
+            args.dataset_description_yaml_path
+        ),
     )
     annotations = filter.inference(dataset)
     filter.write(
@@ -112,7 +123,10 @@ def run_nerf_3d_reconstruction_automation(args: Any) -> None:
     with open(args.task_description_yaml_path, "rb") as file:
         task_description = safe_load(file)
     reconstruction = Nerf3DReconstruction(args.task_description_yaml_path)
-    dataset = ImagesDataset(args.rosbag_path, args.dataset_description_yaml_path)
+    dataset = ImagesDataset(
+        args.rosbag_path,
+        ReadImagesConfig.from_yaml_file(args.dataset_description_yaml_path),
+    )
     reconstruction.inference(dataset)
 
 
@@ -133,7 +147,7 @@ def check_config_files_exists_for_import(args: Any) -> None:
 
 def run_video_import(args: Any) -> None:
     check_config_files_exists_for_import(args)
-    VideoImporter(args.video, args.config).write()
+    VideoImporter(args.video, VideoImporterConfig.from_yaml_file(args.config)).write()
 
 
 def check_config_files_exists_for_visualize(args: Any) -> None:
@@ -152,7 +166,10 @@ def check_config_files_exists_for_visualize(args: Any) -> None:
 def run_visualize_image(args: Any) -> None:
     check_config_files_exists_for_visualize(args)
     dataset = ImagesAndAnnotationsDataset(
-        args.rosbag_path, args.dataset_description_yaml_path
+        args.rosbag_path,
+        ReadImagesAndAnnotationsConfig.from_yaml_file(
+            args.dataset_description_yaml_path
+        ),
     )
     visualization = ClipEmbeddingsVisualization(args.task_description_yaml_path)
     visualization.visualize(dataset)
