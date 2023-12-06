@@ -181,7 +181,7 @@ def ros_message_to_pointcloud(
 
 
 def image_to_tensor(image: Image) -> torch.Tensor:
-    return transforms.Compose([transforms.PILToTensor()])(image)
+    return transforms.Compose([transforms.ToTensor()])(image)
 
 
 def decode_message(message: Message, schema: Schema, decompress: bool) -> Message:

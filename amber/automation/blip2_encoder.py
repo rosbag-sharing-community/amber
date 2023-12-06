@@ -42,6 +42,7 @@ class Blip2Encoder:
         self.image_processor = Blip2ImageProcessor(image_size=224)
 
     def encode_image(self, image: torch.Tensor) -> torch.Tensor:
+        image = self.image_processor(image)
         assert image.dim() == 3
         image = image.unsqueeze(0).to(self.device)
         with self.model.maybe_autocast():
@@ -78,9 +79,7 @@ class Blip2Encoder:
         )
 
     def encode_image_from_file(self, image_path: Path) -> torch.Tensor:
-        return self.encode_image(
-            self.image_processor(transforms.ToTensor()(Image.open(image_path)))
-        )
+        return self.encode_image(transforms.ToTensor()(Image.open(image_path)))
 
     def get_cosine_similarity_from_image_and_text(
         self, image: torch.Tensor, text: str
