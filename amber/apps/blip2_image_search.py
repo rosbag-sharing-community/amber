@@ -7,13 +7,13 @@ from pathlib import Path
 from qdrant_client import QdrantClient
 from qdrant_client.http.models import Distance, VectorParams
 from qdrant_client.http.models import PointStruct
-from typing import List
+from typing import List, Any, Optional
 import os
-import shutil
 import torch
 import torchvision
 import uuid
 import docker
+import gradio as gr
 
 
 class Blip2ImageSearch:
@@ -41,6 +41,42 @@ class Blip2ImageSearch:
         self.client = QdrantClient("localhost", port=qdrant_port)
         # load blip2 models
         self.encoder = Blip2Encoder()
+
+    def show_gradio_ui(self) -> None:
+        with gr.Blocks() as gradio_ui:
+            chatbot = gr.Chatbot()
+            msg = gr.Textbox()
+            clear = gr.ClearButton([msg, chatbot])
+            upload_button = gr.UploadButton(
+                "Click to upload a directory which contains rosbag in mcap format and dataset.yaml",
+                file_count="directory",
+            )
+            file_output = gr.File()
+            upload_button.upload(self.upload_file, upload_button, file_output)
+
+            def respond(message: Any, chat_history: Any) -> Any:
+                # chat_history.append((message, ("lion.jpeg",)))
+                chat_history.append((message, ("fuga")))
+                return "", chat_history
+
+            msg.submit(respond, [msg, chatbot], [msg, chatbot])
+        gradio_ui.launch()
+
+    def upload_file(self, files: List[Any]) -> List[str]:
+        mcap_path: Optional[str] = None
+        yaml_path: Optional[str] = None
+        for file in files:
+            if os.path.splitext(file.name)[-1] == ".mcap":
+                if mcap_path != None:
+                    return []
+                mcap_path = file.name
+            if os.path.basename(file.name) == "dataset.yaml":
+                if yaml_path != None:
+                    return []
+                yaml_path = file.name
+        if mcap_path == None or yaml_path == None:
+            return []
+        return [str(mcap_path), str(yaml_path)]
 
     def found_container(self, container_name: str) -> bool:
         for container in self.docker_client.containers.list():
@@ -113,3 +149,4 @@ class Blip2ImageSearch:
 
 if __name__ == "__main__":
     app = Blip2ImageSearch()
+    app.show_gradio_ui()
