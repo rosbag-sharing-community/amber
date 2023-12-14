@@ -114,17 +114,20 @@ class Blip2ImageSearch:
                 os.path.join(rosbag_directory.absolute().as_posix(), mcap_file)
             )
 
-    def preprocess_video(self, dataset: ImagesDataset) -> None:
+    def preprocess(self, dataset: ImagesDataset) -> None:
         self.client.recreate_collection(
             collection_name="rosbag",
             vectors_config=VectorParams(size=256, distance=Distance.COSINE),
         )
+        sampling_duration: float = 3.0
         dataloader = torch.utils.data.DataLoader(
             dataset,
-            batch_sampler=TimestampSampler(dataset, Time(5, TimeUnit.SECOND)),
+            batch_sampler=TimestampSampler(
+                dataset, Time(sampling_duration, TimeUnit.SECOND)
+            ),
         )
-        for i_batch, sample_batched in enumerate(dataloader):
-            for sample in sample_batched:
+        for _, sample_batched in enumerate(dataloader):
+            for sample_index, sample in enumerate(sample_batched):
                 image_features: torch.Tensor = self.encoder.encode_image(sample)
                 points = []
                 image_id = uuid.uuid4()
@@ -139,6 +142,8 @@ class Blip2ImageSearch:
                                 "image_path": image_path,
                                 "image_id": image_id,
                                 "mcap_path": dataset.rosbag_files,
+                                "duration_from_rosbag_start": sampling_duration
+                                * sample_index,
                             },
                         )
                     )
