@@ -14,12 +14,14 @@ import torchvision
 import uuid
 import docker
 import gradio as gr
+import hashlib
 
 
 class Blip2ImageSearch:
     def __init__(self, qdrant_port: int = 6333) -> None:
         # make data saving directory
         self.data_directory = "/tmp/blip2_image_search"
+        self.mcap_hashes: List[str] = []
         if not os.path.exists(self.data_directory):
             os.makedirs(self.data_directory)
 
@@ -41,6 +43,21 @@ class Blip2ImageSearch:
         self.client = QdrantClient("localhost", port=qdrant_port)
         # load blip2 models
         self.encoder = Blip2Encoder()
+
+    def is_processed_mcap(self, mcap_path: str) -> bool:
+        hash = hashlib.sha256()
+        with open(mcap_path, "rb") as f:
+            while True:
+                chunk = f.read(2048 * hash.block_size)
+                if len(chunk) == 0:
+                    break
+                hash.update(chunk)
+        digest = hash.hexdigest()
+        if digest in self.mcap_hashes:
+            return True
+        else:
+            self.mcap_hashes.append(digest)
+            return False
 
     def show_gradio_ui(self) -> None:
         with gr.Blocks() as gradio_ui:
@@ -76,6 +93,7 @@ class Blip2ImageSearch:
                 yaml_path = file.name
         if mcap_path == None or yaml_path == None:
             return []
+
         return [str(mcap_path), str(yaml_path)]
 
     def found_container(self, container_name: str) -> bool:
@@ -102,17 +120,6 @@ class Blip2ImageSearch:
         )
         for result in search_result:
             print(result)
-
-    def get_rosbag_files(self, rosbag_directory: Path) -> None:
-        self.mcap_files: List[str] = []
-        for mcap_file in glob(
-            "**/*.mcap",
-            root_dir=rosbag_directory.absolute().as_posix(),
-            recursive=True,
-        ):
-            self.mcap_files.append(
-                os.path.join(rosbag_directory.absolute().as_posix(), mcap_file)
-            )
 
     def preprocess(self, dataset: ImagesDataset) -> None:
         self.client.recreate_collection(
