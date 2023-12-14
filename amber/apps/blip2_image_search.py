@@ -17,12 +17,36 @@ import docker
 
 
 class Blip2ImageSearch:
-    def __init__(self) -> None:
+    def __init__(self, qdrant_port: int = 6333) -> None:
+        # make data saving directory
+        self.data_directory = "/tmp/blip2_image_search"
+        if not os.path.exists(self.data_directory):
+            os.makedirs(self.data_directory)
+
+        # setup docker container
+        container_name = "blip2_image_search"
         self.docker_client = docker.from_env()
         if not self.found_image(image_name="qdrant/qdrant", tag="v1.7.2"):
             self.docker_client.images.pull("qdrant/qdrant", tag="v1.7.2")
-        self.client = QdrantClient("localhost", port=6333)
+        if not self.found_container(container_name):
+            self.container = self.docker_client.containers.run(
+                image="qdrant/qdrant:v1.7.2",
+                ports={qdrant_port: qdrant_port},
+                detach=True,
+                tty=True,
+                name=container_name,
+            )
+
+        # setup qdrant client
+        self.client = QdrantClient("localhost", port=qdrant_port)
+        # load blip2 models
         self.encoder = Blip2Encoder()
+
+    def found_container(self, container_name: str) -> bool:
+        for container in self.docker_client.containers.list():
+            if container.name == container_name:
+                return True
+        return False
 
     def found_image(self, image_name: str, tag: str = "latest") -> bool:
         qdrant_images = self.docker_client.images.list(
@@ -59,9 +83,6 @@ class Blip2ImageSearch:
             collection_name="rosbag",
             vectors_config=VectorParams(size=256, distance=Distance.COSINE),
         )
-        image_save_directory = "/tmp/blip2_image_search"
-        shutil.rmtree(image_save_directory, ignore_errors=True)
-        os.makedirs(image_save_directory)
         dataloader = torch.utils.data.DataLoader(
             dataset,
             batch_sampler=TimestampSampler(dataset, Time(5, TimeUnit.SECOND)),
@@ -71,7 +92,7 @@ class Blip2ImageSearch:
                 image_features: torch.Tensor = self.encoder.encode_image(sample)
                 points = []
                 image_id = uuid.uuid4()
-                image_path = os.path.join(image_save_directory, str(image_id) + ".png")
+                image_path = os.path.join(self.data_directory, str(image_id) + ".png")
                 torchvision.transforms.functional.to_pil_image(sample).save(image_path)
                 for i in range(image_features[0].shape[0]):
                     points.append(
