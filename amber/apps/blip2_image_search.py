@@ -94,6 +94,9 @@ class Blip2ImageSearch:
         if mcap_path == None or yaml_path == None:
             return []
 
+        if self.is_processed_mcap(str(mcap_path)):
+            return []
+        self.preprocess(ImagesDataset(mcap_path, yaml_path))
         return [str(mcap_path), str(yaml_path)]
 
     def found_container(self, container_name: str) -> bool:
