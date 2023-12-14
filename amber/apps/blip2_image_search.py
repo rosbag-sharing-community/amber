@@ -7,7 +7,7 @@ from pathlib import Path
 from qdrant_client import QdrantClient
 from qdrant_client.http.models import Distance, VectorParams
 from qdrant_client.http.models import PointStruct
-from typing import List, Any, Optional
+from typing import List, Any, Optional, Tuple
 import os
 import torch
 import torchvision
@@ -74,6 +74,7 @@ class Blip2ImageSearch:
             def respond(message: Any, chat_history: Any) -> Any:
                 # chat_history.append((message, ("lion.jpeg",)))
                 chat_history.append((message, ("fuga")))
+                self.search_by_text(message)
                 return "", chat_history
 
             msg.submit(respond, [msg, chatbot], [msg, chatbot])
@@ -117,14 +118,19 @@ class Blip2ImageSearch:
                     return True
         return False
 
-    def search_by_text(self, text: str) -> None:
+    def search_by_text(self, text: str) -> Optional[Tuple[str, str, float]]:
         search_result = self.client.search(
             collection_name="rosbag",
             query_vector=self.encoder.encode_text(text)[0].tolist(),
-            limit=10,
+            limit=1,
         )
         for result in search_result:
-            print(result)
+            return (
+                result.payload["mcap_path"],
+                result.payload["image_path"],
+                result.payload["duration_from_rosbag_start"],
+            )
+        return None
 
     def preprocess(self, dataset: ImagesDataset) -> None:
         self.client.recreate_collection(
