@@ -19,6 +19,7 @@ import hashlib
 import argparse
 from tqdm import tqdm
 from torchvision import transforms
+import time
 
 
 class SearchResult:
@@ -66,13 +67,16 @@ class ImageSearch:
         # setup qdrant client
         self.client = QdrantClient("localhost", port=qdrant_port)
         self.model = model
+        time_start = time.time()
         if self.model == "blip2":
-            # load blip2 models
             self.encoder = Blip2Encoder()
         elif self.model == "clip":
             self.encoder = ClipEncoder()
         else:
             raise Exception("Model type " + self.model + " does not supported.")
+        time_end = time.time()
+        print("Model loading time")
+        print(time_end - time_start)
 
         if preload_rosbag_directory != None:
             self.preload_rosbag_files(Path(str(preload_rosbag_directory)))
@@ -176,6 +180,7 @@ class ImageSearch:
         return False
 
     def search_by_text(self, text: str) -> Optional[SearchResult]:
+        time_start = time.time()
         if self.model == "blip2":
             search_result = self.client.search(
                 collection_name=self.model,
@@ -190,6 +195,9 @@ class ImageSearch:
             )
         else:
             raise Exception("Model type " + self.model + " does not supported.")
+        time_end = time.time()
+        print("Search Time")
+        print(time_end - time_start)
         for result in search_result:
             return SearchResult(
                 mcap_path=result.payload["mcap_path"],
