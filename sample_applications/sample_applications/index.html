@@ -6,26 +6,26 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <meta content="Masaya Kataoka" name="author"/>
-<link href="https://rosbag-sharing-community.github.io/amber/tips/" rel="canonical"/>
-<link href=".." rel="prev"/>
-<link href="../use_rosbag_as_dataset/how_to_use/" rel="next"/>
-<link href="../assets/images/favicon.png" rel="icon"/>
+<link href="https://rosbag-sharing-community.github.io/amber/sample_applications/sample_applications/" rel="canonical"/>
+<link href="../../import/video/" rel="prev"/>
+<link href="../image_search/" rel="next"/>
+<link href="../../assets/images/favicon.png" rel="icon"/>
 <meta content="mkdocs-1.5.3, mkdocs-material-9.5.3" name="generator"/>
-<title>Tips - amber</title>
-<link href="../assets/stylesheets/main.50c56a3b.min.css" rel="stylesheet"/>
-<link href="../assets/stylesheets/palette.06af60db.min.css" rel="stylesheet"/>
+<title>Sample Applications - amber</title>
+<link href="../../assets/stylesheets/main.50c56a3b.min.css" rel="stylesheet"/>
+<link href="../../assets/stylesheets/palette.06af60db.min.css" rel="stylesheet"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
 <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
 <link href="https://use.fontawesome.com/releases/v5.15.0/css/all.css" rel="stylesheet"/>
-<script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+<script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
 </head>
 <body data-md-color-accent="indigo" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
 <input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
 <input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
 <label class="md-overlay" for="__drawer"></label>
 <div data-md-component="skip">
-<a class="md-skip" href="#tips">
+<a class="md-skip" href="#image-search">
           Skip to content
         </a>
 </div>
@@ -33,7 +33,7 @@
 </div>
 <header class="md-header" data-md-component="header">
 <nav aria-label="Header" class="md-header__inner md-grid">
-<a aria-label="amber" class="md-header__button md-logo" data-md-component="logo" href=".." title="amber">
+<a aria-label="amber" class="md-header__button md-logo" data-md-component="logo" href="../.." title="amber">
 <svg viewbox="0 0 640 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M320 0c17.7 0 32 14.3 32 32v64h120c39.8 0 72 32.2 72 72v272c0 39.8-32.2 72-72 72H168c-39.8 0-72-32.2-72-72V168c0-39.8 32.2-72 72-72h120V32c0-17.7 14.3-32 32-32zM208 384c-8.8 0-16 7.2-16 16s7.2 16 16 16h32c8.8 0 16-7.2 16-16s-7.2-16-16-16h-32zm96 0c-8.8 0-16 7.2-16 16s7.2 16 16 16h32c8.8 0 16-7.2 16-16s-7.2-16-16-16h-32zm96 0c-8.8 0-16 7.2-16 16s7.2 16 16 16h32c8.8 0 16-7.2 16-16s-7.2-16-16-16h-32zM264 256a40 40 0 1 0-80 0 40 40 0 1 0 80 0zm152 40a40 40 0 1 0 0-80 40 40 0 1 0 0 80zM48 224h16v192H48c-26.5 0-48-21.5-48-48v-96c0-26.5 21.5-48 48-48zm544 0c26.5 0 48 21.5 48 48v96c0 26.5-21.5 48-48 48h-16V224h16z"></path></svg>
 </a>
 <label class="md-header__button md-icon" for="__drawer">
@@ -49,7 +49,7 @@
 <div class="md-header__topic" data-md-component="header-topic">
 <span class="md-ellipsis">
             
-              Tips
+              Sample Applications
             
           </span>
 </div>
@@ -102,7 +102,7 @@
 <div class="md-grid">
 <ul class="md-tabs__list">
 <li class="md-tabs__item">
-<a class="md-tabs__link" href="..">
+<a class="md-tabs__link" href="../..">
         
   
     
@@ -111,8 +111,8 @@
 
       </a>
 </li>
-<li class="md-tabs__item md-tabs__item--active">
-<a class="md-tabs__link" href="./">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../tips/">
         
   
     
@@ -122,7 +122,7 @@
       </a>
 </li>
 <li class="md-tabs__item">
-<a class="md-tabs__link" href="../use_rosbag_as_dataset/how_to_use/">
+<a class="md-tabs__link" href="../../use_rosbag_as_dataset/how_to_use/">
           
   
   Use rosbag as dataset
@@ -130,7 +130,7 @@
         </a>
 </li>
 <li class="md-tabs__item">
-<a class="md-tabs__link" href="../automation/automation/">
+<a class="md-tabs__link" href="../../automation/automation/">
           
   
   Automation
@@ -138,7 +138,7 @@
         </a>
 </li>
 <li class="md-tabs__item">
-<a class="md-tabs__link" href="../visualize/visualize/">
+<a class="md-tabs__link" href="../../visualize/visualize/">
           
   
   Visualize
@@ -146,15 +146,15 @@
         </a>
 </li>
 <li class="md-tabs__item">
-<a class="md-tabs__link" href="../import/import/">
+<a class="md-tabs__link" href="../../import/import/">
           
   
   Import
 
         </a>
 </li>
-<li class="md-tabs__item">
-<a class="md-tabs__link" href="../sample_applications/sample_applications/">
+<li class="md-tabs__item md-tabs__item--active">
+<a class="md-tabs__link" href="./">
           
   
   Sample Applications
@@ -171,7 +171,7 @@
 <div class="md-sidebar__inner">
 <nav aria-label="Navigation" class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" data-md-level="0">
 <label class="md-nav__title" for="__drawer">
-<a aria-label="amber" class="md-nav__button md-logo" data-md-component="logo" href=".." title="amber">
+<a aria-label="amber" class="md-nav__button md-logo" data-md-component="logo" href="../.." title="amber">
 <svg viewbox="0 0 640 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M320 0c17.7 0 32 14.3 32 32v64h120c39.8 0 72 32.2 72 72v272c0 39.8-32.2 72-72 72H168c-39.8 0-72-32.2-72-72V168c0-39.8 32.2-72 72-72h120V32c0-17.7 14.3-32 32-32zM208 384c-8.8 0-16 7.2-16 16s7.2 16 16 16h32c8.8 0 16-7.2 16-16s-7.2-16-16-16h-32zm96 0c-8.8 0-16 7.2-16 16s7.2 16 16 16h32c8.8 0 16-7.2 16-16s-7.2-16-16-16h-32zm96 0c-8.8 0-16 7.2-16 16s7.2 16 16 16h32c8.8 0 16-7.2 16-16s-7.2-16-16-16h-32zM264 256a40 40 0 1 0-80 0 40 40 0 1 0 80 0zm152 40a40 40 0 1 0 0-80 40 40 0 1 0 0 80zM48 224h16v192H48c-26.5 0-48-21.5-48-48v-96c0-26.5 21.5-48 48-48zm544 0c26.5 0 48 21.5 48 48v96c0 26.5-21.5 48-48 48h-16V224h16z"></path></svg>
 </a>
     amber
@@ -188,47 +188,18 @@
 </div>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="..">
+<a class="md-nav__link" href="../..">
 <span class="md-ellipsis">
     Home
   </span>
 </a>
 </li>
-<li class="md-nav__item md-nav__item--active">
-<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
-<label class="md-nav__link md-nav__link--active" for="__toc">
-<span class="md-ellipsis">
-    Tips
-  </span>
-<span class="md-nav__icon md-icon"></span>
-</label>
-<a class="md-nav__link md-nav__link--active" href="./">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../tips/">
 <span class="md-ellipsis">
     Tips
   </span>
 </a>
-<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
-<label class="md-nav__title" for="__toc">
-<span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#i-do-not-have-rosbag2-but-i-have-rosbag-ros1">
-<span class="md-ellipsis">
-      I do not have rosbag2, but I have rosbag (ROS1)
-    </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#my-rosbag-is-not-a-mcap-format">
-<span class="md-ellipsis">
-      My rosbag is not a mcap format.
-    </span>
-</a>
-</li>
-</ul>
-</nav>
 </li>
 <li class="md-nav__item md-nav__item--section md-nav__item--nested">
 <input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_3" type="checkbox"/>
@@ -245,35 +216,35 @@
           </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../use_rosbag_as_dataset/how_to_use/">
+<a class="md-nav__link" href="../../use_rosbag_as_dataset/how_to_use/">
 <span class="md-ellipsis">
     How to use?
   </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../use_rosbag_as_dataset/read_images/">
+<a class="md-nav__link" href="../../use_rosbag_as_dataset/read_images/">
 <span class="md-ellipsis">
     Read images
   </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../use_rosbag_as_dataset/read_images_and_annotations/">
+<a class="md-nav__link" href="../../use_rosbag_as_dataset/read_images_and_annotations/">
 <span class="md-ellipsis">
     Read images and annotation
   </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../use_rosbag_as_dataset/read_pointclouds/">
+<a class="md-nav__link" href="../../use_rosbag_as_dataset/read_pointclouds/">
 <span class="md-ellipsis">
     Read pointclouds
   </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../use_rosbag_as_dataset/timestamp_sampler/">
+<a class="md-nav__link" href="../../use_rosbag_as_dataset/timestamp_sampler/">
 <span class="md-ellipsis">
     Sampling data by timestamp
   </span>
@@ -297,28 +268,28 @@
           </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../automation/automation/">
+<a class="md-nav__link" href="../../automation/automation/">
 <span class="md-ellipsis">
     Automation
   </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../automation/detic_image_labaler/">
+<a class="md-nav__link" href="../../automation/detic_image_labaler/">
 <span class="md-ellipsis">
     Detic image labaler
   </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../automation/clip_image_annotation_filter/">
+<a class="md-nav__link" href="../../automation/clip_image_annotation_filter/">
 <span class="md-ellipsis">
     CLIP image annotation filter
   </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../automation/nerf_3d_reconstruction/">
+<a class="md-nav__link" href="../../automation/nerf_3d_reconstruction/">
 <span class="md-ellipsis">
     NeRF 3D Reconstruction
   </span>
@@ -342,14 +313,14 @@
           </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../visualize/visualize/">
+<a class="md-nav__link" href="../../visualize/visualize/">
 <span class="md-ellipsis">
     Visualize
   </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../visualize/clip_image_embedding/">
+<a class="md-nav__link" href="../../visualize/clip_image_embedding/">
 <span class="md-ellipsis">
     CLIP image embedding
   </span>
@@ -373,14 +344,14 @@
           </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../import/import/">
+<a class="md-nav__link" href="../../import/import/">
 <span class="md-ellipsis">
     Import
   </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../import/video/">
+<a class="md-nav__link" href="../../import/video/">
 <span class="md-ellipsis">
     Video
   </span>
@@ -389,29 +360,51 @@
 </ul>
 </nav>
 </li>
-<li class="md-nav__item md-nav__item--section md-nav__item--nested">
-<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_7" type="checkbox"/>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_7" type="checkbox"/>
 <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
 <span class="md-ellipsis">
     Sample Applications
   </span>
 <span class="md-nav__icon md-icon"></span>
 </label>
-<nav aria-expanded="false" aria-labelledby="__nav_7_label" class="md-nav" data-md-level="1">
+<nav aria-expanded="true" aria-labelledby="__nav_7_label" class="md-nav" data-md-level="1">
 <label class="md-nav__title" for="__nav_7">
 <span class="md-nav__icon md-icon"></span>
             Sample Applications
           </label>
 <ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="../sample_applications/sample_applications/">
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    Sample Applications
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
 <span class="md-ellipsis">
     Sample Applications
   </span>
 </a>
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#image-search">
+<span class="md-ellipsis">
+      Image Search
+    </span>
+</a>
+</li>
+</ul>
+</nav>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../sample_applications/image_search/">
+<a class="md-nav__link" href="../image_search/">
 <span class="md-ellipsis">
     Image Search
   </span>
@@ -427,23 +420,12 @@
 </div>
 <div class="md-content" data-md-component="content">
 <article class="md-content__inner md-typeset">
-<h1 id="tips">Tips<a class="headerlink" href="#tips" title="Permanent link">#</a></h1>
-<h2 id="i-do-not-have-rosbag2-but-i-have-rosbag-ros1">I do not have rosbag2, but I have rosbag (ROS1)<a class="headerlink" href="#i-do-not-have-rosbag2-but-i-have-rosbag-ros1" title="Permanent link">#</a></h2>
-<p><a href="https://gitlab.com/ternaris/rosbags">This tool</a> can convert your rosbag into rosbag2 very easily.</p>
-<h2 id="my-rosbag-is-not-a-mcap-format">My rosbag is not a mcap format.<a class="headerlink" href="#my-rosbag-is-not-a-mcap-format" title="Permanent link">#</a></h2>
-<p>You can use <code>ros2 bag convert</code> command.
-First, you prepare compress.yaml like below.</p>
-<div class="highlight"><pre><span></span><code><span class="nt">output_bags</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uri</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rosbag</span>
-<span class="w">    </span><span class="nt">storage_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mcap</span>
-<span class="w">    </span><span class="nt">compression_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">message</span>
-<span class="w">    </span><span class="nt">compression_format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">zstd</span>
-<span class="w">    </span><span class="nt">all</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="w">    </span><span class="nt">compression_queue_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
-<span class="w">    </span><span class="nt">compression_threads</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
-</code></pre></div>
-<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>bag<span class="w"> </span>convert<span class="w"> </span>-i<span class="w"> </span><span class="o">(</span>PATH_TO_ROSBAG<span class="o">)</span><span class="w"> </span>-o<span class="w"> </span>conversion.yaml
-</code></pre></div>
+<h1>Sample Applications</h1>
+<p>This page shows a sample implementation of an application that can be developed using <a href="https://github.com/rosbag-sharing-community/amber">amber</a>.</p>
+<h2 id="image-search">Image Search<a class="headerlink" href="#image-search" title="Permanent link">#</a></h2>
+<p>This application supports text search against images with multiple Vison-Language models.
+For more information, click <a href="../image_search">here</a>.</p>
+<iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" frameborder="0" height="315" src="https://www.youtube.com/embed/ryp29wm46TQ?si=ZDRpYwQRO09ogdMZ" title="YouTube video player" width="560"></iframe>
 <aside class="md-source-file">
 <span class="md-source-file__fact">
 <span class="md-icon" title="Last update">
@@ -490,8 +472,8 @@ First, you prepare compress.yaml like below.</p>
 <div class="md-dialog" data-md-component="dialog">
 <div class="md-dialog__inner md-typeset"></div>
 </div>
-<script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs", "navigation.expand", "navigation.top", "toc.integrate"], "search": "../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
-<script src="../assets/javascripts/bundle.d7c377c4.min.js"></script>
+<script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.expand", "navigation.top", "toc.integrate"], "search": "../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+<script src="../../assets/javascripts/bundle.d7c377c4.min.js"></script>
 <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
 <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>

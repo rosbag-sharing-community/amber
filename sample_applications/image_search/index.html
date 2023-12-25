@@ -6,12 +6,11 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <meta content="Masaya Kataoka" name="author"/>
-<link href="https://rosbag-sharing-community.github.io/amber/use_rosbag_as_dataset/read_pointclouds/" rel="canonical"/>
-<link href="../read_images_and_annotations/" rel="prev"/>
-<link href="../timestamp_sampler/" rel="next"/>
+<link href="https://rosbag-sharing-community.github.io/amber/sample_applications/image_search/" rel="canonical"/>
+<link href="../sample_applications/" rel="prev"/>
 <link href="../../assets/images/favicon.png" rel="icon"/>
 <meta content="mkdocs-1.5.3, mkdocs-material-9.5.3" name="generator"/>
-<title>Read pointclouds - amber</title>
+<title>Image Search - amber</title>
 <link href="../../assets/stylesheets/main.50c56a3b.min.css" rel="stylesheet"/>
 <link href="../../assets/stylesheets/palette.06af60db.min.css" rel="stylesheet"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -25,7 +24,7 @@
 <input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
 <label class="md-overlay" for="__drawer"></label>
 <div data-md-component="skip">
-<a class="md-skip" href="#read-images">
+<a class="md-skip" href="#image-search">
           Skip to content
         </a>
 </div>
@@ -49,7 +48,7 @@
 <div class="md-header__topic" data-md-component="header-topic">
 <span class="md-ellipsis">
             
-              Read pointclouds
+              Image Search
             
           </span>
 </div>
@@ -121,8 +120,8 @@
 
       </a>
 </li>
-<li class="md-tabs__item md-tabs__item--active">
-<a class="md-tabs__link" href="../how_to_use/">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../use_rosbag_as_dataset/how_to_use/">
           
   
   Use rosbag as dataset
@@ -153,8 +152,8 @@
 
         </a>
 </li>
-<li class="md-tabs__item">
-<a class="md-tabs__link" href="../../sample_applications/sample_applications/">
+<li class="md-tabs__item md-tabs__item--active">
+<a class="md-tabs__link" href="../sample_applications/">
           
   
   Sample Applications
@@ -201,51 +200,50 @@
   </span>
 </a>
 </li>
-<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
-<input checked="" class="md-nav__toggle md-toggle" id="__nav_3" type="checkbox"/>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_3" type="checkbox"/>
 <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
 <span class="md-ellipsis">
     Use rosbag as dataset
   </span>
 <span class="md-nav__icon md-icon"></span>
 </label>
-<nav aria-expanded="true" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
 <label class="md-nav__title" for="__nav_3">
 <span class="md-nav__icon md-icon"></span>
             Use rosbag as dataset
           </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../how_to_use/">
+<a class="md-nav__link" href="../../use_rosbag_as_dataset/how_to_use/">
 <span class="md-ellipsis">
     How to use?
   </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../read_images/">
+<a class="md-nav__link" href="../../use_rosbag_as_dataset/read_images/">
 <span class="md-ellipsis">
     Read images
   </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../read_images_and_annotations/">
+<a class="md-nav__link" href="../../use_rosbag_as_dataset/read_images_and_annotations/">
 <span class="md-ellipsis">
     Read images and annotation
   </span>
 </a>
 </li>
-<li class="md-nav__item md-nav__item--active">
-<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
-<a class="md-nav__link md-nav__link--active" href="./">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../use_rosbag_as_dataset/read_pointclouds/">
 <span class="md-ellipsis">
     Read pointclouds
   </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../timestamp_sampler/">
+<a class="md-nav__link" href="../../use_rosbag_as_dataset/timestamp_sampler/">
 <span class="md-ellipsis">
     Sampling data by timestamp
   </span>
@@ -361,33 +359,55 @@
 </ul>
 </nav>
 </li>
-<li class="md-nav__item md-nav__item--section md-nav__item--nested">
-<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_7" type="checkbox"/>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_7" type="checkbox"/>
 <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
 <span class="md-ellipsis">
     Sample Applications
   </span>
 <span class="md-nav__icon md-icon"></span>
 </label>
-<nav aria-expanded="false" aria-labelledby="__nav_7_label" class="md-nav" data-md-level="1">
+<nav aria-expanded="true" aria-labelledby="__nav_7_label" class="md-nav" data-md-level="1">
 <label class="md-nav__title" for="__nav_7">
 <span class="md-nav__icon md-icon"></span>
             Sample Applications
           </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../sample_applications/sample_applications/">
+<a class="md-nav__link" href="../sample_applications/">
 <span class="md-ellipsis">
     Sample Applications
   </span>
 </a>
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../sample_applications/image_search/">
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    Image Search
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
 <span class="md-ellipsis">
     Image Search
   </span>
 </a>
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#run-application-with-ford-dataset">
+<span class="md-ellipsis">
+      Run application with ford dataset.
+    </span>
+</a>
+</li>
+</ul>
+</nav>
 </li>
 </ul>
 </nav>
@@ -399,19 +419,27 @@
 </div>
 <div class="md-content" data-md-component="content">
 <article class="md-content__inner md-typeset">
-<h1 id="read-images">Read images<a class="headerlink" href="#read-images" title="Permanent link">#</a></h1>
-<p>PointcloudDataset Class provides only image data.
-Example task description yaml file is here.</p>
-<div class="highlight"><pre><span></span><code><span class="nt">pointcloud_topics</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">topic_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/wamv/sensors/lidars/lidar_wamv_sensor/points</span>
-<span class="nt">compressed</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<h1 id="image-search">Image Search<a class="headerlink" href="#image-search" title="Permanent link">#</a></h1>
+<p>This application compares the image embedding calculated from the images in the rosbag with the text embedding calculated from the prompts entered by the user using various Vision&amp;Language models, and presents the closest result as the search result.</p>
+<p>This application uses <a href="https://qdrant.tech/">qdrant</a>, a type of vector search engine, for searching.</p>
+<p><img alt="uml diagram" class="uml" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXMtYXNjaWkiIHN0YW5kYWxvbmU9Im5vIj8+PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBjb250ZW50U3R5bGVUeXBlPSJ0ZXh0L2NzcyIgaGVpZ2h0PSIzMTdweCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSIgc3R5bGU9IndpZHRoOjE4OTVweDtoZWlnaHQ6MzE3cHg7YmFja2dyb3VuZDojRkZGRkZGOyIgdmVyc2lvbj0iMS4xIiB2aWV3Qm94PSIwIDAgMTg5NSAzMTciIHdpZHRoPSIxODk1cHgiIHpvb21BbmRQYW49Im1hZ25pZnkiPjxkZWZzLz48Zz48IS0tY2x1c3RlciByb3NiYWdfZGlyZWN0b3J5LS0+PGcgaWQ9ImNsdXN0ZXJfcm9zYmFnX2RpcmVjdG9yeSI+PHBhdGggZD0iTTkyOCw4Mi41NjU5IEwxMDY2LDgyLjU2NTkgQTMuNzUsMy43NSAwIDAgMSAxMDY4LjUsODUuMDY1OSBMMTA3NS41LDEwNC44NjI4IEwxMDg1LDEwNC44NjI4IEEyLjUsMi41IDAgMCAxIDEwODcuNSwxMDcuMzYyOCBMMTA4Ny41LDI3My4wNjU5IEEyLjUsMi41IDAgMCAxIDEwODUsMjc1LjU2NTkgTDkyOCwyNzUuNTY1OSBBMi41LDIuNSAwIDAgMSA5MjUuNSwyNzMuMDY1OSBMOTI1LjUsODUuMDY1OSBBMi41LDIuNSAwIDAgMSA5MjgsODIuNTY1OSAiIGZpbGw9Im5vbmUiIHN0eWxlPSJzdHJva2U6IzAwMDAwMDtzdHJva2Utd2lkdGg6MS41OyIvPjxsaW5lIHN0eWxlPSJzdHJva2U6IzAwMDAwMDtzdHJva2Utd2lkdGg6MS41OyIgeDE9IjkyNS41IiB4Mj0iMTA3NS41IiB5MT0iMTA0Ljg2MjgiIHkyPSIxMDQuODYyOCIvPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmb250LXdlaWdodD0iYm9sZCIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nIiB0ZXh0TGVuZ3RoPSIxMzciIHg9IjkyOS41IiB5PSI5Ny41NjEiPnJvc2JhZ19kaXJlY3Rvcnk8L3RleHQ+PC9nPjwhLS1lbnRpdHkgcm9zYmFnLm1jYXAtLT48ZyBpZD0iZWxlbV9yb3NiYWcubWNhcCI+PHBhdGggZD0iTTk0OS41LDEyOC4wNjU5IEw5NDkuNSwxNTkuMzYyOCBBMi41LDIuNSAwIDAgMCA5NTIsMTYxLjg2MjggTDEwNjEsMTYxLjg2MjggQTIuNSwyLjUgMCAwIDAgMTA2My41LDE1OS4zNjI4IEwxMDYzLjUsMTM1LjU2NTkgTDEwNTMuNSwxMjUuNTY1OSBMOTUyLDEyNS41NjU5IEEyLjUsMi41IDAgMCAwIDk0OS41LDEyOC4wNjU5ICIgZmlsbD0iI0YxRjFGMSIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7Ii8+PHBhdGggZD0iTTEwNTMuNSwxMjUuNTY1OSBMMTA1My41LDEzMy4wNjU5IEEyLjUsMi41IDAgMCAwIDEwNTYsMTM1LjU2NTkgTDEwNjMuNSwxMzUuNTY1OSAiIGZpbGw9IiNGMUYxRjEiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MC41OyIvPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBsZW5ndGhBZGp1c3Q9InNwYWNpbmciIHRleHRMZW5ndGg9Ijk0IiB4PSI5NTkuNSIgeT0iMTQ4LjU2MSI+cm9zYmFnLm1jYXA8L3RleHQ+PC9nPjwhLS1lbnRpdHkgZGF0YXNldC55YW1sLS0+PGcgaWQ9ImVsZW1fZGF0YXNldC55YW1sIj48cGF0aCBkPSJNOTQ5LjUsMTk5LjA2NTkgTDk0OS41LDIzMC4zNjI4IEEyLjUsMi41IDAgMCAwIDk1MiwyMzIuODYyOCBMMTA2MSwyMzIuODYyOCBBMi41LDIuNSAwIDAgMCAxMDYzLjUsMjMwLjM2MjggTDEwNjMuNSwyMDYuNTY1OSBMMTA1My41LDE5Ni41NjU5IEw5NTIsMTk2LjU2NTkgQTIuNSwyLjUgMCAwIDAgOTQ5LjUsMTk5LjA2NTkgIiBmaWxsPSIjRjFGMUYxIiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjAuNTsiLz48cGF0aCBkPSJNMTA1My41LDE5Ni41NjU5IEwxMDUzLjUsMjA0LjA2NTkgQTIuNSwyLjUgMCAwIDAgMTA1NiwyMDYuNTY1OSBMMTA2My41LDIwNi41NjU5ICIgZmlsbD0iI0YxRjFGMSIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7Ii8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTQiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iOTQiIHg9Ijk1OS41IiB5PSIyMTkuNTYxIj5kYXRhc2V0LnlhbWw8L3RleHQ+PC9nPjwhLS1lbnRpdHkgcWRyYW50LS0+PGcgaWQ9ImVsZW1fcWRyYW50Ij48cGF0aCBkPSJNNTYsNTkuMDY1OSBDNTYsNDkuMDY1OSA5MCw0OS4wNjU5IDkwLDQ5LjA2NTkgQzkwLDQ5LjA2NTkgMTI0LDQ5LjA2NTkgMTI0LDU5LjA2NTkgTDEyNCw4NC4zNjI4IEMxMjQsOTQuMzYyOCA5MCw5NC4zNjI4IDkwLDk0LjM2MjggQzkwLDk0LjM2MjggNTYsOTQuMzYyOCA1Niw4NC4zNjI4IEw1Niw1OS4wNjU5ICIgZmlsbD0iI0YxRjFGMSIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7Ii8+PHBhdGggZD0iTTU2LDU5LjA2NTkgQzU2LDY5LjA2NTkgOTAsNjkuMDY1OSA5MCw2OS4wNjU5IEM5MCw2OS4wNjU5IDEyNCw2OS4wNjU5IDEyNCw1OS4wNjU5ICIgZmlsbD0ibm9uZSIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7Ii8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTQiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iNDgiIHg9IjY2IiB5PSI4Ni4wNjEiPnFkcmFudDwvdGV4dD48L2c+PCEtLWVudGl0eSB1c2VyLS0+PGcgaWQ9ImVsZW1fdXNlciI+PGVsbGlwc2UgY3g9IjU1Ni41IiBjeT0iMjEzLjA2NTkiIGZpbGw9IiNGMUYxRjEiIHJ4PSI4IiByeT0iOCIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7Ii8+PHBhdGggZD0iTTU1Ni41LDIyMS4wNjU5IEw1NTYuNSwyNDguMDY1OSBNNTQzLjUsMjI5LjA2NTkgTDU2OS41LDIyOS4wNjU5IE01NTYuNSwyNDguMDY1OSBMNTQzLjUsMjYzLjA2NTkgTTU1Ni41LDI0OC4wNjU5IEw1NjkuNSwyNjMuMDY1OSAiIGZpbGw9Im5vbmUiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MC41OyIvPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBsZW5ndGhBZGp1c3Q9InNwYWNpbmciIHRleHRMZW5ndGg9IjMwIiB4PSI1NDEuNSIgeT0iMjc3LjU2MSI+dXNlcjwvdGV4dD48L2c+PCEtLWVudGl0eSByb3NiYWcyZGF0YXNldC0tPjxnIGlkPSJlbGVtX3Jvc2JhZzJkYXRhc2V0Ij48cmVjdCBmaWxsPSIjRjFGMUYxIiBoZWlnaHQ9IjM5LjI5NjkiIHJ4PSIyLjUiIHJ5PSIyLjUiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MC41OyIgd2lkdGg9IjE0MiIgeD0iMTQwNyIgeT0iODkuMDY1OSIvPjxwb2x5Z29uIGZpbGw9IiNGMUYxRjEiIHBvaW50cz0iMTUzMiw5NC4wNjU5LDE1MzIsMTA4LjA2NTksMTU0NCwxMDguMDY1OSwxNTQ0LDEwMC4wNjU5LDE1MzgsOTQuMDY1OSwxNTMyLDk0LjA2NTkiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MC41OyIvPjxsaW5lIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MC41OyIgeDE9IjE1MzgiIHgyPSIxNTM4IiB5MT0iOTQuMDY1OSIgeTI9IjEwMC4wNjU5Ii8+PGxpbmUgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7IiB4MT0iMTU0NCIgeDI9IjE1MzgiIHkxPSIxMDAuMDY1OSIgeTI9IjEwMC4wNjU5Ii8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTQiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iMTEyIiB4PSIxNDE3IiB5PSIxMTUuMDYxIj5yb3NiYWcyZGF0YXNldDwvdGV4dD48L2c+PCEtLWVudGl0eSBpbWFnZV9lbmNvZGVyLS0+PGcgaWQ9ImVsZW1faW1hZ2VfZW5jb2RlciI+PHJlY3QgZmlsbD0iI0YxRjFGMSIgaGVpZ2h0PSIzNi4yOTY5IiByeD0iMi41IiByeT0iMi41IiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjAuNTsiIHdpZHRoPSIxMzAiIHg9IjE3NTkiIHk9IjM2LjU2NTkiLz48dGV4dCBmaWxsPSIjMDAwMDAwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nIiB0ZXh0TGVuZ3RoPSIxMTAiIHg9IjE3NjkiIHk9IjU5LjU2MSI+aW1hZ2VfZW5jb2RlcjwvdGV4dD48L2c+PCEtLWVudGl0eSBncmFkaW9fVUktLT48ZyBpZD0iZWxlbV9ncmFkaW9fVUkiPjxlbGxpcHNlIGN4PSI5MCIgY3k9IjE3MC41NjU5IiBmaWxsPSIjRjFGMUYxIiByeD0iOCIgcnk9IjgiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MC41OyIvPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBsZW5ndGhBZGp1c3Q9InNwYWNpbmciIHRleHRMZW5ndGg9IjY1IiB4PSI1Ny41IiB5PSIyMDAuNTYxIj5ncmFkaW9fVUk8L3RleHQ+PC9nPjwhLS1lbnRpdHkgdGV4dF9lbmNvZGVyLS0+PGcgaWQ9ImVsZW1fdGV4dF9lbmNvZGVyIj48cmVjdCBmaWxsPSIjRjFGMUYxIiBoZWlnaHQ9IjM2LjI5NjkiIHJ4PSIyLjUiIHJ5PSIyLjUiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MC41OyIgd2lkdGg9IjExNyIgeD0iNDk4IiB5PSI5Ny41NjU5Ii8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTQiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iOTciIHg9IjUwOCIgeT0iMTIwLjU2MSI+dGV4dF9lbmNvZGVyPC90ZXh0PjwvZz48IS0tbGluayB1c2VyIHRvIHJvc2JhZ19kaXJlY3RvcnktLT48ZyBpZD0ibGlua191c2VyX3Jvc2JhZ19kaXJlY3RvcnkiPjxwYXRoIGQ9Ik01NzEuODk4LDI0My4zNjk0IEM2MDkuOTM5NSwyNDUuNDkyMyA3MTYuOTUsMjUxLjQ2MzggODE1LjEzNywyNTYuOTQzIEM4MzkuNjgzOCwyNTguMzEyOCA4NjMuNjc5LDI1OS42NTE4IDg4NS45MDczLDI2MC44OTIyIEM4OTcuMDIxNSwyNjEuNTEyNCA5MDcuNjkzOSwyNjIuMTA4IDkxNy43NzI2LDI2Mi42NzA0IEM5MjAuMjkyMywyNjIuODExIDkxNi43ODQyLDI2Mi42MTUzIDkxOS4yMjczLDI2Mi43NTE2ICIgZmlsbD0ibm9uZSIgaWQ9InVzZXItdG8tcm9zYmFnX2RpcmVjdG9yeSIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxLjA7Ii8+PHBvbHlnb24gZmlsbD0iIzE4MTgxOCIgcG9pbnRzPSI5MjUuMjE4LDI2My4wODU5LDkxNi40NTQ4LDI1OC41OTA3LDkyMC4yMjU3LDI2Mi44MDczLDkxNi4wMDkxLDI2Ni41NzgyLDkyNS4yMTgsMjYzLjA4NTkiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wOyIvPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjEzIiBsZW5ndGhBZGp1c3Q9InNwYWNpbmciIHRleHRMZW5ndGg9IjE4MyIgeD0iNjQ2IiB5PSIyNDMuNjMyOCI+MS0xLnNwZWNpZnkgcm9zYmFnX2RpcmVjb3RyeTwvdGV4dD48L2c+PCEtLWxpbmsgcm9zYmFnLm1jYXAgdG8gcm9zYmFnMmRhdGFzZXQtLT48ZyBpZD0ibGlua19yb3NiYWcubWNhcF9yb3NiYWcyZGF0YXNldCI+PHBhdGggZD0iTTEwNjMuNjcsMTM5LjM3ODkgQzExNDkuNDYsMTMyLjk4MjkgMTMwNy4wNTY2LDEyMS4yMzUgMTQwMC42NDY2LDExNC4yNTggIiBmaWxsPSJub25lIiBpZD0icm9zYmFnLm1jYXAtdG8tcm9zYmFnMmRhdGFzZXQiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wOyIvPjxwb2x5Z29uIGZpbGw9IiMxODE4MTgiIHBvaW50cz0iMTQwNi42MywxMTMuODExOSwxMzk3LjM1NzUsMTEwLjQ5MjEsMTQwMS42NDM4LDExNC4xODM2LDEzOTcuOTUyMywxMTguNDY5OSwxNDA2LjYzLDExMy44MTE5IiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiLz48dGV4dCBmaWxsPSIjMDAwMDAwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMyIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nIiB0ZXh0TGVuZ3RoPSIxOTIiIHg9IjExODQiIHk9IjExMS42MzI4Ij4xLTIubG9hZCBpbWFnZXMgaW5zaWRlIHJvc2JhZzwvdGV4dD48L2c+PCEtLWxpbmsgcm9zYmFnMmRhdGFzZXQgdG8gaW1hZ2VfZW5jb2Rlci0tPjxnIGlkPSJsaW5rX3Jvc2JhZzJkYXRhc2V0X2ltYWdlX2VuY29kZXIiPjxwYXRoIGQ9Ik0xNTQ5LjAzLDk3LjU3MjkgQzE2MTAuNTIsODcuOTIwOSAxNjkzLjI4MjYsNzQuOTI3MiAxNzUyLjk1MjYsNjUuNTYyMiAiIGZpbGw9Im5vbmUiIGlkPSJyb3NiYWcyZGF0YXNldC10by1pbWFnZV9lbmNvZGVyIiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiLz48cG9seWdvbiBmaWxsPSIjMTgxODE4IiBwb2ludHM9IjE3NTguODgsNjQuNjMxOSwxNzQ5LjM2ODYsNjIuMDc1NywxNzUzLjk0MDUsNjUuNDA3MiwxNzUwLjYwOSw2OS45NzksMTc1OC44OCw2NC42MzE5IiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiLz48dGV4dCBmaWxsPSIjMDAwMDAwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMyIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nIiB0ZXh0TGVuZ3RoPSIxNDgiIHg9IjE1ODAiIHk9IjY2LjYzMjgiPjEtMy5pbWFnZSBlbWJlZGRpbmdzPC90ZXh0PjwvZz48IS0tcmV2ZXJzZSBsaW5rIHFkcmFudCB0byBpbWFnZV9lbmNvZGVyLS0+PGcgaWQ9ImxpbmtfcWRyYW50X2ltYWdlX2VuY29kZXIiPjxwYXRoIGQ9Ik0xMjkuODE4Myw1OS4wOTQzIEMxMzkuMzg2OSw1Ni4zMzgzIDE0NC4xNDUzLDU1LjMyMjkgMTU0LDUzLjU2NTkgQzMzMC4xNjQsMjIuMTU2OSAzNzYuNTU4LDIzLjU2NTkgNTU1LjUsMjMuNTY1OSBDNTU1LjUsMjMuNTY1OSA1NTUuNSwyMy41NjU5IDE0NzksMjMuNTY1OSBDMTU3Ni44OSwyMy41NjU5IDE2ODkuODIsMzYuMTcxOSAxNzU4LjgsNDUuMzA2OSAiIGZpbGw9Im5vbmUiIGlkPSJxZHJhbnQtYmFja3RvLWltYWdlX2VuY29kZXIiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wOyIvPjxwb2x5Z29uIGZpbGw9IiMxODE4MTgiIHBvaW50cz0iMTI0LjA1MjcsNjAuNzU0OSwxMzMuODA4Miw2Mi4xMDc3LDEyOC44NTc0LDU5LjM3MSwxMzEuNTk0LDU0LjQyMDIsMTI0LjA1MjcsNjAuNzU0OSIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxLjA7Ii8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTMiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iMjkxIiB4PSI4NjEiIHk9IjE5LjYzMjgiPjEtNC51cHNlcnQgaW1hZ2UgZW1iZWRkaW5ncyB3aXRoIG1ldGFkYXRhPC90ZXh0PjwvZz48IS0tbGluayB1c2VyIHRvIGdyYWRpb19VSS0tPjxnIGlkPSJsaW5rX3VzZXJfZ3JhZGlvX1VJIj48cGF0aCBkPSJNNTQxLjQzNSwyNDYuNzc2NiBDNDg3LjgyNywyNjIuMDA5IDI5Mi4zNzIsMzEwLjA0NTQgMTU0LDI0NS41NjU5IEMxMjQuNDA1NywyMzEuNzc1NCAxMDYuNDY4NywyMDEuODM5NCA5Ny45OTgxLDE4NS4wNTU0ICIgZmlsbD0ibm9uZSIgaWQ9InVzZXItdG8tZ3JhZGlvX1VJIiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiLz48cG9seWdvbiBmaWxsPSIjMTgxODE4IiBwb2ludHM9Ijk1LjI5NDgsMTc5LjY5ODksOTUuNzc4OCwxODkuNTM1OSw5Ny41NDc2LDE4NC4xNjI3LDEwMi45MjA4LDE4NS45MzE0LDk1LjI5NDgsMTc5LjY5ODkiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wOyIvPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjEzIiBsZW5ndGhBZGp1c3Q9InNwYWNpbmciIHRleHRMZW5ndGg9IjEwNyIgeD0iMjU3LjUiIHk9IjI0MS42MzI4Ij4yLTEuc2VuZCBwcm9tcHQ8L3RleHQ+PC9nPjwhLS1saW5rIGdyYWRpb19VSSB0byB1c2VyLS0+PGcgaWQ9ImxpbmtfZ3JhZGlvX1VJX3VzZXIiPjxwYXRoIGQ9Ik05OS4wMzQxLDE3My41MDQ5IEMxMTAuODkyNCwxNzcuNzIzOSAxMzMuODU0NiwxODUuNDQwOSAxNTQsMTg5LjU2NTkgQzI5MS41NjYsMjE3LjczMjYgMzI5LjMwNiwyMDIuNjE4IDQ2OCwyMjQuNTY1OSBDNDk0LjA0MSwyMjguNjg2OSA1MTguMjM0MiwyMzMuOTI5NiA1MzUuNDc5MiwyMzcuODg5MSAiIGZpbGw9Im5vbmUiIGlkPSJncmFkaW9fVUktdG8tdXNlciIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxLjA7Ii8+PHBvbHlnb24gZmlsbD0iIzE4MTgxOCIgcG9pbnRzPSI1NDEuMzI3LDIzOS4yMzE4LDUzMy40NTA0LDIzMy4zMTkyLDUzNi40NTM4LDIzOC4xMTI5LDUzMS42NjAxLDI0MS4xMTY0LDU0MS4zMjcsMjM5LjIzMTgiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wOyIvPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjEzIiBsZW5ndGhBZGp1c3Q9InNwYWNpbmciIHRleHRMZW5ndGg9IjEzNCIgeD0iMjQ0IiB5PSIxODUuNjMyOCI+Mi41LnNlZSBzZWFyY2ggcmVzdWx0PC90ZXh0PjwvZz48IS0tbGluayBncmFkaW9fVUkgdG8gdGV4dF9lbmNvZGVyLS0+PGcgaWQ9ImxpbmtfZ3JhZGlvX1VJX3RleHRfZW5jb2RlciI+PHBhdGggZD0iTTk5LjI1MzUsMTY5Ljk1MTkgQzEzOS42Nzg5LDE2Ni44OTI5IDMyMC43ODcsMTUyLjYwNjkgNDY4LDEzMS41NjU5IEM0NzcuNjMxLDEzMC4xODg5IDQ4MS45MTA5LDEyOS41NTU4IDQ5MS44MDE5LDEyNy44MjM4ICIgZmlsbD0ibm9uZSIgaWQ9ImdyYWRpb19VSS10by10ZXh0X2VuY29kZXIiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wOyIvPjxwb2x5Z29uIGZpbGw9IiMxODE4MTgiIHBvaW50cz0iNDk3LjcxMiwxMjYuNzg4OSw0ODguMTU3LDEyNC40MDEyLDQ5Mi43ODY5LDEyNy42NTEzLDQ4OS41MzY4LDEzMi4yODEzLDQ5Ny43MTIsMTI2Ljc4ODkiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wOyIvPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjEzIiBsZW5ndGhBZGp1c3Q9InNwYWNpbmciIHRleHRMZW5ndGg9IjI3OCIgeD0iMTcyIiB5PSIxMjcuNjMyOCI+Mi0yLmNhbGN1bGF0ZSB0ZXh0IGVtYmVkZGluZyBmcm9tIHByb21wdC48L3RleHQ+PC9nPjwhLS1saW5rIHRleHRfZW5jb2RlciB0byBxZHJhbnQtLT48ZyBpZD0ibGlua190ZXh0X2VuY29kZXJfcWRyYW50Ij48cGF0aCBkPSJNNDk3LjYyNSwxMTAuMDgzOSBDMzk5LjE3MSwxMDAuNzU3OSAyMDguMTQ1Myw4Mi42NjI4IDEzMC4wMDY2LDc1LjI2MDggIiBmaWxsPSJub25lIiBpZD0idGV4dF9lbmNvZGVyLXRvLXFkcmFudCIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxLjA7Ii8+PHBvbHlnb24gZmlsbD0iIzE4MTgxOCIgcG9pbnRzPSIxMjQuMDMzMyw3NC42OTQ5LDEzMi42MTYsNzkuNTI1OSwxMjkuMDExLDc1LjE2NjUsMTMzLjM3MDQsNzEuNTYxNSwxMjQuMDMzMyw3NC42OTQ5IiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiLz48dGV4dCBmaWxsPSIjMDAwMDAwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMyIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nIiB0ZXh0TGVuZ3RoPSIzMTIiIHg9IjE1NSIgeT0iNzQuNjMyOCI+Mi0zLnF1ZXJ5IGltYWdlIGVtYmVkZGluZyBieSB0ZXh0IGVtYmVkZGluZy48L3RleHQ+PC9nPjwhLS1saW5rIHFkcmFudCB0byBncmFkaW9fVUktLT48ZyBpZD0ibGlua19xZHJhbnRfZ3JhZGlvX1VJIj48cGF0aCBkPSJNOTAsOTQuMzQwOSBDOTAsMTE1LjYxNzkgOTAsMTQwLjMwMzkgOTAsMTU1LjQyOTkgIiBmaWxsPSJub25lIiBpZD0icWRyYW50LXRvLWdyYWRpb19VSSIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxLjA7Ii8+PHBvbHlnb24gZmlsbD0iIzE4MTgxOCIgcG9pbnRzPSI5MCwxNjEuNDI5OSw5NCwxNTIuNDI5OSw5MCwxNTYuNDI5OSw4NiwxNTIuNDI5OSw5MCwxNjEuNDI5OSIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxLjA7Ii8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTMiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iMTQzIiB4PSI3IiB5PSIxMzIuMzgyOCI+Mi00LnNlbmQgc2VhcmNoIHJlc3VsdDwvdGV4dD48L2c+PCEtLVNSQz1bUEw5QlJlQ200RHRGQVVPMk0wZkREcnJxdG1EcTdIYng4OVFDSlNVM01iSnJ4Wk02OTQxTUlGQy1DLXlQSndzV0g2Sk5OR01qT3BCWU9XMm1NZElaNC02TlBIcTRqOTc4RTJQWVczUHdJdW1TS3dFeG9vQUFGRTRsOEJSRXF1Z2V0a1pYRGZoejRlY1FURV9YM3EycGszUVJoam53bkpGR0tIMXFWVnZVQTlYZXZ1dHBOZ29nei1VVFJ0WWdKWWVEUDVteHhVMGVGMDVpSmphT3RET0xVUXJ5cjdQUGNUMjV2RW1qMFhwZWl5RmtqNkJtZWllQ2dNXzhNWFV3MUIxZExKeHRkQkxCY0tMcUxrRUdLd3JIRHJoeVRkQjVkYUpGTXhESjRFOVM1TTc3c2hmdS1WcE81N0FWUFREd1JlQTJuTzVaRnpveDVGZ0hIdktGbUlwVk9pTVhMYVB4Q3RlakxDMzdPVFhjcnpMUTBVb0tySlBSZEdsdjZZYV9wWTRRRGpGMUNfa2lpZ2h5V0stMXBha1dIOWhENVBkSXdFTU9lTklIb1VlcmFzZEZfR1MwXS0tPjwvZz48L3N2Zz4=" title=""/></p>
+<p>1-<em> shows the processing steps up to the point where the embedding of the image is calculated and it is registered in qdrant.
+2-</em> indicates the point where prompt input is accepted and displayed.</p>
+<h2 id="run-application-with-ford-dataset">Run application with ford dataset.<a class="headerlink" href="#run-application-with-ford-dataset" title="Permanent link">#</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This sample command is written with the assumption that it will be executed in the root directory of the amber package.</p>
+</div>
+<div class="highlight"><pre><span></span><code>python3<span class="w"> </span>amber/apps/image_search.py<span class="w"> </span>--rosbag_directory<span class="w"> </span>tests/rosbag/ford/<span class="w"> </span>--sampling_duration<span class="o">=</span><span class="m">0</span>.1
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">amber.dataset.pointcloud_dataset</span> <span class="kn">import</span> <span class="n">PointcloudDataset</span><span class="p">,</span> <span class="n">ReadPointCloudConfig</span>
+<p>If it works correctly, the following message is displayed.</p>
+<div class="highlight"><pre><span></span><code>Running on local URL:  http://127.0.0.1:7860
 
-<span class="n">dataset</span> <span class="o">=</span> <span class="n">PointcloudDataset</span><span class="p">(</span>
-  <span class="s2">"(path to rosbag .mcap file)"</span><span class="p">,</span>
-  <span class="n">ReadPointCloudConfig</span><span class="o">.</span><span class="n">from_yaml_file</span><span class="p">(</span><span class="s2">"(path to rosbag yaml description file)"</span><span class="p">))</span>
+To create a public link, set `share=True` in `launch()`.
 </code></pre></div>
+<p>Please access <a href="http://127.0.0.1:7860">this URL</a> as soon as the message is confirmed.</p>
+<p>You can search for images by entering a prompt in gradio's UI as shown in the video below.</p>
+<iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" frameborder="0" height="315" src="https://www.youtube.com/embed/ryp29wm46TQ?si=ZDRpYwQRO09ogdMZ" title="YouTube video player" width="560"></iframe>
 <aside class="md-source-file">
 <span class="md-source-file__fact">
 <span class="md-icon" title="Last update">
