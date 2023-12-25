@@ -185,7 +185,7 @@ class ImageSearch:
         elif self.model == "clip":
             search_result = self.client.search(
                 collection_name=self.model,
-                query_vector=self.encoder.get_single_text_embeddings(text).tolist(),
+                query_vector=self.encoder.get_single_text_embeddings(text)[0].tolist(),
                 limit=10,
             )
         else:
@@ -199,7 +199,6 @@ class ImageSearch:
         return None
 
     def preload_rosbag_files(self, rosbag_directory: Path) -> None:
-        print(rosbag_directory)
         for mcap_file in tqdm(
             glob(
                 "**/*.mcap",
