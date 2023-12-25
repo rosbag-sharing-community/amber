@@ -1,0 +1,3 @@
+ignore:
+  - "amber/automation/nerf_3d_reconstruction.py"
+  - "amber/apps"

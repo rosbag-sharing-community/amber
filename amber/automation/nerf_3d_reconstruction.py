@@ -1,6 +1,5 @@
 import docker
 from amber.automation.automation import Automation
-import shutil
 import os
 from amber.dataset.images_dataset import ImagesDataset
 from amber.automation.task_description import ColmapPoseEstimationConfig

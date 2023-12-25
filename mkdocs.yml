@@ -83,6 +83,7 @@ markdown_extensions:
   - attr_list
   - codehilite: { guess_lang: false }
   - fontawesome_markdown
+  - plantuml_markdown: { server: http://www.plantuml.com/plantuml }
   - pymdownx.arithmatex:
       generic: true
   - pymdownx.emoji
@@ -114,3 +115,6 @@ nav:
   - Import:
     - Import: import/import.md
     - Video: import/video.md
+  - Sample Applications:
+    - Sample Applications: sample_applications/sample_applications.md
+    - Image Search: sample_applications/image_search.md
