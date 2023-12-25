@@ -56,3 +56,17 @@ gradio_UI --> user : 2.5.see search result
 ```bash
 python3 amber/apps/image_search.py --rosbag_directory tests/rosbag/ford/ --sampling_duration=0.1
 ```
+
+If it works correctly, the following message is displayed.
+
+```
+Running on local URL:  http://127.0.0.1:7860
+
+To create a public link, set `share=True` in `launch()`.
+```
+
+Please access [this URL](http://127.0.0.1:7860) as soon as the message is confirmed.
+
+You can search for images by entering a prompt in gradio's UI as shown in the video below.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/ryp29wm46TQ?si=ZDRpYwQRO09ogdMZ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
