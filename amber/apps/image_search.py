@@ -172,7 +172,7 @@ class ImageSearch:
     def search_by_text(self, text: str) -> Optional[SearchResult]:
         if self.model == "blip2":
             search_result = self.client.search(
-                collection_name="rosbag",
+                collection_name=self.model,
                 query_vector=self.encoder.encode_text(text)[0].tolist(),
                 limit=10,
             )
@@ -194,7 +194,7 @@ class ImageSearch:
                 root_dir=rosbag_directory.absolute().as_posix(),
                 recursive=True,
             ),
-            desc="proc1",
+            desc="preloading rosbag",
             postfix="range",
             ncols=80,
         ):
@@ -219,12 +219,12 @@ class ImageSearch:
                 print("Rosbag data was already processed.")
 
     def preprocess(self, dataset: ImagesDataset) -> None:
-        if not self.collection_exists("rosbag"):
+        if not self.collection_exists(self.model):
             self.client.create_collection(
-                collection_name="rosbag",
+                collection_name=self.model,
                 vectors_config=VectorParams(size=256, distance=Distance.COSINE),
             )
-        sampling_duration: float = 5.0
+        sampling_duration: float = 0.3
         dataloader = torch.utils.data.DataLoader(
             dataset,
             batch_sampler=TimestampSampler(
@@ -232,8 +232,13 @@ class ImageSearch:
             ),
         )
         for _, sample_batched in enumerate(dataloader):
-            for sample_index, sample in enumerate(sample_batched):
-                image_features: torch.Tensor = self.encoder.encode_image(sample)
+            for sample_index, sample in enumerate(
+                tqdm(sample_batched, desc="processing images in rosbag.")
+            ):
+                if self.model == "blip2":
+                    image_features: torch.Tensor = self.encoder.encode_image(sample)
+                else:
+                    raise Exception("Model type " + self.model + " does not supported.")
                 points = []
                 image_id = uuid.uuid4()
                 image_path = os.path.join(self.data_directory, str(image_id) + ".png")
@@ -253,7 +258,7 @@ class ImageSearch:
                         )
                     )
                     self.client.upsert(
-                        collection_name="rosbag", wait=True, points=points
+                        collection_name=self.model, wait=True, points=points
                     )
 
 
