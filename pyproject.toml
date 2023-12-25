@@ -91,6 +91,8 @@ mkdocs-mermaid2-plugin = "^1.0.0"
 pymdown-extensions = "*"
 mkdocs-git-revision-date-localized-plugin = "*"
 mkdocs-gitsnippet-plugin = "*"
+plantuml-markdown = "^3.9.2"
+plantuml = "^0.3.0"
 
 [tool.poetry.scripts]
 amber = "amber.cli:main"
