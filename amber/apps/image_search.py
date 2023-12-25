@@ -38,10 +38,12 @@ class ImageSearch:
         qdrant_port: int = 5555,
         preload_rosbag_directory: Optional[str] = None,
         model: str = "blip2",
+        sampling_duration: float = 5.0,
     ) -> None:
         # make data saving directory
         self.data_directory = "/tmp/image_search"
         self.mcap_hashes: List[str] = []
+        self.sampling_duration = sampling_duration
         if not os.path.exists(self.data_directory):
             os.makedirs(self.data_directory)
 
@@ -224,11 +226,10 @@ class ImageSearch:
                 collection_name=self.model,
                 vectors_config=VectorParams(size=256, distance=Distance.COSINE),
             )
-        sampling_duration: float = 0.3
         dataloader = torch.utils.data.DataLoader(
             dataset,
             batch_sampler=TimestampSampler(
-                dataset, Time(sampling_duration, TimeUnit.SECOND)
+                dataset, Time(self.sampling_duration, TimeUnit.SECOND)
             ),
         )
         for _, sample_batched in enumerate(dataloader):
@@ -252,7 +253,7 @@ class ImageSearch:
                                 "image_path": image_path,
                                 "image_id": image_id,
                                 "mcap_path": dataset.rosbag_files,
-                                "duration_from_rosbag_start": sampling_duration
+                                "duration_from_rosbag_start": self.sampling_duration
                                 * sample_index,
                             },
                         )
@@ -269,10 +270,12 @@ if __name__ == "__main__":
     parser.add_argument("--port", default=5555, help="connection port of the qdrant")
     parser.add_argument("--model", choices=["blip2"], default="blip2")
     parser.add_argument("--rosbag_directory", default=None)
+    parser.add_argument("--sampling_duration", default=5.0, type=float)
     args = parser.parse_args()
     app = ImageSearch(
         qdrant_port=args.port,
         preload_rosbag_directory=args.rosbag_directory,
         model=args.model,
+        sampling_duration=args.sampling_duration,
     )
     app.show_gradio_ui()
