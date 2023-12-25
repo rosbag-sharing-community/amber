@@ -32,18 +32,21 @@ class SearchResult:
         self.image_path = image_path
 
 
-class Blip2ImageSearch:
+class ImageSearch:
     def __init__(
-        self, qdrant_port: int = 5555, preload_rosbag_directory: Optional[str] = None
+        self,
+        qdrant_port: int = 5555,
+        preload_rosbag_directory: Optional[str] = None,
+        model: str = "blip2",
     ) -> None:
         # make data saving directory
-        self.data_directory = "/tmp/blip2_image_search"
+        self.data_directory = "/tmp/image_search"
         self.mcap_hashes: List[str] = []
         if not os.path.exists(self.data_directory):
             os.makedirs(self.data_directory)
 
         # setup docker container
-        container_name = "blip2_image_search"
+        container_name = "image_search"
         self.docker_client = docker.from_env()
         if not self.found_image(image_name="qdrant/qdrant", tag="v1.7.2"):
             self.docker_client.images.pull("qdrant/qdrant", tag="v1.7.2")
@@ -58,8 +61,12 @@ class Blip2ImageSearch:
 
         # setup qdrant client
         self.client = QdrantClient("localhost", port=qdrant_port)
-        # load blip2 models
-        self.encoder = Blip2Encoder()
+        self.model = model
+        if self.model == "blip2":
+            # load blip2 models
+            self.encoder = Blip2Encoder()
+        else:
+            raise Exception("Model type " + self.model + " does not supported.")
 
         if preload_rosbag_directory != None:
             self.preload_rosbag_files(Path(str(preload_rosbag_directory)))
@@ -163,11 +170,14 @@ class Blip2ImageSearch:
         return False
 
     def search_by_text(self, text: str) -> Optional[SearchResult]:
-        search_result = self.client.search(
-            collection_name="rosbag",
-            query_vector=self.encoder.encode_text(text)[0].tolist(),
-            limit=10,
-        )
+        if self.model == "blip2":
+            search_result = self.client.search(
+                collection_name="rosbag",
+                query_vector=self.encoder.encode_text(text)[0].tolist(),
+                limit=10,
+            )
+        else:
+            raise Exception("Model type " + self.model + " does not supported.")
         for result in search_result:
             return SearchResult(
                 mcap_path=result.payload["mcap_path"],
@@ -251,7 +261,15 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Sample application of searching image by blip2"
     )
+    parser.add_argument(
+        "--port", default=5555, description="connection port of the qdrant"
+    )
+    parser.add_argument("--model", choices=["blip2"], default="blip2")
     parser.add_argument("--rosbag_directory", default=None)
     args = parser.parse_args()
-    app = Blip2ImageSearch(preload_rosbag_directory=args.rosbag_directory)
+    app = ImageSearch(
+        qdrant_port=args.port,
+        preload_rosbag_directory=args.rosbag_directory,
+        model=args.model,
+    )
     app.show_gradio_ui()
