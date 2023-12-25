@@ -7,7 +7,7 @@ from pathlib import Path
 from qdrant_client import QdrantClient
 from qdrant_client.http.models import Distance, VectorParams
 from qdrant_client.http.models import PointStruct
-from typing import List, Any, Optional, Tuple
+from typing import List, Any, Optional, cast
 import os
 import torch
 import torchvision
@@ -15,10 +15,27 @@ import uuid
 import docker
 import gradio as gr
 import hashlib
+import argparse
+from tqdm import tqdm
+
+
+class SearchResult:
+    duration_from_rosbag_start: float = 0
+    mcap_path: str = ""
+    image_path: str = ""
+
+    def __init__(
+        self, duration_from_rosbag_start: float, mcap_path: str, image_path: str
+    ) -> None:
+        self.duration_from_rosbag_start = duration_from_rosbag_start
+        self.mcap_path = mcap_path
+        self.image_path = image_path
 
 
 class Blip2ImageSearch:
-    def __init__(self, qdrant_port: int = 6333) -> None:
+    def __init__(
+        self, qdrant_port: int = 5555, preload_rosbag_directory: Optional[str] = None
+    ) -> None:
         # make data saving directory
         self.data_directory = "/tmp/blip2_image_search"
         self.mcap_hashes: List[str] = []
@@ -33,7 +50,7 @@ class Blip2ImageSearch:
         if not self.found_container(container_name):
             self.container = self.docker_client.containers.run(
                 image="qdrant/qdrant:v1.7.2",
-                ports={qdrant_port: qdrant_port},
+                ports={6333: qdrant_port},
                 detach=True,
                 tty=True,
                 name=container_name,
@@ -43,6 +60,16 @@ class Blip2ImageSearch:
         self.client = QdrantClient("localhost", port=qdrant_port)
         # load blip2 models
         self.encoder = Blip2Encoder()
+
+        if preload_rosbag_directory != None:
+            self.preload_rosbag_files(Path(str(preload_rosbag_directory)))
+
+    def collection_exists(self, collection_name: str) -> bool:
+        for collections in self.client.get_collections():
+            for collection in collections[1]:
+                if collection.name == collection_name:
+                    return True
+        return False
 
     def is_processed_mcap(self, mcap_path: str) -> bool:
         hash = hashlib.sha256()
@@ -72,9 +99,26 @@ class Blip2ImageSearch:
             upload_button.upload(self.upload_file, upload_button, file_output)
 
             def respond(message: Any, chat_history: Any) -> Any:
-                # chat_history.append((message, ("lion.jpeg",)))
-                chat_history.append((message, ("fuga")))
-                self.search_by_text(message)
+                result = self.search_by_text(message)
+                if result == None:
+                    chat_history.append(
+                        (message, ("something wrong happend in search"))
+                    )
+                else:
+                    chat_history.append(
+                        (message, (cast(SearchResult, result).image_path,))
+                    )
+                    chat_history.append(
+                        ("Which rosbag?", cast(SearchResult, result).mcap_path)
+                    )
+                    chat_history.append(
+                        (
+                            "Around how many seconds after the start?",
+                            "About "
+                            + str(cast(SearchResult, result).duration_from_rosbag_start)
+                            + " sec",
+                        )
+                    )
                 return "", chat_history
 
             msg.submit(respond, [msg, chatbot], [msg, chatbot])
@@ -118,26 +162,59 @@ class Blip2ImageSearch:
                     return True
         return False
 
-    def search_by_text(self, text: str) -> Optional[Tuple[str, str, float]]:
+    def search_by_text(self, text: str) -> Optional[SearchResult]:
         search_result = self.client.search(
             collection_name="rosbag",
             query_vector=self.encoder.encode_text(text)[0].tolist(),
-            limit=1,
+            limit=10,
         )
         for result in search_result:
-            return (
-                result.payload["mcap_path"],
-                result.payload["image_path"],
-                result.payload["duration_from_rosbag_start"],
+            return SearchResult(
+                mcap_path=result.payload["mcap_path"],
+                image_path=result.payload["image_path"],
+                duration_from_rosbag_start=result.payload["duration_from_rosbag_start"],
             )
         return None
 
+    def preload_rosbag_files(self, rosbag_directory: Path) -> None:
+        print(rosbag_directory)
+        for mcap_file in tqdm(
+            glob(
+                "**/*.mcap",
+                root_dir=rosbag_directory.absolute().as_posix(),
+                recursive=True,
+            ),
+            desc="proc1",
+            postfix="range",
+            ncols=80,
+        ):
+            print(
+                "Start loading rosbag : "
+                + os.path.join(rosbag_directory.absolute().as_posix(), mcap_file)
+            )
+            if not self.is_processed_mcap(
+                os.path.join(rosbag_directory.absolute().as_posix(), mcap_file)
+            ):
+                self.preprocess(
+                    ImagesDataset(
+                        os.path.join(rosbag_directory.absolute().as_posix(), mcap_file),
+                        ReadImagesConfig.from_yaml_file(
+                            os.path.join(
+                                rosbag_directory.absolute().as_posix(), "dataset.yaml"
+                            )
+                        ),
+                    )
+                )
+            else:
+                print("Rosbag data was already processed.")
+
     def preprocess(self, dataset: ImagesDataset) -> None:
-        self.client.recreate_collection(
-            collection_name="rosbag",
-            vectors_config=VectorParams(size=256, distance=Distance.COSINE),
-        )
-        sampling_duration: float = 3.0
+        if not self.collection_exists("rosbag"):
+            self.client.create_collection(
+                collection_name="rosbag",
+                vectors_config=VectorParams(size=256, distance=Distance.COSINE),
+            )
+        sampling_duration: float = 5.0
         dataloader = torch.utils.data.DataLoader(
             dataset,
             batch_sampler=TimestampSampler(
@@ -171,5 +248,10 @@ class Blip2ImageSearch:
 
 
 if __name__ == "__main__":
-    app = Blip2ImageSearch()
+    parser = argparse.ArgumentParser(
+        description="Sample application of searching image by blip2"
+    )
+    parser.add_argument("--rosbag_directory", default=None)
+    args = parser.parse_args()
+    app = Blip2ImageSearch(preload_rosbag_directory=args.rosbag_directory)
     app.show_gradio_ui()
