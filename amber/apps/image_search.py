@@ -261,9 +261,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Sample application of searching image by blip2"
     )
-    parser.add_argument(
-        "--port", default=5555, description="connection port of the qdrant"
-    )
+    parser.add_argument("--port", default=5555, help="connection port of the qdrant")
     parser.add_argument("--model", choices=["blip2"], default="blip2")
     parser.add_argument("--rosbag_directory", default=None)
     args = parser.parse_args()
