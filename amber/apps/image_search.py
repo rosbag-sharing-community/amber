@@ -1,4 +1,5 @@
 from amber.automation.blip2_encoder import Blip2Encoder
+from amber.automation.clip_encoder import ClipEncoder
 from amber.dataset.images_dataset import ImagesDataset, ReadImagesConfig
 from amber.sampler.timestamp_sampler import TimestampSampler
 from amber.unit.time import Time, TimeUnit
@@ -17,6 +18,7 @@ import gradio as gr
 import hashlib
 import argparse
 from tqdm import tqdm
+from torchvision import transforms
 
 
 class SearchResult:
@@ -67,6 +69,8 @@ class ImageSearch:
         if self.model == "blip2":
             # load blip2 models
             self.encoder = Blip2Encoder()
+        elif self.model == "clip":
+            self.encoder = ClipEncoder()
         else:
             raise Exception("Model type " + self.model + " does not supported.")
 
@@ -178,6 +182,12 @@ class ImageSearch:
                 query_vector=self.encoder.encode_text(text)[0].tolist(),
                 limit=10,
             )
+        elif self.model == "clip":
+            search_result = self.client.search(
+                collection_name=self.model,
+                query_vector=self.encoder.get_single_text_embeddings(text).tolist(),
+                limit=10,
+            )
         else:
             raise Exception("Model type " + self.model + " does not supported.")
         for result in search_result:
@@ -222,10 +232,16 @@ class ImageSearch:
 
     def preprocess(self, dataset: ImagesDataset) -> None:
         if not self.collection_exists(self.model):
-            self.client.create_collection(
-                collection_name=self.model,
-                vectors_config=VectorParams(size=256, distance=Distance.COSINE),
-            )
+            if self.model == "blip2":
+                self.client.create_collection(
+                    collection_name=self.model,
+                    vectors_config=VectorParams(size=256, distance=Distance.COSINE),
+                )
+            else:
+                self.client.create_collection(
+                    collection_name=self.model,
+                    vectors_config=VectorParams(size=512, distance=Distance.COSINE),
+                )
         dataloader = torch.utils.data.DataLoader(
             dataset,
             batch_sampler=TimestampSampler(
@@ -236,8 +252,14 @@ class ImageSearch:
             for sample_index, sample in enumerate(
                 tqdm(sample_batched, desc="processing images in rosbag.")
             ):
+                image_features: torch.Tensor
                 if self.model == "blip2":
-                    image_features: torch.Tensor = self.encoder.encode_image(sample)
+                    image_features = self.encoder.encode_image(sample)
+                elif self.model == "clip":
+                    to_pil_image = transforms.ToPILImage()
+                    image_features = self.encoder.get_single_image_embeddings(
+                        to_pil_image(sample)
+                    ).unsqueeze(0)
                 else:
                     raise Exception("Model type " + self.model + " does not supported.")
                 points = []
@@ -268,7 +290,7 @@ if __name__ == "__main__":
         description="Sample application of searching image by blip2"
     )
     parser.add_argument("--port", default=5555, help="connection port of the qdrant")
-    parser.add_argument("--model", choices=["blip2"], default="blip2")
+    parser.add_argument("--model", choices=["blip2", "clip"], default="blip2")
     parser.add_argument("--rosbag_directory", default=None)
     parser.add_argument("--sampling_duration", default=5.0, type=float)
     args = parser.parse_args()
