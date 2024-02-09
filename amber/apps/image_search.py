@@ -51,7 +51,7 @@ class ImageSearch:
             os.makedirs(self.data_directory)
 
         # setup docker container
-        container_name = "image_search"
+        container_name = "image_search_" + model
         self.docker_client = docker.from_env()
         if not self.found_image(image_name="qdrant/qdrant", tag="v1.7.2"):
             self.docker_client.images.pull("qdrant/qdrant", tag="v1.7.2")
