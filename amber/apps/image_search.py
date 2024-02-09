@@ -44,7 +44,7 @@ class ImageSearch:
         sampling_duration: float = 5.0,
     ) -> None:
         # make data saving directory
-        self.data_directory = "/tmp/image_search"
+        self.data_directory = "/tmp/image_search/" + model
         self.mcap_hashes: List[str] = []
         self.sampling_duration = sampling_duration
         if not os.path.exists(self.data_directory):
