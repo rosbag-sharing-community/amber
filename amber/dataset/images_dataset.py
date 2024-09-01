@@ -47,12 +47,12 @@ class ImagesDataset(Rosbag2Dataset):  # type: ignore
         self.count_images()
 
     def count_images(self) -> None:
-        num_images = 0
+        self.num_images = 0
         for rosbag_file in self.rosbag_files:
             reader = NonSeekingReader(rosbag_file)
             for schema, channel, message in reader.iter_messages():
                 if channel.topic in self.config.get_image_topics():
-                    num_images = num_images + 1
+                    self.num_images = self.num_images + 1
                     self.message_metadata.append(
                         MessageMetaData.from_dict(
                             {
@@ -69,9 +69,9 @@ class ImagesDataset(Rosbag2Dataset):  # type: ignore
                     )
 
     def __len__(self) -> int:
-        return num_images
+        return self.num_images
 
-    def __getitem__(self, index: int) -> torch.Tensor:
+    def __iter__(self) -> torch.Tensor:
         for rosbag_file in self.rosbag_files:
             reader = NonSeekingReader(rosbag_file)
             for schema, channel, message in reader.iter_messages():
@@ -79,4 +79,4 @@ class ImagesDataset(Rosbag2Dataset):  # type: ignore
                     image = decode_image_message(
                         message, schema, self.config.compressed
                     )
-                    yield image
+                    yield (image)
