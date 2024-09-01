@@ -73,7 +73,7 @@ class PointcloudDataset(Rosbag2Dataset):  # type: ignore
         for rosbag_file in self.rosbag_files:
             reader = NonSeekingReader(rosbag_file)
             for schema, channel, message in reader.iter_messages():
-                if channel.topic in self.config.get_image_topics():
+                if channel.topic in self.config.get_pointcloud_topics():
                     yield decode_pointcloud_message(
                         message, schema, self.config.compressed
                     )
