@@ -24,7 +24,8 @@ class ReadImagesConfig(YAMLWizard):  # type: ignore
 
 
 class ImagesDataset(Rosbag2Dataset):  # type: ignore
-    images: List[torch.Tensor] = []
+    # images: List[torch.Tensor] = []
+    num_images = 0
     config: ReadImagesConfig = ReadImagesConfig()
 
     def __init__(
@@ -34,7 +35,7 @@ class ImagesDataset(Rosbag2Dataset):  # type: ignore
         transform: Any = None,
         target_transform: Any = None,
     ) -> None:
-        self.images.clear()
+        # self.images.clear()
         self.config = config
         print(self.config)
         super().__init__(
@@ -43,16 +44,15 @@ class ImagesDataset(Rosbag2Dataset):  # type: ignore
             transform,
             target_transform,
         )
-        self.read_images()
+        self.count_images()
 
-    def read_images(self) -> None:
+    def count_images(self) -> None:
+        num_images = 0
         for rosbag_file in self.rosbag_files:
             reader = NonSeekingReader(rosbag_file)
             for schema, channel, message in reader.iter_messages():
                 if channel.topic in self.config.get_image_topics():
-                    self.images.append(
-                        decode_image_message(message, schema, self.config.compressed)
-                    )
+                    num_images = num_images + 1
                     self.message_metadata.append(
                         MessageMetaData.from_dict(
                             {
@@ -67,10 +67,16 @@ class ImagesDataset(Rosbag2Dataset):  # type: ignore
                             }
                         )
                     )
-        assert len(self.images) == len(self.message_metadata)
 
     def __len__(self) -> int:
-        return len(self.images)
+        return num_images
 
     def __getitem__(self, index: int) -> torch.Tensor:
-        return self.images[index]
+        for rosbag_file in self.rosbag_files:
+            reader = NonSeekingReader(rosbag_file)
+            for schema, channel, message in reader.iter_messages():
+                if channel.topic in self.config.get_image_topics():
+                    image = decode_image_message(
+                        message, schema, self.config.compressed
+                    )
+                    yield image
