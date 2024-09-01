@@ -76,7 +76,4 @@ class ImagesDataset(Rosbag2Dataset):  # type: ignore
             reader = NonSeekingReader(rosbag_file)
             for schema, channel, message in reader.iter_messages():
                 if channel.topic in self.config.get_image_topics():
-                    image = decode_image_message(
-                        message, schema, self.config.compressed
-                    )
-                    yield (image)
+                    yield decode_image_message(message, schema, self.config.compressed)
