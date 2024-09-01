@@ -3,6 +3,7 @@ dist
 poetry.lock
 __pycache__
 .coverage
+requirements.txt
 
 # output data
 output.mcap

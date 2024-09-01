@@ -43,12 +43,12 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{secrets.WASABI_ACCESS_KEY}}
           AWS_SECRET_ACCESS_KEY: ${{secrets.WASABI_SECRET_ACCESS_KEY}}
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           file: ./_htmlcov/coverage.xml
           flags: pytest # optional
           name: codecov-umbrella # optional
-          fail_ci_if_error: true # optional (default = false)
+          fail_ci_if_error: false # optional (default = false)
           verbose: true # optional (default = false)
           token: ${{ secrets.CODECOV_TOKEN }}
   build:
@@ -72,7 +72,11 @@ jobs:
       - name: install
         run: poetry install
       - name: build
-        run: poetry build
+        run: |
+          poetry lock
+          poetry export -f requirements.txt --output requirements.txt --without-hashes
+          poetry build -f wheel
+          pip wheel --wheel-dir=dist -r requirements.txt
       - uses: actions/upload-artifact@v3
         with:
           name: package
