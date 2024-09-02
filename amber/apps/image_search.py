@@ -1,8 +1,6 @@
 from amber.automation.blip2_encoder import Blip2Encoder
 from amber.automation.clip_encoder import ClipEncoder
 from amber.dataset.images_dataset import ImagesDataset, ReadImagesConfig
-from amber.sampler.timestamp_sampler import TimestampSampler
-from amber.unit.time import Time, TimeUnit
 from glob import glob
 from pathlib import Path
 from qdrant_client import QdrantClient
@@ -40,12 +38,10 @@ class ImageSearch:
         qdrant_port: int = 5555,
         preload_rosbag_directory: Optional[str] = None,
         model: str = "blip2",
-        sampling_duration: float = 5.0,
     ) -> None:
         # make data saving directory
         self.data_directory = "/tmp/image_search"
         self.mcap_hashes: List[str] = []
-        self.sampling_duration = sampling_duration
         if not os.path.exists(self.data_directory):
             os.makedirs(self.data_directory)
 
@@ -241,13 +237,11 @@ class ImageSearch:
                     collection_name=self.model,
                     vectors_config=VectorParams(size=512, distance=Distance.COSINE),
                 )
+        batch_size = 1
         dataloader = torch.utils.data.DataLoader(
-            dataset,
-            batch_sampler=TimestampSampler(
-                dataset, Time(self.sampling_duration, TimeUnit.SECOND)
-            ),
+            dataset, batch_size=batch_size, shuffle=False, num_workers=0
         )
-        for _, sample_batched in enumerate(dataloader):
+        for i_batch, sample_batched in enumerate(dataloader):
             for sample_index, sample in enumerate(
                 tqdm(sample_batched, desc="processing images in rosbag.")
             ):
@@ -274,8 +268,12 @@ class ImageSearch:
                                 "image_path": image_path,
                                 "image_id": image_id,
                                 "mcap_path": dataset.rosbag_files,
-                                "duration_from_rosbag_start": self.sampling_duration
-                                * sample_index,
+                                "duration_from_rosbag_start": (
+                                    dataset.get_metadata(
+                                        i_batch * batch_size + sample_index
+                                    ).publish_time
+                                    - dataset.get_first_timestamp()
+                                ).total_seconds(),
                             },
                         )
                     )
@@ -291,12 +289,10 @@ if __name__ == "__main__":
     parser.add_argument("--port", default=5555, help="connection port of the qdrant")
     parser.add_argument("--model", choices=["blip2", "clip"], default="blip2")
     parser.add_argument("--rosbag_directory", default=None)
-    parser.add_argument("--sampling_duration", default=5.0, type=float)
     args = parser.parse_args()
     app = ImageSearch(
         qdrant_port=args.port,
         preload_rosbag_directory=args.rosbag_directory,
         model=args.model,
-        sampling_duration=args.sampling_duration,
     )
     app.show_gradio_ui()
