@@ -1,5 +1,5 @@
 import os
-from torch.utils.data import Dataset
+from torch.utils.data import IterableDataset
 from typing import Any, List, Optional
 from yaml import safe_load  # type: ignore
 from amber.exception import CertificationError
@@ -20,7 +20,7 @@ class MessageMetaData(JSONWizard):  # type: ignore
     )  # Unix epoch time
 
 
-class Rosbag2Dataset(Dataset):  # type: ignore
+class Rosbag2Dataset(IterableDataset):  # type: ignore
     message_metadata: List[MessageMetaData] = []
     compressed: bool = False
 

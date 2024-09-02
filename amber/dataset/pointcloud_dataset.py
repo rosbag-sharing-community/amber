@@ -25,7 +25,7 @@ class ReadPointCloudConfig(YAMLWizard):  # type: ignore
 
 
 class PointcloudDataset(Rosbag2Dataset):  # type: ignore
-    pointclouds: List[torch.Tensor] = []
+    num_pointclouds = 0
     config: ReadPointCloudConfig = ReadPointCloudConfig()
 
     def __init__(
@@ -43,18 +43,14 @@ class PointcloudDataset(Rosbag2Dataset):  # type: ignore
             transform,
             target_transform,
         )
-        self.read_pointclouds()
+        self.count_pointclouds()
 
-    def read_pointclouds(self) -> None:
+    def count_pointclouds(self) -> None:
         for rosbag_file in self.rosbag_files:
             reader = NonSeekingReader(rosbag_file)
             for schema, channel, message in reader.iter_messages():
                 if channel.topic in self.config.get_pointcloud_topics():
-                    self.pointclouds.append(
-                        decode_pointcloud_message(
-                            message, schema, self.config.compressed
-                        )
-                    )
+                    self.num_pointclouds = self.num_pointclouds + 1
                     self.message_metadata.append(
                         MessageMetaData.from_dict(
                             {
@@ -69,10 +65,15 @@ class PointcloudDataset(Rosbag2Dataset):  # type: ignore
                             }
                         )
                     )
-        assert len(self.pointclouds) == len(self.message_metadata)
 
     def __len__(self) -> int:
-        return len(self.pointclouds)
+        return self.num_pointclouds
 
-    def __getitem__(self, index: int) -> torch.Tensor:
-        return self.pointclouds[index]
+    def __iter__(self) -> torch.Tensor:
+        for rosbag_file in self.rosbag_files:
+            reader = NonSeekingReader(rosbag_file)
+            for schema, channel, message in reader.iter_messages():
+                if channel.topic in self.config.get_pointcloud_topics():
+                    yield decode_pointcloud_message(
+                        message, schema, self.config.compressed
+                    )
