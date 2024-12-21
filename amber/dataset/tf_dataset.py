@@ -5,14 +5,14 @@ from dataclass_wizard import YAMLWizard
 
 @dataclass
 class ReadTfTopicConfig(YAMLWizard):  # type: ignore
-    tf_topic_config: TfTopicConfig = TfTopicConfig()
+    tf_topics: TfTopicConfig = TfTopicConfig()
     compressed: bool = True
 
     def get_tf_topic(self) -> str:
-        return self.tf_topic_config.topic_name
+        return self.tf_topics.topic_name
 
     def get_static_tf_topic(self) -> str:
-        return self.tf_topic_config.static_tf_topic_name
+        return self.tf_topics.static_tf_topic_name
 
 
 class TfDataset(Rosbag2Dataset):  # type: ignore
