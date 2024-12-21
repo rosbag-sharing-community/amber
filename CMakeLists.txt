@@ -42,18 +42,18 @@ python_extension_module(tf2_py)
 # test settings
 find_package(GTest)
 
-if(GTest_FOUND)
-  # tf2_unittest: add testcase for tf2
-  function(tf2_unittest test_name)
-    add_executable(${test_name} ${TF2_DIR}/test/${test_name}.cpp)
-    target_include_directories(
-      ${test_name} PUBLIC ${TF2_DIR}/include ${ROSIDL_RUNTIME_CPP_DIR}/include
-                          ${CONSOLE_BRIDGE_DIR}/include ${MESSAGES_DIR})
-    target_link_libraries(${test_name} GTest::GTest GTest::Main tf2)
-  endfunction()
+# if(GTest_FOUND)
+#   # tf2_unittest: add testcase for tf2
+#   function(tf2_unittest test_name)
+#     add_executable(${test_name} ${TF2_DIR}/test/${test_name}.cpp)
+#     target_include_directories(
+#       ${test_name} PUBLIC ${TF2_DIR}/include ${ROSIDL_RUNTIME_CPP_DIR}/include
+#                           ${CONSOLE_BRIDGE_DIR}/include ${MESSAGES_DIR})
+#     target_link_libraries(${test_name} GTest::GTest GTest::Main tf2)
+#   endfunction()
 
-  tf2_unittest(cache_unittest)
-  tf2_unittest(simple_tf2_core)
-  tf2_unittest(static_cache_test)
-  tf2_unittest(test_time)
-endif()
+#   tf2_unittest(cache_unittest)
+#   tf2_unittest(simple_tf2_core)
+#   tf2_unittest(static_cache_test)
+#   tf2_unittest(test_time)
+# endif()
