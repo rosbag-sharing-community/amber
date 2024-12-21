@@ -1121,30 +1121,30 @@ bool staticInit()
   tf2_timeoutexception = stringToPython("tf2.TimeoutException");
 #endif
 
-  pModulerclpy = pythonImport("rclpy");
-  pModulerclpytime = pythonImport("rclpy.time");
-  pModulebuiltininterfacesmsgs = pythonImport("builtin_interfaces.msg");
-  pModulegeometrymsgs = pythonImport("geometry_msgs.msg");
+  // pModulerclpy = pythonImport("rclpy");
+  // pModulerclpytime = pythonImport("rclpy.time");
+  // pModulebuiltininterfacesmsgs = pythonImport("builtin_interfaces.msg");
+  // pModulegeometrymsgs = pythonImport("geometry_msgs.msg");
 
-  if (pModulerclpy == nullptr) {
-    printf("Cannot load rclpy module");
-    return false;
-  }
+  // if (pModulerclpy == nullptr) {
+  //   printf("Cannot load rclpy module");
+  //   return false;
+  // }
 
-  if (pModulerclpytime == nullptr) {
-    printf("Cannot load rclpy.time.Time module");
-    return false;
-  }
+  // if (pModulerclpytime == nullptr) {
+  //   printf("Cannot load rclpy.time.Time module");
+  //   return false;
+  // }
 
-  if (pModulegeometrymsgs == nullptr) {
-    printf("Cannot load geometry_msgs module");
-    return false;
-  }
+  // if (pModulegeometrymsgs == nullptr) {
+  //   printf("Cannot load geometry_msgs module");
+  //   return false;
+  // }
 
-  if (pModulebuiltininterfacesmsgs == nullptr) {
-    printf("Cannot load builtin_interfaces module");
-    return false;
-  }
+  // if (pModulebuiltininterfacesmsgs == nullptr) {
+  //   printf("Cannot load builtin_interfaces module");
+  //   return false;
+  // }
 
   if (PyType_Ready(&buffer_core_Type) != 0) {
     return false;
