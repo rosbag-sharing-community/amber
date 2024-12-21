@@ -11,7 +11,6 @@ output.mp4
 
 # remote rosbag
 rosbag/ford_with_annotation
-rosbag
 
 # tensorbord directory
 runs

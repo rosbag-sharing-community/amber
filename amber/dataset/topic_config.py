@@ -17,3 +17,9 @@ class PointCloudType(Enum):
 class PointcloudTopicConfig(YAMLWizard):  # type: ignore
     topic_name: str = ""
     pointcloud_type: PointCloudType = PointCloudType.XYZ
+
+
+@dataclass
+class TfTopicConfig(YAMLWizard):  # type: ignore
+    topic_name: str = "/tf"
+    static_tf_topic_name: str = "/tf_static"
