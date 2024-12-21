@@ -15,6 +15,8 @@
 #ifndef BUILTIN_INTERFACES__MSG__TIME_HPP_
 #define BUILTIN_INTERFACES__MSG__TIME_HPP_
 
+#include <cstdint>
+
 namespace builtin_interfaces
 {
 namespace msg

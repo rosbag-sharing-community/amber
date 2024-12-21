@@ -12,24 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef STD_MSGS__MSG__HEADER_HPP_
-#define STD_MSGS__MSG__HEADER_HPP_
+#include <geometry_msgs/msg/transform_stamped.hpp>
 
-#include <builtin_interfaces/msg/time.hpp>
-#include <string>
-#include <cstdint>
+#include <pybind11/pybind11.h>
 
-namespace std_msgs
+PYBIND11_MODULE(geometry_msgs, m)
 {
-namespace msg
-{
-struct Header
-{
-  std::uint32_t seq;
-  builtin_interfaces::msg::Time stamp;
-  std::string frame_id;
-};
-} // namespace msg
-} // namespace std_msgs
-
-#endif  // STD_MSGS__MSG__HEADER_HPP_
+    m.doc() = "python package compatible with geometry_msgs";
+}

@@ -40,5 +40,11 @@ install(TARGETS tf2_py LIBRARY DESTINATION tf2_py)
 python_extension_module(tf2)
 python_extension_module(tf2_py)
 
+find_package(pybind11 REQUIRED)
+pybind11_add_module(geometry_msgs ${MESSAGES_DIR}/geometry_msgs.cpp)
+target_include_directories(
+  geometry_msgs
+  PUBLIC ${MESSAGES_DIR})
+
 # test settings
 find_package(GTest)

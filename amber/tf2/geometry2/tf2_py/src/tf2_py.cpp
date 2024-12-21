@@ -78,7 +78,6 @@ inline std::string stringFromPython(PyObject * input)
     } \
   } while (0)
 
-static PyObject * pModulerclpy = nullptr;
 static PyObject * pModulerclpytime = nullptr;
 static PyObject * pModulebuiltininterfacesmsgs = nullptr;
 static PyObject * pModulegeometrymsgs = nullptr;
