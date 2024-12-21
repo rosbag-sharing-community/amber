@@ -38,21 +38,6 @@ inline std::string stringFromPython(PyObject * input)
   return std::string(data, size);
 }
 
-/// \brief Imports a python module by name.
-/// \note The caller is responsible for decref'ing the returned object.
-/// \note If the return value is NULL then an exception is set.
-/// \return a reference to the imported module.
-inline PyObject * pythonImport(const std::string & name)
-{
-  PyObject * py_name = stringToPython(name);
-  if (!py_name) {
-    return nullptr;
-  }
-  PyObject * module = PyImport_Import(py_name);
-  Py_XDECREF(py_name);
-  return module;
-}
-
 // Run x (a tf method, catching TF's exceptions and reraising them as Python exceptions)
 //
 #define WRAP(x) \
@@ -1120,31 +1105,6 @@ bool staticInit()
   tf2_invalidargumentexception = stringToPython("tf2.InvalidArgumentException");
   tf2_timeoutexception = stringToPython("tf2.TimeoutException");
 #endif
-
-  // pModulerclpy = pythonImport("rclpy");
-  // pModulerclpytime = pythonImport("rclpy.time");
-  // pModulebuiltininterfacesmsgs = pythonImport("builtin_interfaces.msg");
-  // pModulegeometrymsgs = pythonImport("geometry_msgs.msg");
-
-  // if (pModulerclpy == nullptr) {
-  //   printf("Cannot load rclpy module");
-  //   return false;
-  // }
-
-  // if (pModulerclpytime == nullptr) {
-  //   printf("Cannot load rclpy.time.Time module");
-  //   return false;
-  // }
-
-  // if (pModulegeometrymsgs == nullptr) {
-  //   printf("Cannot load geometry_msgs module");
-  //   return false;
-  // }
-
-  // if (pModulebuiltininterfacesmsgs == nullptr) {
-  //   printf("Cannot load builtin_interfaces module");
-  //   return false;
-  // }
 
   if (PyType_Ready(&buffer_core_Type) != 0) {
     return false;
