@@ -5,6 +5,7 @@ on:
       - .github/workflows/pytest.yaml
       - amber/**
       - tests/**
+      - pyproject.toml
   push:
     branches:
       - master
