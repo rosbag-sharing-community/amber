@@ -18,3 +18,6 @@ runs
 
 # coverage
 tests/coverage.xml
+
+# editor
+.vscode

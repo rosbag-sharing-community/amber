@@ -45,6 +45,7 @@ pybind11_add_module(geometry_msgs ${MESSAGES_DIR}/geometry_msgs.cpp)
 target_include_directories(
   geometry_msgs
   PUBLIC ${MESSAGES_DIR})
+install(TARGETS geometry_msgs LIBRARY DESTINATION geometry_msgs)
 
 # test settings
 find_package(GTest)

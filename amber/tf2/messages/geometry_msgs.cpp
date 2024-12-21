@@ -19,4 +19,6 @@
 PYBIND11_MODULE(geometry_msgs, m)
 {
     m.doc() = "python package compatible with geometry_msgs";
+    namespace py = pybind11;
+    py::class_<geometry_msgs::msg::TransformStamped>(m, "TransformStamped");
 }
