@@ -12,12 +12,6 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
                       -Woverloaded-virtual)
 endif()
 
-find_package(PythonExtensions REQUIRED)
-include(FindProtobuf REQUIRED)
-
-set(PROTO_FILES "amber/proto/annotation.proto")
-protobuf_generate_python(PROTO_PY ${PROTO_FILES})
-
 set(MESSAGES_DIR amber/tf2/messages)
 set(ROSIDL_RUNTIME_CPP_DIR amber/tf2/rosidl_runtime_cpp)
 set(CONSOLE_BRIDGE_DIR amber/tf2/console_bridge)
