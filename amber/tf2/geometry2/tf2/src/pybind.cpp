@@ -20,6 +20,11 @@ PYBIND11_MODULE(tf2_amber, m)
     m.doc() = "python package compatible with tf2";
     namespace py = pybind11;
 
+    // Functions/Classes related to time.
+    py::class_<tf2::Duration>(m, "Duration");
+    m.def("durationFromSec", &tf2::durationFromSec, "Construct tf2::Duration from second");
+    
+    // ROS 2 compatible messages
     py::class_<builtin_interfaces::msg::Time>(m, "Time")
         .def_readwrite("sec", &builtin_interfaces::msg::Time::sec)
         .def_readwrite("nanosec", &builtin_interfaces::msg::Time::nanosec);  
