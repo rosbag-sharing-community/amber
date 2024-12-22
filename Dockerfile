@@ -1,4 +1,4 @@
-FROM nvidia/cuda:11.8.0-base-ubuntu22.04 as build-stage
+FROM nvidia/cuda:12.4.0-base-ubuntu22.04 as build-stage
 
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y python3 python3-pip git libopencv-dev && \
     apt-get clean && \

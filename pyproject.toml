@@ -54,9 +54,9 @@ setuptools= "58.2.0"
 tensorboard = "^2.14.0"
 tensorboardx = "^2.6.2.2"
 threadpoolctl = "^3.2.0"
-torch = {version = "2.0.1+cu118", source = "torch_cu118"}
-torchaudio = {version = "2.0.2+cu118", source = "torch_cu118"}
-torchvision = {version = "0.15.2+cu118", source = "torch_cu118"}
+torch = {version = "2.5.0+cu124", source = "torch_cu124"}
+torchaudio = {version = "2.5.0+cu124", source = "torch_cu124"}
+torchvision = {version = "0.20.0+cu124", source = "torch_cu124"}
 transformers = ">=4.25.0,<4.27"
 urllib3 = "^1.26.0"
 huggingface-hub = "0.25.2"
@@ -100,8 +100,8 @@ plantuml = "^0.3.0"
 amber = "amber.cli:main"
 
 [[tool.poetry.source]]
-name = "torch_cu118"
-url = "https://download.pytorch.org/whl/cu118"
+name = "torch_cu124"
+url = "https://download.pytorch.org/whl/cu124"
 priority = "explicit"
 
 [build-system]
