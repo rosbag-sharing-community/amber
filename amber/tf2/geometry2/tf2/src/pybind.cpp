@@ -65,6 +65,13 @@ PYBIND11_MODULE(tf2_amber, m)
     // Functions/Classes related to BufferCore
     py::class_<tf2::BufferCore>(m, "BufferCore")
         .def(py::init<tf2::Duration>())
-        .def("setTransform", &tf2::BufferCore::setTransform);
+        .def("setTransform", &tf2::BufferCore::setTransform)
+        .def("lookupTransform", [](const tf2::BufferCore &self,
+            const std::string &target_frame,
+            const std::string &source_frame,
+            const tf2::TimePoint &time) {
+                return self.lookupTransform(target_frame, source_frame, time);
+            })
+        .def("getAllFrameNames", &tf2::BufferCore::getAllFrameNames);
 }
 
