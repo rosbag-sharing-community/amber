@@ -26,8 +26,7 @@ pybind11_add_module(
   ${TF2_DIR}/src/static_cache.cpp 
   ${TF2_DIR}/src/buffer_core.cpp
   ${TF2_DIR}/src/pybind.cpp
-  ${CONSOLE_BRIDGE_DIR}/src/console.cpp
-  ${MESSAGES_DIR}/ros2_compatible_messages.cpp)
+  ${CONSOLE_BRIDGE_DIR}/src/console.cpp)
 
 target_include_directories(
   tf2_amber PUBLIC ${TF2_DIR}/include ${ROSIDL_RUNTIME_CPP_DIR}/include
