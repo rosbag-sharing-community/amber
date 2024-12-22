@@ -52,48 +52,48 @@ jobs:
           fail_ci_if_error: false # optional (default = false)
           verbose: true # optional (default = false)
           token: ${{ secrets.CODECOV_TOKEN }}
-  build:
-    name: build
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: ["3.10.12"]
-        poetry-version: ["1.5.1"]
-        os: [ubuntu-22.04]
-    runs-on: ${{ matrix.os }}
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/workflows/actions/cleanup_runner
-      - uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python-version }}
-      - uses: abatilo/actions-poetry@v2
-        with:
-          poetry-version: ${{ matrix.poetry-version }}
-      - name: install
-        run: poetry install
-      - name: build
-        run: |
-          poetry lock
-          poetry export -f requirements.txt --output requirements.txt --without-hashes
-          poetry build -f wheel
-          pip wheel --wheel-dir=dist -r requirements.txt
-      - uses: actions/upload-artifact@v3
-        with:
-          name: package
-          path: "dist/*"
-      - name: Setup Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GHCR_TOKEN }}
-      - name: Build and push
-        uses: docker/build-push-action@v3
-        with:
-          tags: ghcr.io/${{ github.repository_owner }}/amber:latest
-          no-cache: true
-          push: ${{ github.event_name != 'pull_request' }}
-          context: .
+  # build:
+  #   name: build
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       python-version: ["3.10.12"]
+  #       poetry-version: ["1.5.1"]
+  #       os: [ubuntu-22.04]
+  #   runs-on: ${{ matrix.os }}
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: ./.github/workflows/actions/cleanup_runner
+  #     - uses: actions/setup-python@v4
+  #       with:
+  #         python-version: ${{ matrix.python-version }}
+  #     - uses: abatilo/actions-poetry@v2
+  #       with:
+  #         poetry-version: ${{ matrix.poetry-version }}
+  #     - name: install
+  #       run: poetry install
+  #     - name: build
+  #       run: |
+  #         poetry lock
+  #         poetry export -f requirements.txt --output requirements.txt --without-hashes
+  #         poetry build -f wheel
+  #         pip wheel --wheel-dir=dist -r requirements.txt
+  #     - uses: actions/upload-artifact@v3
+  #       with:
+  #         name: package
+  #         path: "dist/*"
+  #     - name: Setup Docker Buildx
+  #       uses: docker/setup-buildx-action@v2
+  #     - name: Login to GitHub Container Registry
+  #       uses: docker/login-action@v2
+  #       with:
+  #         registry: ghcr.io
+  #         username: ${{ github.actor }}
+  #         password: ${{ secrets.GHCR_TOKEN }}
+  #     - name: Build and push
+  #       uses: docker/build-push-action@v3
+  #       with:
+  #         tags: ghcr.io/${{ github.repository_owner }}/amber:latest
+  #         no-cache: true
+  #         push: ${{ github.event_name != 'pull_request' }}
+  #         context: .
