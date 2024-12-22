@@ -71,7 +71,6 @@ PYBIND11_MODULE(tf2_amber, m)
             const std::string &source_frame,
             const tf2::TimePoint &time) {
                 return self.lookupTransform(target_frame, source_frame, time);
-            })
-        .def("getAllFrameNames", &tf2::BufferCore::getAllFrameNames);
+            });
 }
 
