@@ -16,7 +16,7 @@
 
 #include <pybind11/pybind11.h>
 
-PYBIND11_MODULE(ros2_compatible_messages, m)
+PYBIND11_MODULE(tf2_amber, m)
 {
     m.doc() = "python package compatible with geometry_msgs";
     namespace py = pybind11;

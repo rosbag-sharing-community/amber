@@ -18,34 +18,16 @@ set(CONSOLE_BRIDGE_DIR amber/tf2/console_bridge)
 set(TF2_DIR amber/tf2/geometry2/tf2)
 set(TF2_PY_DIR amber/tf2/geometry2/tf2_py)
 
-add_library(
-  tf2 STATIC
+find_package(pybind11 REQUIRED)
+pybind11_add_module(
+  tf2_amber
   ${TF2_DIR}/src/time.cpp ${TF2_DIR}/src/cache.cpp
   ${TF2_DIR}/src/static_cache.cpp ${TF2_DIR}/src/buffer_core.cpp
-  ${CONSOLE_BRIDGE_DIR}/src/console.cpp)
+  ${CONSOLE_BRIDGE_DIR}/src/console.cpp
+  ${MESSAGES_DIR}/ros2_compatible_messages.cpp)
 
 target_include_directories(
-  tf2 PUBLIC ${TF2_DIR}/include ${ROSIDL_RUNTIME_CPP_DIR}/include
+  tf2_amber PUBLIC ${TF2_DIR}/include ${ROSIDL_RUNTIME_CPP_DIR}/include
              ${CONSOLE_BRIDGE_DIR}/include ${MESSAGES_DIR})
 
-add_library(tf2_py STATIC
-  ${TF2_PY_DIR}/src/tf2_py.cpp)
-target_include_directories(
-  tf2_py
-  PUBLIC ${TF2_DIR}/include ${ROSIDL_RUNTIME_CPP_DIR}/include
-         ${CONSOLE_BRIDGE_DIR}/include ${MESSAGES_DIR} ${PYTHON_INCLUDE_DIRS})
-
-install(TARGETS tf2 LIBRARY DESTINATION tf2)
-install(TARGETS tf2_py LIBRARY DESTINATION tf2_py)
-python_extension_module(tf2)
-python_extension_module(tf2_py)
-
-find_package(pybind11 REQUIRED)
-pybind11_add_module(ros2_compatible_messages ${MESSAGES_DIR}/ros2_compatible_messages.cpp)
-target_include_directories(
-  ros2_compatible_messages
-  PUBLIC ${MESSAGES_DIR})
-install(TARGETS ros2_compatible_messages LIBRARY DESTINATION ros2_compatible_messages)
-
-# test settings
-find_package(GTest)
+install(TARGETS tf2_amber LIBRARY DESTINATION .)
