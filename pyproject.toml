@@ -157,5 +157,5 @@ prepare.help = "sets up a development environment"
 lint.cmd = "pre-commit run --all-files"
 lint.help = "runs linters (+ fix)"
 
-test.cmd  = "python run_gtests.py && pytest"
+test.cmd  = "pytest"
 test.help = "runs tests"
