@@ -23,9 +23,16 @@ PYBIND11_MODULE(tf2_amber, m)
     // Functions/Classes related to time.
     py::class_<tf2::Duration>(m, "Duration")
         .def("count", &tf2::Duration::count);
+    py::class_<tf2::TimePoint>(m, "TimePoint")
+        .def(py::init<tf2::Duration>());
+    m.def("get_now", &tf2::get_now, "Get tf2::TimePoint of the now.");
     m.def("durationFromSec", &tf2::durationFromSec, "Construct tf2::Duration from second");
-    
-    // ROS 2 compatible messages
+    m.def("timeFromSec", &tf2::timeFromSec, "Construct tf2::TimePoint from second");
+    m.def("durationToSec", &tf2::durationToSec, "convert tf2::Duration to double value");
+    m.def("timeToSec", &tf2::durationToSec, "convert tf2::TimePoint to double value");
+    m.def("displayTimePoint", &tf2::displayTimePoint, "convert tf2::TimePoint to string");
+
+    // ROS 2 compatible messages.
     py::class_<builtin_interfaces::msg::Time>(m, "Time")
         .def_readwrite("sec", &builtin_interfaces::msg::Time::sec)
         .def_readwrite("nanosec", &builtin_interfaces::msg::Time::nanosec);  
@@ -54,5 +61,10 @@ PYBIND11_MODULE(tf2_amber, m)
         .def_readwrite("header", &geometry_msgs::msg::TransformStamped::header)
         .def_readwrite("child_frame_id", &geometry_msgs::msg::TransformStamped::child_frame_id)
         .def_readwrite("transform", &geometry_msgs::msg::TransformStamped::transform);
+
+    // Functions/Classes related to BufferCore
+    py::class_<tf2::BufferCore>(m, "BufferCore")
+        .def(py::init<tf2::Duration>())
+        .def("setTransform", &tf2::BufferCore::setTransform);
 }
 
