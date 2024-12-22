@@ -21,7 +21,8 @@ PYBIND11_MODULE(tf2_amber, m)
     namespace py = pybind11;
 
     // Functions/Classes related to time.
-    py::class_<tf2::Duration>(m, "Duration");
+    py::class_<tf2::Duration>(m, "Duration")
+        .def("count", &tf2::Duration::count);
     m.def("durationFromSec", &tf2::durationFromSec, "Construct tf2::Duration from second");
     
     // ROS 2 compatible messages
