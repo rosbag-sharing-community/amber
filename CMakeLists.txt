@@ -41,11 +41,11 @@ python_extension_module(tf2)
 python_extension_module(tf2_py)
 
 find_package(pybind11 REQUIRED)
-pybind11_add_module(geometry_msgs ${MESSAGES_DIR}/geometry_msgs.cpp)
+pybind11_add_module(ros2_compatible_messages ${MESSAGES_DIR}/ros2_compatible_messages.cpp)
 target_include_directories(
-  geometry_msgs
+  ros2_compatible_messages
   PUBLIC ${MESSAGES_DIR})
-install(TARGETS geometry_msgs LIBRARY DESTINATION geometry_msgs)
+install(TARGETS ros2_compatible_messages LIBRARY DESTINATION ros2_compatible_messages)
 
 # test settings
 find_package(GTest)

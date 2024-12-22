@@ -16,7 +16,7 @@
 
 #include <pybind11/pybind11.h>
 
-PYBIND11_MODULE(geometry_msgs, m)
+PYBIND11_MODULE(ros2_compatible_messages, m)
 {
     m.doc() = "python package compatible with geometry_msgs";
     namespace py = pybind11;
