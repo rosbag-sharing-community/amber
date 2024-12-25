@@ -25,7 +25,9 @@ def get_poetry_venv_path() -> Path:
         venv_path = result.stdout.strip()
         return Path(venv_path)
     except subprocess.CalledProcessError as e:
-        raise RuntimeError(f"Failed to get Poetry virtual environment: {e.stderr}") from e
+        raise RuntimeError(
+            f"Failed to get Poetry virtual environment: {e.stderr}"
+        ) from e
 
 
 def build(setup_kwargs: Dict[str, Any]) -> None:
@@ -36,7 +38,9 @@ def build(setup_kwargs: Dict[str, Any]) -> None:
 
     # Get the installation directory for the Poetry virtual environment
     venv_path = get_poetry_venv_path()
-    dest_dir = venv_path / "lib" / f"python{sysconfig.get_python_version()}" / "site-packages"
+    dest_dir = (
+        venv_path / "lib" / f"python{sysconfig.get_python_version()}" / "site-packages"
+    )
 
     print("Copy from " + str(src_dir) + " to " + str(dest_dir))
 
