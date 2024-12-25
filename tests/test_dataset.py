@@ -4,6 +4,7 @@ from amber.dataset.images_and_annotations_dataset import (
     ReadImagesAndAnnotationsConfig,
 )
 from amber.dataset.pointcloud_dataset import PointcloudDataset, ReadPointCloudConfig
+from amber.dataset.tf_dataset import TfDataset, ReadTfTopicConfig
 from amber.dataset.rosbag2_dataset import download_rosbag
 from amber.dataset.conversion import image_to_tensor
 from torch.utils.data import DataLoader
@@ -76,6 +77,16 @@ def test_read_image_ford() -> None:
     )
     assert dataset.get_last_timestamp() == datetime.datetime(
         2017, 8, 4, 4, 49, 10, 155844, tzinfo=datetime.timezone.utc
+    )
+
+
+def test_read_tf() -> None:
+    current_path = Path(os.path.dirname(os.path.realpath(__file__)))
+    dataset = TfDataset(
+        str(current_path / "rosbag" / "ford" / "ford.mcap"),
+        ReadTfTopicConfig.from_yaml_file(
+            str(current_path / "rosbag" / "ford" / "read_tf.yaml")
+        ),
     )
 
 
