@@ -44,6 +44,10 @@ def build(setup_kwargs: Dict[str, Any]) -> None:
 
     print("Copy from " + str(src_dir) + " to " + str(dest_dir))
 
+    # Delete C-extensions copied in previous runs, just in case.
+    # remove_files(dest_dir, "**/*.pyd")
+    remove_files(dest_dir, "**/tf2_amber.*.so")
+
     # Copy built C-extensions back to the Poetry virtual environment.
     copy_files(src_dir, dest_dir, "**/*.pyd")
     copy_files(src_dir, dest_dir, "**/*.so")
