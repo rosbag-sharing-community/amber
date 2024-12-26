@@ -103,6 +103,7 @@ nav:
     - Read images: use_rosbag_as_dataset/read_images.md
     - Read images and annotation: use_rosbag_as_dataset/read_images_and_annotations.md
     - Read pointclouds: use_rosbag_as_dataset/read_pointclouds.md 
+    - Read tf: use_rosbag_as_dataset/read_tf.md
     - Sampling data by timestamp: use_rosbag_as_dataset/timestamp_sampler.md
   - Automation:
     - Automation: automation/automation.md
