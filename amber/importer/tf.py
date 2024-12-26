@@ -1,6 +1,10 @@
 from amber.dataset.schema import TFMessageSchema
 from amber.dataset.conversion import build_message_from_tf
 from tf2_amber import TransformStamped
+from mcap_ros2.writer import Writer as McapWriter
+from dataclasses import dataclass
+from dataclass_wizard import YAMLWizard
+import math
 
 
 @dataclass
@@ -9,29 +13,36 @@ class TfImporterConfig(YAMLWizard):  # type: ignore
 
 
 class TfImporter:
-    def __init__(self):
+    def __init__(self, config):
         self.config: TfImporterConfig = config
         self.file = open(self.config.rosbag_path, "wb")
         self.writer = McapWriter(self.file)
-        self.schema = writer.register_msgdef(
+        self.schema = self.writer.register_msgdef(
             TFMessageSchema.name, TFMessageSchema.schema_text
         )
+        self.index = 0
 
-    def __del__(self):
+    # self.writer.finish throw error when we use it in destructor.
+    def finish(self):
         self.writer.finish()
         self.file.close()
 
     def write(self, transform: TransformStamped):
-        get_nanoseconds_timestamp: Callable[[], int] = lambda: math.floor(
-            Time(self.capture.get(cv2.CAP_PROP_POS_MSEC), TimeUnit.MILLISECOND).get(
-                TimeUnit.NANOSECOND
-            )
-        )
         self.writer.write_message(
             topic="/tf",
             schema=self.schema,
             message=build_message_from_tf([transform]),
-            log_time=get_nanoseconds_timestamp(),
-            publish_time=get_nanoseconds_timestamp(),
-            sequence=i,
+            log_time=0,
+            publish_time=0,
+            sequence=self.index,
         )
+        self.index = self.index + 1
+
+
+if __name__ == "__main__":
+    pass
+    # importer = TfImporter(TfImporterConfig())
+    # importer.write(TransformStamped())
+    # importer.write(TransformStamped())
+    # importer.write(TransformStamped())
+    # importer.close()
