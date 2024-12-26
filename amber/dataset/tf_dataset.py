@@ -14,6 +14,8 @@ class ReadTfTopicConfig(YAMLWizard):  # type: ignore
     tf_topic: TfTopicConfig = TfTopicConfig()
     compressed: bool = True
     sampling_duration: float = 0.01666666666  # 60Hz
+    target_frame: str = ""
+    source_frame: str = ""
 
     def get_tf_topic(self) -> str:
         return self.tf_topic.topic_name

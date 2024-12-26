@@ -1,3 +1,5 @@
 tf_topics:
-  - topic_name: "/tf"
-  - static_tf_topic_name: "/tf_static"
+  topic_name: "/tf"
+  static_tf_topic_name: "/tf_static"
+  target_frame: body
+  source_frame: map
