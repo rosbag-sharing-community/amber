@@ -9,6 +9,7 @@ from tf2_amber import BufferCore, timeFromSec, durationFromSec, TransformStamped
 import sys
 import torch
 from typing import List
+import datetime
 
 
 @dataclass
@@ -82,13 +83,27 @@ class TfDataset(Rosbag2Dataset):  # type: ignore
                 self.transforms.append(transform)
             except:
                 pass
+            self.message_metadata.append(
+                MessageMetaData.from_dict(
+                    {
+                        "publish_time": datetime.datetime.fromtimestamp(
+                            timestamp_nanosec.get(TimeUnit.SECOND),
+                            tz=datetime.timezone.utc,
+                        ),
+                        "topic": "/tf",
+                        "rosbag_path": "N/A",
+                    }
+                )
+            )
 
     def __len__(self) -> int:
-        return 0
+        return len(self.transforms)
 
     def __iter__(self) -> torch.Tensor:
         current_index = 0
-        return torch.zeros(0)
+        for transfrom in self.transforms:
+            current_index = current_index + 1
+            yield torch.zeros(0)
 
     def get_sampled_timestamps(
         self, first_timestamp: Time, last_timestamp: Time, sampling_duration: Time

@@ -88,6 +88,12 @@ def test_read_tf() -> None:
             str(current_path / "rosbag" / "ford" / "read_tf.yaml")
         ),
     )
+    dataloader = DataLoader(dataset, batch_size=1, shuffle=False, num_workers=0)
+    count = 0
+    for i_batch, sample_batched in enumerate(dataloader):
+        for sample in sample_batched:
+            count = count + 1
+    assert count == 1636
 
 
 @pytest.mark.skipif(
