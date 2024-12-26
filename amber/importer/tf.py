@@ -1,4 +1,5 @@
 from amber.dataset.schema import TFMessageSchema
+from amber.dataset.conversion import build_message_from_tf
 from tf2_amber import TransformStamped
 
 
@@ -29,7 +30,7 @@ class TfImporter:
         self.writer.write_message(
             topic="/tf",
             schema=self.schema,
-            message="",
+            message=build_message_from_tf([transform]),
             log_time=get_nanoseconds_timestamp(),
             publish_time=get_nanoseconds_timestamp(),
             sequence=i,

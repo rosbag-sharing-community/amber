@@ -303,7 +303,5 @@ def build_message_from_transform_stamped(
     }
 
 
-# def build_message_from_tf(transform_stamped: tf2_amber.TransformStamped):
-#     return {
-#         "header",
-#     }
+def build_message_from_tf(transforms: List[tf2_amber.Transform]):
+    return {"transforms": transforms}
