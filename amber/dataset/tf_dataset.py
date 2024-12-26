@@ -90,7 +90,7 @@ class TfDataset(Rosbag2Dataset):  # type: ignore
                             timestamp_nanosec.get(TimeUnit.SECOND),
                             tz=datetime.timezone.utc,
                         ),
-                        "topic": "/tf",
+                        "topic": "N/A",
                         "rosbag_path": "N/A",
                     }
                 )
