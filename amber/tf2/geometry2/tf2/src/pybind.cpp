@@ -44,6 +44,12 @@ PYBIND11_MODULE(tf2_amber, m)
         .def_readwrite("nanosec", &builtin_interfaces::msg::Time::nanosec);  
 
     py::class_<std_msgs::msg::Header>(m, "Header")
+        .def(py::init([](std::uint32_t seq, const builtin_interfaces::msg::Time& stamp, const std::string& frame_id) {
+            return std_msgs::msg::Header(seq, stamp, frame_id);
+        }))
+        .def(py::init([]() {
+            return std_msgs::msg::Header();
+        }))
         .def_readwrite("seq", &std_msgs::msg::Header::seq)
         .def_readwrite("stamp", &std_msgs::msg::Header::stamp)
         .def_readwrite("frame_id", &std_msgs::msg::Header::frame_id);

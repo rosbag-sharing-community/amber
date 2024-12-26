@@ -28,6 +28,10 @@ struct Header
   std::uint32_t seq;
   builtin_interfaces::msg::Time stamp;
   std::string frame_id;
+  
+  Header() : seq(0), stamp(), frame_id("") {}
+  Header(std::uint32_t seq, const builtin_interfaces::msg::Time& stamp, const std::string& frame_id)
+      : seq(seq), stamp(stamp), frame_id(frame_id) {}
 };
 } // namespace msg
 } // namespace std_msgs
