@@ -1,5 +1,6 @@
 from amber.dataset.rosbag2_dataset import Rosbag2Dataset, MessageMetaData
 from amber.dataset.topic_config import TfTopicConfig
+from amber.dataset.conversion import build_transform_stamped_message
 from dataclass_wizard import YAMLWizard
 from tf2_amber import BufferCore, durationFromSec, TransformStamped
 from dataclasses import dataclass
@@ -39,6 +40,9 @@ class TfDataset(Rosbag2Dataset):  # type: ignore
             for schema, channel, message in reader.iter_messages():
                 if channel.topic in [self.config.get_tf_topic()]:
                     # self.tf_buffer.setTransform()
+                    build_transform_stamped_message(
+                        message, schema, self.config.compressed
+                    )
                     pass
                 if channel.topic in [self.config.get_static_tf_topic()]:
                     pass

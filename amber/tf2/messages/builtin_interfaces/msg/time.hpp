@@ -23,6 +23,9 @@ namespace msg
 {
 struct Time
 {
+  Time(std::int32_t sec, std::uint32_t nanosec) : sec(sec), nanosec(nanosec) {}
+  Time() : sec(0), nanosec(0) {}
+
   std::int32_t sec;
   std::uint32_t nanosec;
 };

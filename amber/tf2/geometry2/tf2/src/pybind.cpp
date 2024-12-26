@@ -34,6 +34,12 @@ PYBIND11_MODULE(tf2_amber, m)
 
     // ROS 2 compatible messages.
     py::class_<builtin_interfaces::msg::Time>(m, "Time")
+        .def(py::init([](int sec, unsigned int nanosec) {
+            return builtin_interfaces::msg::Time(sec, nanosec);
+        }))
+        .def(py::init([]() {
+            return builtin_interfaces::msg::Time();
+        }))
         .def_readwrite("sec", &builtin_interfaces::msg::Time::sec)
         .def_readwrite("nanosec", &builtin_interfaces::msg::Time::nanosec);  
 

@@ -231,7 +231,11 @@ def build_message_from_image(
     }
 
 
-def decode_transform_stamped_message(
+def build_transform_stamped_message(
     message: Message, schema: Schema, decompress: bool
-) -> bool:
-    return True
+) -> TransformStamped:
+    tf_message: Any = decode_message(message, schema, decompress)
+    tf_amber_message: TransformStamped = TransformStamped()
+    print(tf_message)
+    # transform_stamped_message.header.frame_id = tf_message.header.frame_id
+    return tf_amber_message
