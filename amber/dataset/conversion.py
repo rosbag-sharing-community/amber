@@ -236,7 +236,6 @@ def build_transform_stamped_message(
 ) -> List[tf2_amber.TransformStamped]:
     tf_messages: Any = decode_message(message, schema, decompress)
     tf_amber_messages: List[tf2_amber.TransformStamped] = []
-    # transform_stamped_message.header.frame_id = tf_message.header.frame_id
     for message in tf_messages.transforms:
         tf_amber_message = tf2_amber.TransformStamped(
             tf2_amber.Header(

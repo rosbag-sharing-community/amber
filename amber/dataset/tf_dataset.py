@@ -39,13 +39,19 @@ class TfDataset(Rosbag2Dataset):  # type: ignore
             reader = NonSeekingReader(rosbag_file)
             for schema, channel, message in reader.iter_messages():
                 if channel.topic in [self.config.get_tf_topic()]:
-                    # self.tf_buffer.setTransform()
-                    build_transform_stamped_message(
+                    for tf_amber_message in build_transform_stamped_message(
                         message, schema, self.config.compressed
-                    )
-                    pass
+                    ):
+                        self.tf_buffer.setTransform(
+                            tf_amber_message, "Authority undetectable", False
+                        )
                 if channel.topic in [self.config.get_static_tf_topic()]:
-                    pass
+                    for tf_amber_message in build_transform_stamped_message(
+                        message, schema, self.config.compressed
+                    ):
+                        self.tf_buffer.setTransform(
+                            tf_amber_message, "Authority undetectable", True
+                        )
 
     def __len__(self) -> int:
         return 0
