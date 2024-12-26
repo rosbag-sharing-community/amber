@@ -70,6 +70,13 @@ class TfDataset(Rosbag2Dataset):  # type: ignore
             Time(float(last_timestamp), TimeUnit.NANOSECOND),
             Time(self.config.sampling_duration, TimeUnit.SECOND),
         )
+        for timestamp in sampled_timestamps:
+            timestamp_nanosec = Time(float(timestamp), TimeUnit.NANOSECOND)
+            tf_buffer.lookupTransform(
+                self.config.target_frame,
+                self.config.source_frame,
+                durationFromSec(timestamp_nanosec.get(TimeUnit.SECOND)),
+            )
 
     def __len__(self) -> int:
         return 0
