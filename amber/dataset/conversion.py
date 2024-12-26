@@ -16,6 +16,7 @@ import cv2
 import io
 import open3d
 from struct import unpack
+from tf2_amber import TransformStamped, Transform, Quaternion, Vector3
 
 
 def compress_message(message: Message) -> Message:
@@ -228,3 +229,9 @@ def build_message_from_image(
         "step": len(data) // int(image.shape[0]),
         "data": data.tolist(),
     }
+
+
+def decode_transform_stamped_message(
+    message: Message, schema: Schema, decompress: bool
+) -> bool:
+    return True
