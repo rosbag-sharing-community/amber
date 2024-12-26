@@ -55,6 +55,12 @@ PYBIND11_MODULE(tf2_amber, m)
         .def_readwrite("frame_id", &std_msgs::msg::Header::frame_id);
 
     py::class_<geometry_msgs::msg::Vector3>(m, "Vector3")
+        .def(py::init([](double x, double y, double z) {
+            return geometry_msgs::msg::Vector3(x, y, z);
+        }))
+        .def(py::init([]() {
+            return geometry_msgs::msg::Vector3();
+        }))
         .def_readwrite("x", &geometry_msgs::msg::Vector3::x)
         .def_readwrite("y", &geometry_msgs::msg::Vector3::y)
         .def_readwrite("z", &geometry_msgs::msg::Vector3::z);
