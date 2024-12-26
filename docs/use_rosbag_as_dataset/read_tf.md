@@ -26,3 +26,18 @@ for i_batch, sample_batched in enumerate(dataloader):
     for sample in sample_batched:
         count = count + 1
 ```
+
+## Output tensor
+
+The output tensor has 7 dimensions.
+
+```python
+torch.Tensor([
+    transform.translation.x, 
+    transform.translation.y, 
+    transform.translation.z
+    transform.rotation.x,
+    transform.rotation.y
+    transform.rotation.z
+    transform.rotation.w])
+```
