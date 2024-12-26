@@ -5,7 +5,7 @@ from amber.unit.time import Time, TimeUnit
 from dataclass_wizard import YAMLWizard
 from dataclasses import dataclass
 from mcap.reader import NonSeekingReader
-from tf2_amber import BufferCore, durationFromSec, TransformStamped
+from tf2_amber import BufferCore, timeFromSec, durationFromSec, TransformStamped
 import sys
 import torch
 from typing import List
@@ -72,11 +72,14 @@ class TfDataset(Rosbag2Dataset):  # type: ignore
         )
         for timestamp in sampled_timestamps:
             timestamp_nanosec = Time(float(timestamp), TimeUnit.NANOSECOND)
-            tf_buffer.lookupTransform(
-                self.config.target_frame,
-                self.config.source_frame,
-                durationFromSec(timestamp_nanosec.get(TimeUnit.SECOND)),
-            )
+            try:
+                transform = tf_buffer.lookupTransform(
+                    self.config.target_frame,
+                    self.config.source_frame,
+                    timeFromSec(timestamp_nanosec.get(TimeUnit.SECOND)),
+                )
+            except:
+                pass
 
     def __len__(self) -> int:
         return 0
