@@ -66,6 +66,12 @@ PYBIND11_MODULE(tf2_amber, m)
         .def_readwrite("z", &geometry_msgs::msg::Vector3::z);
 
     py::class_<geometry_msgs::msg::Quaternion>(m, "Quaternion")
+        .def(py::init([](double x, double y, double z, double w) {
+            return geometry_msgs::msg::Quaternion(x, y, z, w);
+        }))
+        .def(py::init([]() {
+            return geometry_msgs::msg::Quaternion();
+        }))
         .def_readwrite("x", &geometry_msgs::msg::Quaternion::x)
         .def_readwrite("y", &geometry_msgs::msg::Quaternion::y)
         .def_readwrite("z", &geometry_msgs::msg::Quaternion::z)

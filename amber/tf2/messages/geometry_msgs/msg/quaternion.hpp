@@ -25,6 +25,9 @@ struct Quaternion
   double y = 0;
   double z = 0;
   double w = 1;
+
+  Quaternion() : x(0), y(0), z(0), w(1) {}
+  Quaternion(double x, double y, double z, double w) : x(x), y(y), z(z), w(w) {}
 };
 } // namespace msg
 } // namespace geometry_msgs
