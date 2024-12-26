@@ -103,7 +103,17 @@ class TfDataset(Rosbag2Dataset):  # type: ignore
         current_index = 0
         for transfrom in self.transforms:
             current_index = current_index + 1
-            yield torch.zeros(0)
+            yield torch.Tensor(
+                [
+                    transfrom.transform.translation.x,
+                    transfrom.transform.translation.y,
+                    transfrom.transform.translation.z,
+                    transfrom.transform.rotation.x,
+                    transfrom.transform.rotation.y,
+                    transfrom.transform.rotation.z,
+                    transfrom.transform.rotation.w,
+                ]
+            )
 
     def get_sampled_timestamps(
         self, first_timestamp: Time, last_timestamp: Time, sampling_duration: Time

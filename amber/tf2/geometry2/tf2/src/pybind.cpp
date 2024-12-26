@@ -69,7 +69,7 @@ PYBIND11_MODULE(tf2_amber, m) {
       .def_readwrite("x", &geometry_msgs::msg::Quaternion::x)
       .def_readwrite("y", &geometry_msgs::msg::Quaternion::y)
       .def_readwrite("z", &geometry_msgs::msg::Quaternion::z)
-      .def_readwrite("z", &geometry_msgs::msg::Quaternion::w);
+      .def_readwrite("w", &geometry_msgs::msg::Quaternion::w);
 
   py::class_<geometry_msgs::msg::Transform>(m, "Transform")
       .def(py::init([](const geometry_msgs::msg::Vector3 &translation,
