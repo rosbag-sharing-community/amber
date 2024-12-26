@@ -1,12 +1,14 @@
+from amber.dataset.conversion import build_transform_stamped_message
 from amber.dataset.rosbag2_dataset import Rosbag2Dataset, MessageMetaData
 from amber.dataset.topic_config import TfTopicConfig
-from amber.dataset.conversion import build_transform_stamped_message
+from amber.unit.time import Time, TimeUnit
 from dataclass_wizard import YAMLWizard
-from tf2_amber import BufferCore, durationFromSec, TransformStamped
 from dataclasses import dataclass
-import torch
-import sys
 from mcap.reader import NonSeekingReader
+from tf2_amber import BufferCore, durationFromSec, TransformStamped
+import sys
+import torch
+from typing import List
 
 
 @dataclass
@@ -63,10 +65,26 @@ class TfDataset(Rosbag2Dataset):  # type: ignore
                         tf_buffer.setTransform(
                             tf_amber_message, "Authority undetectable", True
                         )
+        sampled_timestamps = self.get_sampled_timestamps(
+            Time(float(first_timestamp), TimeUnit.NANOSECOND),
+            Time(float(last_timestamp), TimeUnit.NANOSECOND),
+            Time(self.config.sampling_duration, TimeUnit.SECOND),
+        )
 
     def __len__(self) -> int:
         return 0
 
     def __iter__(self) -> torch.Tensor:
         current_index = 0
-        torch.zeros(0)
+        return torch.zeros(0)
+
+    def get_sampled_timestamps(
+        self, first_timestamp: Time, last_timestamp: Time, sampling_duration: Time
+    ) -> List[int]:
+        return list(
+            range(
+                int(first_timestamp.get(TimeUnit.NANOSECOND)),
+                int(last_timestamp.get(TimeUnit.NANOSECOND)),
+                int(sampling_duration.get(TimeUnit.NANOSECOND)),
+            )
+        )
