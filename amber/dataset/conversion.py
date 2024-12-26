@@ -16,7 +16,7 @@ import cv2
 import io
 import open3d
 from struct import unpack
-from tf2_amber import TransformStamped, Transform, Quaternion, Vector3
+import tf2_amber
 
 
 def compress_message(message: Message) -> Message:
@@ -233,9 +233,30 @@ def build_message_from_image(
 
 def build_transform_stamped_message(
     message: Message, schema: Schema, decompress: bool
-) -> TransformStamped:
-    tf_message: Any = decode_message(message, schema, decompress)
-    tf_amber_message: TransformStamped = TransformStamped()
-    print(tf_message)
+) -> List[tf2_amber.TransformStamped]:
+    tf_messages: Any = decode_message(message, schema, decompress)
+    tf_amber_messages: List[tf2_amber.TransformStamped] = []
     # transform_stamped_message.header.frame_id = tf_message.header.frame_id
-    return tf_amber_message
+    for message in tf_messages.transforms:
+        tf_amber_message = tf2_amber.TransformStamped(
+            tf2_amber.Header(
+                tf2_amber.Time(message.header.stamp.sec, message.header.stamp.nanosec),
+                message.header.frame_id,
+            ),
+            message.child_frame_id,
+            tf2_amber.Transform(
+                tf2_amber.Vector3(
+                    message.transform.translation.x,
+                    message.transform.translation.y,
+                    message.transform.translation.z,
+                ),
+                tf2_amber.Quaternion(
+                    message.transform.rotation.x,
+                    message.transform.rotation.y,
+                    message.transform.rotation.z,
+                    message.transform.rotation.w,
+                ),
+            ),
+        )
+        tf_amber_messages.append(tf_amber_message)
+    return tf_amber_messages
