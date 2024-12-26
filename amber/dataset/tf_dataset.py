@@ -33,6 +33,7 @@ class TfDataset(Rosbag2Dataset):  # type: ignore
         config: ReadTfTopicConfig,
     ) -> None:
         self.config = config
+        self.transforms: List[TransformStamped] = []
         print(self.config)
         super().__init__(
             rosbag_path,
@@ -78,6 +79,7 @@ class TfDataset(Rosbag2Dataset):  # type: ignore
                     self.config.source_frame,
                     timeFromSec(timestamp_nanosec.get(TimeUnit.SECOND)),
                 )
+                self.transforms.append(transform)
             except:
                 pass
 
