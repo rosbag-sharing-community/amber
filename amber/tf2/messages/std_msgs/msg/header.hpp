@@ -16,24 +16,22 @@
 #define STD_MSGS__MSG__HEADER_HPP_
 
 #include <builtin_interfaces/msg/time.hpp>
-#include <string>
 #include <cstdint>
+#include <string>
 
-namespace std_msgs
-{
-namespace msg
-{
-struct Header
-{
+namespace std_msgs {
+namespace msg {
+struct Header {
   std::uint32_t seq;
   builtin_interfaces::msg::Time stamp;
   std::string frame_id;
-  
+
   Header() : seq(0), stamp(), frame_id("") {}
-  Header(std::uint32_t seq, const builtin_interfaces::msg::Time& stamp, const std::string& frame_id)
+  Header(std::uint32_t seq, const builtin_interfaces::msg::Time &stamp,
+         const std::string &frame_id)
       : seq(seq), stamp(stamp), frame_id(frame_id) {}
 };
 } // namespace msg
 } // namespace std_msgs
 
-#endif  // STD_MSGS__MSG__HEADER_HPP_
+#endif // STD_MSGS__MSG__HEADER_HPP_

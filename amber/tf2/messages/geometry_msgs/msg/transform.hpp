@@ -15,19 +15,21 @@
 #ifndef GEOMETRY_MSGS__MSG__TRANSFORM_HPP_
 #define GEOMETRY_MSGS__MSG__TRANSFORM_HPP_
 
-#include <geometry_msgs/msg/vector3.hpp>
 #include <geometry_msgs/msg/quaternion.hpp>
+#include <geometry_msgs/msg/vector3.hpp>
 
-namespace geometry_msgs
-{
-namespace msg
-{
-struct Transform
-{
+namespace geometry_msgs {
+namespace msg {
+struct Transform {
   geometry_msgs::msg::Vector3 translation;
   geometry_msgs::msg::Quaternion rotation;
+
+  Transform() : translation(), rotation() {}
+  Transform(const geometry_msgs::msg::Vector3 &translation,
+            const geometry_msgs::msg::Quaternion &rotation)
+      : translation(translation), rotation(rotation) {}
 };
 } // namespace msg
 } // namespace geometry_msgs
 
-#endif  // GEOMETRY_MSGS__MSG__TRANSFORM_HPP_
+#endif // GEOMETRY_MSGS__MSG__TRANSFORM_HPP_

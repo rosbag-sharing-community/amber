@@ -1,4 +1,5 @@
-// Copyright 2015-2016, Open Source Robotics Foundation, Inc. All rights reserved.
+// Copyright 2015-2016, Open Source Robotics Foundation, Inc. All rights
+// reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
@@ -10,7 +11,8 @@
 //      notice, this list of conditions and the following disclaimer in the
 //      documentation and/or other materials provided with the distribution.
 //
-//    * Neither the name of the Open Source Robotics Foundation nor the names of its
+//    * Neither the name of the Open Source Robotics Foundation nor the names of
+//    its
 //      contributors may be used to endorse or promote products derived from
 //      this software without specific prior written permission.
 //
@@ -35,8 +37,7 @@
 
 #include "tf2/visibility_control.h"
 
-namespace tf2
-{
+namespace tf2 {
 using Duration = std::chrono::nanoseconds;
 using TimePoint = std::chrono::time_point<std::chrono::system_clock, Duration>;
 
@@ -54,14 +55,14 @@ TF2_PUBLIC
 TimePoint timeFromSec(double t_sec);
 
 TF2_PUBLIC
-double durationToSec(const tf2::Duration & input);
+double durationToSec(const tf2::Duration &input);
 
 TF2_PUBLIC
-double timeToSec(const TimePoint & timepoint);
+double timeToSec(const TimePoint &timepoint);
 
 TF2_PUBLIC
-std::string displayTimePoint(const TimePoint & stamp);
+std::string displayTimePoint(const TimePoint &stamp);
 
-}  // namespace tf2
+} // namespace tf2
 
-#endif  // TF2__TIME_H_
+#endif // TF2__TIME_H_

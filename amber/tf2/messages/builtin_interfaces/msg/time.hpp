@@ -17,12 +17,9 @@
 
 #include <cstdint>
 
-namespace builtin_interfaces
-{
-namespace msg
-{
-struct Time
-{
+namespace builtin_interfaces {
+namespace msg {
+struct Time {
   std::int32_t sec;
   std::uint32_t nanosec;
 
@@ -32,5 +29,4 @@ struct Time
 } // namespace msg
 } // namespace builtin_interfaces
 
-
-#endif  // BUILTIN_INTERFACES__MSG__TIME_HPP_
+#endif // BUILTIN_INTERFACES__MSG__TIME_HPP_

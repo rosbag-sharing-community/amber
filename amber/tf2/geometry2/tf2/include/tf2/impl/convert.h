@@ -10,7 +10,8 @@
 //      notice, this list of conditions and the following disclaimer in the
 //      documentation and/or other materials provided with the distribution.
 //
-//    * Neither the name of the Open Source Robotics Foundation nor the names of its
+//    * Neither the name of the Open Source Robotics Foundation nor the names of
+//    its
 //      contributors may be used to endorse or promote products derived from
 //      this software without specific prior written permission.
 //
@@ -29,17 +30,12 @@
 #ifndef TF2__IMPL__CONVERT_H_
 #define TF2__IMPL__CONVERT_H_
 
-namespace tf2
-{
-namespace impl
-{
+namespace tf2 {
+namespace impl {
 
-template<bool IS_MESSAGE_A, bool IS_MESSAGE_B>
-class Converter
-{
+template <bool IS_MESSAGE_A, bool IS_MESSAGE_B> class Converter {
 public:
-  template<typename A, typename B>
-  static void convert(const A & a, B & b);
+  template <typename A, typename B> static void convert(const A &a, B &b);
 };
 
 // The case where both A and B are messages should not happen: if you have two
@@ -49,32 +45,29 @@ public:
 // if B == A, the templated version of convert with only one argument will be
 // used.
 //
-template< >
-template<typename A, typename B>
-inline void Converter<true, true>::convert(const A & a, B & b);
+template <>
+template <typename A, typename B>
+inline void Converter<true, true>::convert(const A &a, B &b);
 
-template< >
-template<typename A, typename B>
-inline void Converter<true, false>::convert(const A & a, B & b)
-{
+template <>
+template <typename A, typename B>
+inline void Converter<true, false>::convert(const A &a, B &b) {
   fromMsg(a, b);
 }
 
-template< >
-template<typename A, typename B>
-inline void Converter<false, true>::convert(const A & a, B & b)
-{
+template <>
+template <typename A, typename B>
+inline void Converter<false, true>::convert(const A &a, B &b) {
   b = toMsg(a);
 }
 
-template< >
-template<typename A, typename B>
-inline void Converter<false, false>::convert(const A & a, B & b)
-{
+template <>
+template <typename A, typename B>
+inline void Converter<false, false>::convert(const A &a, B &b) {
   fromMsg(toMsg(a), b);
 }
 
-}  // namespace impl
-}  // namespace tf2
+} // namespace impl
+} // namespace tf2
 
-#endif  // TF2__IMPL__CONVERT_H_
+#endif // TF2__IMPL__CONVERT_H_

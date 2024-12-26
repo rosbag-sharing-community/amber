@@ -15,39 +15,30 @@
 #ifndef TF2__IMPL__UTILS_H_
 #define TF2__IMPL__UTILS_H_
 
-#include <tf2/convert.h>
-#include <tf2/transform_datatypes.h>
-#include <tf2/LinearMath/Quaternion.h>
 #include <geometry_msgs/msg/quaternion.hpp>
 #include <geometry_msgs/msg/quaternion_stamped.hpp>
+#include <tf2/LinearMath/Quaternion.h>
+#include <tf2/convert.h>
+#include <tf2/transform_datatypes.h>
 
-
-namespace tf2
-{
+namespace tf2 {
 
 // Forward declare functions needed in this header
-void fromMsg(const geometry_msgs::msg::Quaternion & in, tf2::Quaternion & out);
+void fromMsg(const geometry_msgs::msg::Quaternion &in, tf2::Quaternion &out);
 
-namespace impl
-{
+namespace impl {
 
 /** Function needed for the generalization of toQuaternion
  * \param q a tf2::Quaternion
  * \return a copy of the same quaternion
  */
-inline
-tf2::Quaternion toQuaternion(const tf2::Quaternion & q)
-{
-  return q;
-}
+inline tf2::Quaternion toQuaternion(const tf2::Quaternion &q) { return q; }
 
 /** Function needed for the generalization of toQuaternion
  * \param q a geometry_msgs::msg::Quaternion
  * \return a copy of the same quaternion as a tf2::Quaternion
  */
-inline
-tf2::Quaternion toQuaternion(const geometry_msgs::msg::Quaternion & q)
-{
+inline tf2::Quaternion toQuaternion(const geometry_msgs::msg::Quaternion &q) {
   tf2::Quaternion res;
   fromMsg(q, res);
   return res;
@@ -57,9 +48,8 @@ tf2::Quaternion toQuaternion(const geometry_msgs::msg::Quaternion & q)
  * \param q a geometry_msgs::msg::QuaternionStamped
  * \return a copy of the same quaternion as a tf2::Quaternion
  */
-inline
-tf2::Quaternion toQuaternion(const geometry_msgs::msg::QuaternionStamped & q)
-{
+inline tf2::Quaternion
+toQuaternion(const geometry_msgs::msg::QuaternionStamped &q) {
   tf2::Quaternion res;
   fromMsg(q.quaternion, res);
   return res;
@@ -69,11 +59,9 @@ tf2::Quaternion toQuaternion(const geometry_msgs::msg::QuaternionStamped & q)
  * \param t some tf2::Stamped object
  * \return a copy of the same quaternion as a tf2::Quaternion
  */
-template<typename T>
-tf2::Quaternion toQuaternion(const tf2::Stamped<T> & t)
-{
-  geometry_msgs::msg::QuaternionStamped q = toMsg<tf2::Stamped<T>,
-      geometry_msgs::msg::QuaternionStamped>(t);
+template <typename T> tf2::Quaternion toQuaternion(const tf2::Stamped<T> &t) {
+  geometry_msgs::msg::QuaternionStamped q =
+      toMsg<tf2::Stamped<T>, geometry_msgs::msg::QuaternionStamped>(t);
   return toQuaternion(q);
 }
 
@@ -82,10 +70,9 @@ tf2::Quaternion toQuaternion(const tf2::Stamped<T> & t)
  * \param t some object
  * \return a copy of the same quaternion as a tf2::Quaternion
  */
-template<typename T>
-tf2::Quaternion toQuaternion(const T & t)
-{
-  geometry_msgs::msg::Quaternion q = toMsg<T, geometry_msgs::msg::QuaternionStamped>(t);
+template <typename T> tf2::Quaternion toQuaternion(const T &t) {
+  geometry_msgs::msg::Quaternion q =
+      toMsg<T, geometry_msgs::msg::QuaternionStamped>(t);
   return toQuaternion(q);
 }
 
@@ -98,9 +85,8 @@ tf2::Quaternion toQuaternion(const T & t)
  * \param pitch the computed pitch
  * \param roll the computed roll
  */
-inline
-void getEulerYPR(const tf2::Quaternion & q, double & yaw, double & pitch, double & roll)
-{
+inline void getEulerYPR(const tf2::Quaternion &q, double &yaw, double &pitch,
+                        double &roll) {
   const double pi_2 = 1.57079632679489661923;
   double sqw;
   double sqx;
@@ -136,9 +122,7 @@ void getEulerYPR(const tf2::Quaternion & q, double & yaw, double & pitch, double
  * \param q a tf2::Quaternion
  * \return the computed yaw
  */
-inline
-double getYaw(const tf2::Quaternion & q)
-{
+inline double getYaw(const tf2::Quaternion &q) {
   double yaw;
 
   double sqw;
@@ -165,6 +149,6 @@ double getYaw(const tf2::Quaternion & q)
   return yaw;
 }
 
-}  // namespace impl
-}  // namespace tf2
-#endif  // TF2__IMPL__UTILS_H_
+} // namespace impl
+} // namespace tf2
+#endif // TF2__IMPL__UTILS_H_

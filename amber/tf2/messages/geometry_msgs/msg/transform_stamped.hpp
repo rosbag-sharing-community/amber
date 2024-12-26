@@ -15,20 +15,23 @@
 #ifndef GEOMETRY_MSGS__MSG__TRANSFORM_STAMPED_HPP_
 #define GEOMETRY_MSGS__MSG__TRANSFORM_STAMPED_HPP_
 
-#include <std_msgs/msg/header.hpp>
 #include <geometry_msgs/msg/transform.hpp>
+#include <std_msgs/msg/header.hpp>
 
-namespace geometry_msgs
-{
-namespace msg
-{
-struct TransformStamped
-{
+namespace geometry_msgs {
+namespace msg {
+struct TransformStamped {
   std_msgs::msg::Header header;
   std::string child_frame_id;
   geometry_msgs::msg::Transform transform;
+
+  TransformStamped() : header(), child_frame_id(""), transform() {}
+  TransformStamped(const std_msgs::msg::Header &header,
+                   const std::string &child_frame_id,
+                   const geometry_msgs::msg::Transform &transform)
+      : header(header), child_frame_id(child_frame_id), transform(transform) {}
 };
 } // namespace msg
 } // namespace geometry_msgs
 
-#endif  // GEOMETRY_MSGS__MSG__TRANSFORM_STAMPED_HPP_
+#endif // GEOMETRY_MSGS__MSG__TRANSFORM_STAMPED_HPP_

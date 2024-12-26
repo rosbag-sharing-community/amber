@@ -10,7 +10,8 @@
 //      notice, this list of conditions and the following disclaimer in the
 //      documentation and/or other materials provided with the distribution.
 //
-//    * Neither the name of the Open Source Robotics Foundation nor the names of its
+//    * Neither the name of the Open Source Robotics Foundation nor the names of
+//    its
 //      contributors may be used to endorse or promote products derived from
 //      this software without specific prior written permission.
 //
@@ -34,13 +35,9 @@
 
 #include "tf2/time.h"
 
-tf2::TimePoint tf2::get_now()
-{
-  return std::chrono::system_clock::now();
-}
+tf2::TimePoint tf2::get_now() { return std::chrono::system_clock::now(); }
 
-tf2::Duration tf2::durationFromSec(double t_sec)
-{
+tf2::Duration tf2::durationFromSec(double t_sec) {
   int32_t sec, nsec;
   sec = static_cast<int32_t>(floor(t_sec));
   nsec = static_cast<int32_t>(std::round((t_sec - sec) * 1e9));
@@ -50,13 +47,11 @@ tf2::Duration tf2::durationFromSec(double t_sec)
   return std::chrono::seconds(sec) + std::chrono::nanoseconds(nsec);
 }
 
-tf2::TimePoint tf2::timeFromSec(double t_sec)
-{
+tf2::TimePoint tf2::timeFromSec(double t_sec) {
   return tf2::TimePoint(durationFromSec(t_sec));
 }
 
-double tf2::durationToSec(const tf2::Duration & input)
-{
+double tf2::durationToSec(const tf2::Duration &input) {
   int64_t count = input.count();
 
   // scale the nanoseconds separately for improved accuracy
@@ -70,12 +65,10 @@ double tf2::durationToSec(const tf2::Duration & input)
   return sec_double + nsec_double;
 }
 
-double tf2::timeToSec(const tf2::TimePoint & timepoint)
-{
+double tf2::timeToSec(const tf2::TimePoint &timepoint) {
   return durationToSec(tf2::Duration(timepoint.time_since_epoch()));
 }
 
-std::string tf2::displayTimePoint(const TimePoint & stamp)
-{
+std::string tf2::displayTimePoint(const TimePoint &stamp) {
   return std::to_string(tf2::timeToSec(stamp));
 }

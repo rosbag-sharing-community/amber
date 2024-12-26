@@ -20,93 +20,61 @@
 #include <string>
 #include <type_traits>
 
-namespace rosidl_generator_traits
-{
+namespace rosidl_generator_traits {
 
-inline void value_to_yaml(bool value, std::ostream & out)
-{
+inline void value_to_yaml(bool value, std::ostream &out) {
   out << (value ? "true" : "false");
 }
 
-inline void character_value_to_yaml(unsigned char value, std::ostream & out)
-{
+inline void character_value_to_yaml(unsigned char value, std::ostream &out) {
   auto flags = out.flags();
-  out << "0x" << std::hex << std::setw(2) << std::setfill('0') << \
-    static_cast<uint16_t>(value);
+  out << "0x" << std::hex << std::setw(2) << std::setfill('0')
+      << static_cast<uint16_t>(value);
   out.flags(flags);
 }
 
-inline void character_value_to_yaml(char16_t value, std::ostream & out)
-{
+inline void character_value_to_yaml(char16_t value, std::ostream &out) {
   auto flags = out.flags();
-  out << "\"\\u" << std::hex << std::setw(4) << std::setfill('0') << \
-    static_cast<uint_least16_t>(value) << "\"";
+  out << "\"\\u" << std::hex << std::setw(4) << std::setfill('0')
+      << static_cast<uint_least16_t>(value) << "\"";
   out.flags(flags);
 }
 
-inline void value_to_yaml(float value, std::ostream & out)
-{
+inline void value_to_yaml(float value, std::ostream &out) {
   auto flags = out.flags();
   out << std::showpoint << value;
   out.flags(flags);
 }
 
-inline void value_to_yaml(double value, std::ostream & out)
-{
+inline void value_to_yaml(double value, std::ostream &out) {
   auto flags = out.flags();
   out << std::showpoint << value;
   out.flags(flags);
 }
 
-inline void value_to_yaml(long double value, std::ostream & out)
-{
+inline void value_to_yaml(long double value, std::ostream &out) {
   auto flags = out.flags();
   out << std::showpoint << value;
   out.flags(flags);
 }
 
-inline void value_to_yaml(uint8_t value, std::ostream & out)
-{
-  out << +value;
-}
+inline void value_to_yaml(uint8_t value, std::ostream &out) { out << +value; }
 
-inline void value_to_yaml(int8_t value, std::ostream & out)
-{
-  out << +value;
-}
+inline void value_to_yaml(int8_t value, std::ostream &out) { out << +value; }
 
-inline void value_to_yaml(uint16_t value, std::ostream & out)
-{
-  out << value;
-}
+inline void value_to_yaml(uint16_t value, std::ostream &out) { out << value; }
 
-inline void value_to_yaml(int16_t value, std::ostream & out)
-{
-  out << value;
-}
+inline void value_to_yaml(int16_t value, std::ostream &out) { out << value; }
 
-inline void value_to_yaml(uint32_t value, std::ostream & out)
-{
-  out << value;
-}
+inline void value_to_yaml(uint32_t value, std::ostream &out) { out << value; }
 
-inline void value_to_yaml(int32_t value, std::ostream & out)
-{
-  out << value;
-}
+inline void value_to_yaml(int32_t value, std::ostream &out) { out << value; }
 
-inline void value_to_yaml(uint64_t value, std::ostream & out)
-{
-  out << value;
-}
+inline void value_to_yaml(uint64_t value, std::ostream &out) { out << value; }
 
-inline void value_to_yaml(int64_t value, std::ostream & out)
-{
-  out << value;
-}
+inline void value_to_yaml(int64_t value, std::ostream &out) { out << value; }
 
-inline void value_to_yaml(const std::string & value, std::ostream & out)
-{
+inline void value_to_yaml(const std::string &value, std::ostream &out) {
   out << "\"";
   size_t index = 0;
   while (index < value.size()) {
@@ -124,23 +92,22 @@ inline void value_to_yaml(const std::string & value, std::ostream & out)
   out << "\"";
 }
 
-inline void value_to_yaml(const std::u16string & value, std::ostream & out)
-{
+inline void value_to_yaml(const std::u16string &value, std::ostream &out) {
   out << "\"";
   std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> convert;
   auto flags = out.flags();
   size_t index = 0;
   while (index < value.size()) {
     uint_least16_t character = static_cast<uint_least16_t>(value[index]);
-    if (!(character & 0xff80)) {  // ASCII
+    if (!(character & 0xff80)) { // ASCII
       std::string character_as_string = convert.to_bytes(character);
       out << std::hex << character_as_string.c_str();
-    } else if (!(character & 0xff00)) {  // only 1 byte set
-      out << "\\x" << std::hex << std::setw(2) << std::setfill('0') << \
-        character;
+    } else if (!(character & 0xff00)) { // only 1 byte set
+      out << "\\x" << std::hex << std::setw(2) << std::setfill('0')
+          << character;
     } else {
-      out << "\\u" << std::hex << std::setw(4) << std::setfill('0') << \
-        character;
+      out << "\\u" << std::hex << std::setw(4) << std::setfill('0')
+          << character;
     }
     index += 1;
   }
@@ -148,42 +115,30 @@ inline void value_to_yaml(const std::u16string & value, std::ostream & out)
   out << "\"";
 }
 
-template<typename T>
-inline const char * data_type();
+template <typename T> inline const char *data_type();
 
-template<typename T>
-inline const char * name();
+template <typename T> inline const char *name();
 
-template<typename T>
-struct has_fixed_size : std::false_type {};
+template <typename T> struct has_fixed_size : std::false_type {};
 
-template<typename T>
-struct has_bounded_size : std::false_type {};
+template <typename T> struct has_bounded_size : std::false_type {};
 
-template<typename T>
-struct is_message : std::false_type {};
+template <typename T> struct is_message : std::false_type {};
 
-template<typename T>
-struct is_service : std::false_type {};
+template <typename T> struct is_service : std::false_type {};
 
-template<typename T>
-struct is_service_request : std::false_type {};
+template <typename T> struct is_service_request : std::false_type {};
 
-template<typename T>
-struct is_service_response : std::false_type {};
+template <typename T> struct is_service_response : std::false_type {};
 
-template<typename T>
-struct is_action : std::false_type {};
+template <typename T> struct is_action : std::false_type {};
 
-template<typename T>
-struct is_action_goal : std::false_type {};
+template <typename T> struct is_action_goal : std::false_type {};
 
-template<typename T>
-struct is_action_result : std::false_type {};
+template <typename T> struct is_action_result : std::false_type {};
 
-template<typename T>
-struct is_action_feedback : std::false_type {};
+template <typename T> struct is_action_feedback : std::false_type {};
 
-}  // namespace rosidl_generator_traits
+} // namespace rosidl_generator_traits
 
-#endif  // ROSIDL_RUNTIME_CPP__TRAITS_HPP_
+#endif // ROSIDL_RUNTIME_CPP__TRAITS_HPP_

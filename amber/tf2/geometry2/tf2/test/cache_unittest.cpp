@@ -35,24 +35,25 @@
 #include <utility>
 #include <vector>
 
-#include "tf2/time_cache.h"
 #include "tf2/LinearMath/Quaternion.h"
+#include "tf2/time_cache.h"
 
 std::vector<double> values;
 unsigned int step = 0;
 
-void seed_rand()
-{
+void seed_rand() {
   values.clear();
   for (unsigned int i = 0; i < 2000; i++) {
-    int pseudo_rand = static_cast<int>(std::floor(static_cast<double>(i * 3.141592653589793)));
-    values.push_back(( pseudo_rand % 100) / 50.0 - 1.0);
+    int pseudo_rand = static_cast<int>(
+        std::floor(static_cast<double>(i * 3.141592653589793)));
+    values.push_back((pseudo_rand % 100) / 50.0 - 1.0);
   }
 }
 
-double get_rand()
-{
-  if (values.size() == 0) {throw std::runtime_error("you need to call seed_rand first");}
+double get_rand() {
+  if (values.size() == 0) {
+    throw std::runtime_error("you need to call seed_rand first");
+  }
   if (step >= values.size()) {
     step = 0;
   } else {
@@ -61,14 +62,12 @@ double get_rand()
   return values[step];
 }
 
-void setIdentity(tf2::TransformStorage & stor)
-{
+void setIdentity(tf2::TransformStorage &stor) {
   stor.translation_.setValue(0.0, 0.0, 0.0);
   stor.rotation_.setValue(0.0, 0.0, 0.0, 1.0);
 }
 
-TEST(TimeCache, Repeatability)
-{
+TEST(TimeCache, Repeatability) {
   unsigned int runs = 100;
 
   tf2::TimeCache cache;
@@ -90,8 +89,7 @@ TEST(TimeCache, Repeatability)
   }
 }
 
-TEST(TimeCache, RepeatabilityReverseInsertOrder)
-{
+TEST(TimeCache, RepeatabilityReverseInsertOrder) {
   unsigned int runs = 100;
 
   tf2::TimeCache cache;
@@ -112,8 +110,7 @@ TEST(TimeCache, RepeatabilityReverseInsertOrder)
   }
 }
 
-TEST(TimeCache, ZeroAtFront)
-{
+TEST(TimeCache, ZeroAtFront) {
   uint64_t runs = 100;
 
   tf2::TimeCache cache;
@@ -146,14 +143,14 @@ TEST(TimeCache, ZeroAtFront)
   stor.stamp_ = tf2::TimePoint(std::chrono::nanoseconds(runs + 1));
   cache.insertData(stor);
 
-  // Make sure we get a different value now that a new values is added at the front
+  // Make sure we get a different value now that a new values is added at the
+  // front
   cache.getData(tf2::TimePoint(), stor);
   EXPECT_EQ(stor.frame_id_, runs);
   EXPECT_EQ(stor.stamp_, tf2::TimePoint(std::chrono::nanoseconds(runs + 1)));
 }
 
-TEST(TimeCache, CartesianInterpolation)
-{
+TEST(TimeCache, CartesianInterpolation) {
   uint64_t runs = 100;
   double epsilon = 2e-6;
   seed_rand();
@@ -176,30 +173,35 @@ TEST(TimeCache, CartesianInterpolation)
 
       stor.translation_.setValue(xvalues[step], yvalues[step], zvalues[step]);
       stor.frame_id_ = 2;
-      stor.stamp_ = tf2::TimePoint(std::chrono::nanoseconds(step * 100 + offset));
+      stor.stamp_ =
+          tf2::TimePoint(std::chrono::nanoseconds(step * 100 + offset));
       cache.insertData(stor);
     }
 
     for (int pos = 0; pos < 100; pos++) {
-      cache.getData(tf2::TimePoint(std::chrono::nanoseconds(offset + pos)), stor);
+      cache.getData(tf2::TimePoint(std::chrono::nanoseconds(offset + pos)),
+                    stor);
       double x_out = stor.translation_.x();
       double y_out = stor.translation_.y();
       double z_out = stor.translation_.z();
-      //      printf("pose %d, %f %f %f, expected %f %f %f\n", pos, x_out, y_out, z_out,
+      //      printf("pose %d, %f %f %f, expected %f %f %f\n", pos, x_out,
+      //      y_out, z_out,
       //       xvalues[0] + (xvalues[1] - xvalues[0]) * (double)pos/100.,
       //       yvalues[0] + (yvalues[1] - yvalues[0]) * (double)pos/100.0,
       //       zvalues[0] + (xvalues[1] - zvalues[0]) * (double)pos/100.0);
-      EXPECT_NEAR(xvalues[0] + (xvalues[1] - xvalues[0]) * (double)pos / 100.0, x_out, epsilon);
-      EXPECT_NEAR(yvalues[0] + (yvalues[1] - yvalues[0]) * (double)pos / 100.0, y_out, epsilon);
-      EXPECT_NEAR(zvalues[0] + (zvalues[1] - zvalues[0]) * (double)pos / 100.0, z_out, epsilon);
+      EXPECT_NEAR(xvalues[0] + (xvalues[1] - xvalues[0]) * (double)pos / 100.0,
+                  x_out, epsilon);
+      EXPECT_NEAR(yvalues[0] + (yvalues[1] - yvalues[0]) * (double)pos / 100.0,
+                  y_out, epsilon);
+      EXPECT_NEAR(zvalues[0] + (zvalues[1] - zvalues[0]) * (double)pos / 100.0,
+                  z_out, epsilon);
     }
     cache.clearList();
   }
 }
 
 /** \brief Make sure we dont' interpolate across reparented data */
-TEST(TimeCache, ReparentingInterpolationProtection)
-{
+TEST(TimeCache, ReparentingInterpolationProtection) {
   double epsilon = 1e-6;
   uint64_t offset = 555;
 
@@ -225,7 +227,8 @@ TEST(TimeCache, ReparentingInterpolationProtection)
   }
 
   for (int pos = 0; pos < 100; pos++) {
-    EXPECT_TRUE(cache.getData(tf2::TimePoint(std::chrono::nanoseconds(offset + pos)), stor));
+    EXPECT_TRUE(cache.getData(
+        tf2::TimePoint(std::chrono::nanoseconds(offset + pos)), stor));
     double x_out = stor.translation_.x();
     double y_out = stor.translation_.y();
     double z_out = stor.translation_.z();
@@ -235,8 +238,7 @@ TEST(TimeCache, ReparentingInterpolationProtection)
   }
 }
 
-TEST(Bullet, Slerp)
-{
+TEST(Bullet, Slerp) {
   uint64_t runs = 100;
   seed_rand();
 
@@ -244,18 +246,14 @@ TEST(Bullet, Slerp)
   q1.setEuler(0, 0, 0);
 
   for (uint64_t i = 0; i < runs; i++) {
-    q2.setEuler(
-      1.0 * get_rand(),
-      1.0 * get_rand(),
-      1.0 * get_rand());
+    q2.setEuler(1.0 * get_rand(), 1.0 * get_rand(), 1.0 * get_rand());
     tf2::Quaternion q3 = slerp(q1, q2, 0.5);
 
     EXPECT_NEAR(q3.angle(q1), q2.angle(q3), 1e-5);
   }
 }
 
-TEST(TimeCache, AngularInterpolation)
-{
+TEST(TimeCache, AngularInterpolation) {
   uint64_t runs = 100;
   double epsilon = 1e-6;
   seed_rand();
@@ -274,19 +272,21 @@ TEST(TimeCache, AngularInterpolation)
   for (uint64_t i = 1; i < runs; i++) {
     for (uint64_t step = 0; step < 2; step++) {
       yawvalues[step] = 10.0 * get_rand() / 100.0;
-      pitchvalues[step] = 0;  // 10.0 * get_rand();
+      pitchvalues[step] = 0; // 10.0 * get_rand();
       rollvalues[step] = 0;  // 10.0 * get_rand();
       quats[step].setRPY(yawvalues[step], pitchvalues[step], rollvalues[step]);
       stor.rotation_ = quats[step];
       stor.frame_id_ = 3;
       // step = 0 or 1
-      stor.stamp_ = tf2::TimePoint(std::chrono::nanoseconds(offset + (step * 100)));
+      stor.stamp_ =
+          tf2::TimePoint(std::chrono::nanoseconds(offset + (step * 100)));
       cache.insertData(stor);
     }
 
     for (int pos = 0; pos < 100; pos++) {
       // get the transform for the position
-      EXPECT_TRUE(cache.getData(tf2::TimePoint(std::chrono::nanoseconds(offset + pos)), stor));
+      EXPECT_TRUE(cache.getData(
+          tf2::TimePoint(std::chrono::nanoseconds(offset + pos)), stor));
       tf2::Quaternion quat(stor.rotation_);
 
       // Generate a ground truth quaternion directly calling slerp
@@ -299,8 +299,7 @@ TEST(TimeCache, AngularInterpolation)
   }
 }
 
-TEST(TimeCache, DuplicateEntries)
-{
+TEST(TimeCache, DuplicateEntries) {
   tf2::TimeCache cache;
 
   tf2::TransformStorage stor;
@@ -323,8 +322,7 @@ TEST(TimeCache, DuplicateEntries)
   EXPECT_TRUE(!std::isnan(stor.rotation_.w()));
 }
 
-int main(int argc, char ** argv)
-{
+int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }
