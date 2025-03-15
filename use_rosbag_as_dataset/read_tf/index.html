@@ -6,12 +6,12 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <meta content="Masaya Kataoka" name="author"/>
-<link href="https://rosbag-sharing-community.github.io/amber/automation/automation/" rel="canonical"/>
-<link href="../../use_rosbag_as_dataset/read_tf/" rel="prev"/>
-<link href="../detic_image_labaler/" rel="next"/>
+<link href="https://rosbag-sharing-community.github.io/amber/use_rosbag_as_dataset/read_tf/" rel="canonical"/>
+<link href="../read_pointclouds/" rel="prev"/>
+<link href="../../automation/automation/" rel="next"/>
 <link href="../../assets/images/favicon.png" rel="icon"/>
 <meta content="mkdocs-1.5.3, mkdocs-material-9.5.18" name="generator"/>
-<title>Automation - amber</title>
+<title>Read tf - amber</title>
 <link href="../../assets/stylesheets/main.66ac8b77.min.css" rel="stylesheet"/>
 <link href="../../assets/stylesheets/palette.06af60db.min.css" rel="stylesheet"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -25,7 +25,7 @@
 <input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
 <label class="md-overlay" for="__drawer"></label>
 <div data-md-component="skip">
-<a class="md-skip" href="#automation">
+<a class="md-skip" href="#read-tf">
           Skip to content
         </a>
 </div>
@@ -49,7 +49,7 @@
 <div class="md-header__topic" data-md-component="header-topic">
 <span class="md-ellipsis">
             
-              Automation
+              Read tf
             
           </span>
 </div>
@@ -121,16 +121,16 @@
 
       </a>
 </li>
-<li class="md-tabs__item">
-<a class="md-tabs__link" href="../../use_rosbag_as_dataset/how_to_use/">
+<li class="md-tabs__item md-tabs__item--active">
+<a class="md-tabs__link" href="../how_to_use/">
           
   
   Use rosbag as dataset
 
         </a>
 </li>
-<li class="md-tabs__item md-tabs__item--active">
-<a class="md-tabs__link" href="./">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../automation/automation/">
           
   
   Automation
@@ -201,90 +201,59 @@
   </span>
 </a>
 </li>
-<li class="md-nav__item md-nav__item--nested">
-<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_3" type="checkbox"/>
-<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
 <span class="md-ellipsis">
     Use rosbag as dataset
   </span>
 <span class="md-nav__icon md-icon"></span>
 </label>
-<nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<nav aria-expanded="true" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
 <label class="md-nav__title" for="__nav_3">
 <span class="md-nav__icon md-icon"></span>
             Use rosbag as dataset
           </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../use_rosbag_as_dataset/how_to_use/">
+<a class="md-nav__link" href="../how_to_use/">
 <span class="md-ellipsis">
     How to use?
   </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../use_rosbag_as_dataset/read_images/">
+<a class="md-nav__link" href="../read_images/">
 <span class="md-ellipsis">
     Read images
   </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../use_rosbag_as_dataset/read_images_and_annotations/">
+<a class="md-nav__link" href="../read_images_and_annotations/">
 <span class="md-ellipsis">
     Read images and annotation
   </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../use_rosbag_as_dataset/read_pointclouds/">
+<a class="md-nav__link" href="../read_pointclouds/">
 <span class="md-ellipsis">
     Read pointclouds
   </span>
 </a>
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../use_rosbag_as_dataset/read_tf/">
-<span class="md-ellipsis">
-    Read tf
-  </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../use_rosbag_as_dataset/timestamp_sampler.md">
-<span class="md-ellipsis">
-    Sampling data by timestamp
-  </span>
-</a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
-<input checked="" class="md-nav__toggle md-toggle" id="__nav_4" type="checkbox"/>
-<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
-<span class="md-ellipsis">
-    Automation
-  </span>
-<span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-expanded="true" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
-<label class="md-nav__title" for="__nav_4">
-<span class="md-nav__icon md-icon"></span>
-            Automation
-          </label>
-<ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item md-nav__item--active">
 <input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
 <label class="md-nav__link md-nav__link--active" for="__toc">
 <span class="md-ellipsis">
-    Automation
+    Read tf
   </span>
 <span class="md-nav__icon md-icon"></span>
 </label>
 <a class="md-nav__link md-nav__link--active" href="./">
 <span class="md-ellipsis">
-    Automation
+    Read tf
   </span>
 </a>
 <nav aria-label="Table of contents" class="md-nav md-nav--secondary">
@@ -294,77 +263,62 @@
     </label>
 <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#cli-tools">
+<a class="md-nav__link" href="#output-tensor">
 <span class="md-ellipsis">
-      CLI tools
-    </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#python-api">
-<span class="md-ellipsis">
-      Python API
-    </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#support-status">
-<span class="md-ellipsis">
-      Support status
-    </span>
-</a>
-<nav aria-label="Support status" class="md-nav">
-<ul class="md-nav__list">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#docker-support">
-<span class="md-ellipsis">
-      Docker Support
-    </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#native-support">
-<span class="md-ellipsis">
-      Native Support
-    </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hugging-face-support">
-<span class="md-ellipsis">
-      Hugging face Support
-    </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#cuda-support">
-<span class="md-ellipsis">
-      CUDA Support
+      Output tensor
     </span>
 </a>
 </li>
 </ul>
 </nav>
 </li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../timestamp_sampler.md">
+<span class="md-ellipsis">
+    Sampling data by timestamp
+  </span>
+</a>
+</li>
 </ul>
 </nav>
 </li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+<span class="md-ellipsis">
+    Automation
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+            Automation
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../detic_image_labaler/">
+<a class="md-nav__link" href="../../automation/automation/">
+<span class="md-ellipsis">
+    Automation
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../automation/detic_image_labaler/">
 <span class="md-ellipsis">
     Detic image labaler
   </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../clip_image_annotation_filter/">
+<a class="md-nav__link" href="../../automation/clip_image_annotation_filter/">
 <span class="md-ellipsis">
     CLIP image annotation filter
   </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../nerf_3d_reconstruction/">
+<a class="md-nav__link" href="../../automation/nerf_3d_reconstruction/">
 <span class="md-ellipsis">
     NeRF 3D Reconstruction
   </span>
@@ -473,62 +427,40 @@
 </div>
 <div class="md-content" data-md-component="content">
 <article class="md-content__inner md-typeset">
-<h1 id="automation">Automation<a class="headerlink" href="#automation" title="Permanent link">#</a></h1>
-<p>Automation helps you to enjoy your ML life.
-Automation tools can be used with two ways, use with CLI and use with Python API</p>
-<h2 id="cli-tools">CLI tools<a class="headerlink" href="#cli-tools" title="Permanent link">#</a></h2>
-<p>All of the automation tools can be use <code>amber automation</code> command.
-If you want to check the help text, please type <code>amber automation --help</code></p>
-<h2 id="python-api">Python API<a class="headerlink" href="#python-api" title="Permanent link">#</a></h2>
-<p>All of the automation tools have Python classes.
-If you want to know detail, please read detatiled documentations.</p>
-<h2 id="support-status">Support status<a class="headerlink" href="#support-status" title="Permanent link">#</a></h2>
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Docker Support (CPU)</th>
-<th>Docker Support(CUDA)</th>
-<th>Native Support</th>
-<th>CUDA Support(Native)</th>
-<th>Huggingface Support</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><a href="../detic_image_labaler">DeticImageLabaler</a></td>
-<td></td>
-<td></td>
-<td><img alt="✔️" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/2714.png" title=":heavy_check_mark:"/></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td><a href="../clip_image_annotation_filter">ClipImageAnnotationFilter</a></td>
-<td></td>
-<td></td>
-<td><img alt="✔️" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/2714.png" title=":heavy_check_mark:"/></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td><a href="../nerf_3d_reconstruction">NeRF 3D Reconstruction</a></td>
-<td></td>
-<td><img alt="✔️" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/2714.png" title=":heavy_check_mark:"/></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<h3 id="docker-support">Docker Support<a class="headerlink" href="#docker-support" title="Permanent link">#</a></h3>
-<p>Support automation algorithm inside docker.</p>
-<h3 id="native-support">Native Support<a class="headerlink" href="#native-support" title="Permanent link">#</a></h3>
-<p>Support automation algorithm in native environment.</p>
-<h3 id="hugging-face-support">Hugging face Support<a class="headerlink" href="#hugging-face-support" title="Permanent link">#</a></h3>
-<p>Support running automation algorithum on <a href="https://huggingface.co/">hugging face.</a></p>
-<h3 id="cuda-support">CUDA Support<a class="headerlink" href="#cuda-support" title="Permanent link">#</a></h3>
-<p>Support cuda for accelerating automation.</p>
+<h1 id="read-tf">Read tf<a class="headerlink" href="#read-tf" title="Permanent link">#</a></h1>
+<p>ImagesDataset Class provides only transform data.
+Example task description yaml file is here.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">topic_name</span><span class="p">:</span><span class="w"> </span><span class="s">"/tf"</span>
+<span class="nt">static_tf_topic_name</span><span class="p">:</span><span class="w"> </span><span class="s">"/tf_static"</span>
+<span class="nt">target_frame</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">body</span>
+<span class="nt">source_frame</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">map</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">amber.dataset.tf_dataset</span><span class="w"> </span><span class="kn">import</span> <span class="n">TfDataset</span><span class="p">,</span> <span class="n">ReadTfTopicConfig</span>
+
+<span class="n">current_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)))</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">TfDataset</span><span class="p">(</span>
+    <span class="nb">str</span><span class="p">(</span><span class="n">current_path</span> <span class="o">/</span> <span class="s2">"rosbag"</span> <span class="o">/</span> <span class="s2">"ford"</span> <span class="o">/</span> <span class="s2">"ford.mcap"</span><span class="p">),</span>
+    <span class="n">ReadTfTopicConfig</span><span class="o">.</span><span class="n">from_yaml_file</span><span class="p">(</span>
+        <span class="nb">str</span><span class="p">(</span><span class="n">current_path</span> <span class="o">/</span> <span class="s2">"rosbag"</span> <span class="o">/</span> <span class="s2">"ford"</span> <span class="o">/</span> <span class="s2">"read_tf.yaml"</span><span class="p">)</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+<span class="n">dataloader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">i_batch</span><span class="p">,</span> <span class="n">sample_batched</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">dataloader</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">sample</span> <span class="ow">in</span> <span class="n">sample_batched</span><span class="p">:</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span>
+</code></pre></div>
+<h2 id="output-tensor">Output tensor<a class="headerlink" href="#output-tensor" title="Permanent link">#</a></h2>
+<p>The output tensor has 7 dimensions.</p>
+<div class="highlight"><pre><span></span><code><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">([</span>
+    <span class="n">transform</span><span class="o">.</span><span class="n">translation</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> 
+    <span class="n">transform</span><span class="o">.</span><span class="n">translation</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> 
+    <span class="n">transform</span><span class="o">.</span><span class="n">translation</span><span class="o">.</span><span class="n">z</span>
+    <span class="n">transform</span><span class="o">.</span><span class="n">rotation</span><span class="o">.</span><span class="n">x</span><span class="p">,</span>
+    <span class="n">transform</span><span class="o">.</span><span class="n">rotation</span><span class="o">.</span><span class="n">y</span>
+    <span class="n">transform</span><span class="o">.</span><span class="n">rotation</span><span class="o">.</span><span class="n">z</span>
+    <span class="n">transform</span><span class="o">.</span><span class="n">rotation</span><span class="o">.</span><span class="n">w</span><span class="p">])</span>
+</code></pre></div>
 <aside class="md-source-file">
 <span class="md-source-file__fact">
 <span class="md-icon" title="Last update">
