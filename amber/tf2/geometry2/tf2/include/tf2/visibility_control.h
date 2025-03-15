@@ -10,7 +10,8 @@
 //      notice, this list of conditions and the following disclaimer in the
 //      documentation and/or other materials provided with the distribution.
 //
-//    * Neither the name of the Open Source Robotics Foundation nor the names of its
+//    * Neither the name of the Open Source Robotics Foundation nor the names of
+//    its
 //      contributors may be used to endorse or promote products derived from
 //      this software without specific prior written permission.
 //
@@ -33,31 +34,31 @@
 //     https://gcc.gnu.org/wiki/Visibility
 
 #if defined _WIN32 || defined __CYGWIN__
-  #ifdef __GNUC__
-    #define TF2_EXPORT __attribute__ ((dllexport))
-    #define TF2_IMPORT __attribute__ ((dllimport))
-  #else
-    #define TF2_EXPORT __declspec(dllexport)
-    #define TF2_IMPORT __declspec(dllimport)
-  #endif
-  #ifdef TF2_BUILDING_DLL
-    #define TF2_PUBLIC TF2_EXPORT
-  #else
-    #define TF2_PUBLIC TF2_IMPORT
-  #endif
-  #define TF2_PUBLIC_TYPE TF2_PUBLIC
-  #define TF2_LOCAL
+#ifdef __GNUC__
+#define TF2_EXPORT __attribute__((dllexport))
+#define TF2_IMPORT __attribute__((dllimport))
 #else
-  #define TF2_EXPORT __attribute__ ((visibility("default")))
-  #define TF2_IMPORT
-  #if __GNUC__ >= 4
-    #define TF2_PUBLIC __attribute__ ((visibility("default")))
-    #define TF2_LOCAL  __attribute__ ((visibility("hidden")))
-  #else
-    #define TF2_PUBLIC
-    #define TF2_LOCAL
-  #endif
-  #define TF2_PUBLIC_TYPE
+#define TF2_EXPORT __declspec(dllexport)
+#define TF2_IMPORT __declspec(dllimport)
+#endif
+#ifdef TF2_BUILDING_DLL
+#define TF2_PUBLIC TF2_EXPORT
+#else
+#define TF2_PUBLIC TF2_IMPORT
+#endif
+#define TF2_PUBLIC_TYPE TF2_PUBLIC
+#define TF2_LOCAL
+#else
+#define TF2_EXPORT __attribute__((visibility("default")))
+#define TF2_IMPORT
+#if __GNUC__ >= 4
+#define TF2_PUBLIC __attribute__((visibility("default")))
+#define TF2_LOCAL __attribute__((visibility("hidden")))
+#else
+#define TF2_PUBLIC
+#define TF2_LOCAL
+#endif
+#define TF2_PUBLIC_TYPE
 #endif
 
-#endif  // TF2__VISIBILITY_CONTROL_H_
+#endif // TF2__VISIBILITY_CONTROL_H_

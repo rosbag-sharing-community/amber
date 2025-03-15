@@ -1,4 +1,5 @@
-// Copyright (c) 2020, Open Source Robotics Foundation, Inc. All rights reserved.
+// Copyright (c) 2020, Open Source Robotics Foundation, Inc. All rights
+// reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
@@ -26,9 +27,9 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#include <gtest/gtest.h>
-#include <chrono>
 #include "tf2/time.h"
+#include <chrono>
+#include <gtest/gtest.h>
 
 using namespace std::literals::chrono_literals;
 

@@ -35,12 +35,12 @@ gradio = "^3.35.0"
 gradio_client = "^0.2.5"
 huggingface-hub = "0.25.2"
 mcap-ros2-support= "^0.3.0"
-numpy = "^2.2.1"
+numpy= "1.26.4" # This version comes from Genesis. https://github.com/Genesis-Embodied-AI/Genesis/blob/163e4138d32df139d83fb9dee927f3418fe67ee0/pyproject.toml#L18
 onnxruntime-gpu = "^1.15.1"
 open3d = "^0.18.0"
 opencv-python = "~4.10.0"
 pandas = "^2.0.3"
-Pillow = "^11.0.0"
+Pillow = ">=9.2.0,<11.0" # This version comes from Genesis. https://github.com/Genesis-Embodied-AI/Genesis/blob/163e4138d32df139d83fb9dee927f3418fe67ee0/pyproject.toml#L32
 pybind11 = "^2.13.6"
 pyparsing = "*"
 python = ">=3.10,<3.13"
@@ -105,7 +105,7 @@ url = "https://download.pytorch.org/whl/cu124"
 priority = "explicit"
 
 [build-system]
-requires = ["poetry-core>=1.0.0", "scikit-build", "cmake", "ninja"]
+requires = ["poetry-core>=1.0.0", "scikit-build", "cmake", "ninja", "pybind11"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.coverage.html]
@@ -157,5 +157,5 @@ prepare.help = "sets up a development environment"
 lint.cmd = "pre-commit run --all-files"
 lint.help = "runs linters (+ fix)"
 
-test.cmd  = "python run_gtests.py && pytest"
+test.cmd  = "pytest"
 test.help = "runs tests"

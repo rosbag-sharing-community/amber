@@ -42,43 +42,40 @@
 #include "tf2/transform_datatypes.h"
 #include "tf2/visibility_control.h"
 
-namespace tf2
-{
+namespace tf2 {
 
 /**\brief The templated function expected to be able to do a transform
  *
- * This is the method which tf2 will use to try to apply a transform for any given datatype.
- * \param data_in[in] The data to be transformed.
- * \param data_out[inout] A reference to the output data. Note this can point to data in and the method should be mutation safe.
- * \param transform[in] The transform to apply to data_in to fill data_out.
+ * This is the method which tf2 will use to try to apply a transform for any
+ * given datatype. \param data_in[in] The data to be transformed. \param
+ * data_out[inout] A reference to the output data. Note this can point to data
+ * in and the method should be mutation safe. \param transform[in] The transform
+ * to apply to data_in to fill data_out.
  *
  * This method needs to be implemented by client library developers
  */
-template<class T>
-void doTransform(
-  const T & data_in, T & data_out,
-  const geometry_msgs::msg::TransformStamped & transform);
+template <class T>
+void doTransform(const T &data_in, T &data_out,
+                 const geometry_msgs::msg::TransformStamped &transform);
 
 /**\brief Get the timestamp from data
  * \param[in] t The data input.
  * \return The timestamp associated with the data.
  */
-template<class T>
-tf2::TimePoint getTimestamp(const T & t);
+template <class T> tf2::TimePoint getTimestamp(const T &t);
 
 /**\brief Get the frame_id from data
  * \param[in] t The data input.
  * \return The frame_id associated with the data.
  */
-template<class T>
-std::string getFrameId(const T & t);
+template <class T> std::string getFrameId(const T &t);
 
 /**\brief Get the covariance matrix from data
  * \param[in] t The data input.
  * \return The covariance matrix associated with the data.
  */
-template<class T>
-std::array<std::array<double, 6>, 6> getCovarianceMatrix(const T & t);
+template <class T>
+std::array<std::array<double, 6>, 6> getCovarianceMatrix(const T &t);
 
 /**\brief Get the frame_id from data
  *
@@ -87,9 +84,7 @@ std::array<std::array<double, 6>, 6> getCovarianceMatrix(const T & t);
  * \param[in] t The data input.
  * \return The frame_id associated with the data.
  */
-template<class P>
-tf2::TimePoint getTimestamp(const tf2::Stamped<P> & t)
-{
+template <class P> tf2::TimePoint getTimestamp(const tf2::Stamped<P> &t) {
   return t.stamp_;
 }
 
@@ -100,9 +95,7 @@ tf2::TimePoint getTimestamp(const tf2::Stamped<P> & t)
  * \param[in] t The data input.
  * \return The frame_id associated with the data.
  */
-template<class P>
-std::string getFrameId(const tf2::Stamped<P> & t)
-{
+template <class P> std::string getFrameId(const tf2::Stamped<P> &t) {
   return t.frame_id_;
 }
 
@@ -113,29 +106,25 @@ std::string getFrameId(const tf2::Stamped<P> & t)
  * \param[in] c The data input.
  * \return The covariance matrix associated with the data.
  */
-template<class P>
-std::array<std::array<double, 6>, 6> getCovarianceMatrix(const tf2::WithCovarianceStamped<P> & t)
-{
+template <class P>
+std::array<std::array<double, 6>, 6>
+getCovarianceMatrix(const tf2::WithCovarianceStamped<P> &t) {
   return t.cov_mat_;
 }
 
-/**\brief Function that converts from one type to a ROS message type. It has to be
- * implemented by each data type in tf2_* (except ROS messages) as it is
- * used in the "convert" function.
- * \param a an object of whatever type
- * \return the conversion as a ROS message
+/**\brief Function that converts from one type to a ROS message type. It has to
+ * be implemented by each data type in tf2_* (except ROS messages) as it is used
+ * in the "convert" function. \param a an object of whatever type \return the
+ * conversion as a ROS message
  */
-template<typename A, typename B>
-B toMsg(const A & a);
+template <typename A, typename B> B toMsg(const A &a);
 
-/**\brief Function that converts from a ROS message type to another type. It has to be
- * implemented by each data type in tf2_* (except ROS messages) as it is used
- * in the "convert" function.
- * \param a a ROS message to convert from
- * \param b the object to convert to
+/**\brief Function that converts from a ROS message type to another type. It has
+ * to be implemented by each data type in tf2_* (except ROS messages) as it is
+ * used in the "convert" function. \param a a ROS message to convert from \param
+ * b the object to convert to
  */
-template<typename A, typename B>
-void fromMsg(const A &, B & b);
+template <typename A, typename B> void fromMsg(const A &, B &b);
 
 /**\brief Function that converts any type to any type (messages or not).
  * Matching toMsg and from Msg conversion functions need to exist.
@@ -144,16 +133,12 @@ void fromMsg(const A &, B & b);
  * \param a an object to convert from
  * \param b the object to convert to
  */
-template<class A, class B>
-void convert(const A & a, B & b)
-{
+template <class A, class B> void convert(const A &a, B &b) {
   impl::Converter<rosidl_generator_traits::is_message<A>::value,
-    rosidl_generator_traits::is_message<B>::value>::convert(a, b);
+                  rosidl_generator_traits::is_message<B>::value>::convert(a, b);
 }
 
-template<class A>
-void convert(const A & a1, A & a2)
-{
+template <class A> void convert(const A &a1, A &a2) {
   if (&a1 != &a2) {
     a2 = a1;
   }
@@ -164,13 +149,11 @@ void convert(const A & a1, A & a2)
  * \param row_major A row-major array of 36 covariance values.
  * \return A nested array representation of 6x6 covariance values.
  */
-inline
-std::array<std::array<double, 6>, 6> covarianceRowMajorToNested(
-  const std::array<double, 36> & row_major)
-{
+inline std::array<std::array<double, 6>, 6>
+covarianceRowMajorToNested(const std::array<double, 36> &row_major) {
   std::array<std::array<double, 6>, 6> nested_array;
   std::array<double, 36>::const_iterator ss = row_major.begin();
-  for (std::array<double, 6> & dd : nested_array) {
+  for (std::array<double, 6> &dd : nested_array) {
     std::copy_n(ss, dd.size(), dd.begin());
     ss += dd.size();
   }
@@ -182,20 +165,18 @@ std::array<std::array<double, 6>, 6> covarianceRowMajorToNested(
  * \param nested_array A nested array representation of 6x6 covariance values.
  * \return A row-major array of 36 covariance values.
  */
-inline
-std::array<double, 36> covarianceNestedToRowMajor(
-  const std::array<std::array<double, 6>, 6> & nested_array)
-{
+inline std::array<double, 36> covarianceNestedToRowMajor(
+    const std::array<std::array<double, 6>, 6> &nested_array) {
   std::array<double, 36> row_major = {};
   size_t counter = 0;
-  for (const auto & arr : nested_array) {
-    for (const double & val : arr) {
+  for (const auto &arr : nested_array) {
+    for (const double &val : arr) {
       row_major[counter] = val;
       counter++;
     }
   }
   return row_major;
 }
-}  // namespace tf2
+} // namespace tf2
 
-#endif  // TF2__CONVERT_H_
+#endif // TF2__CONVERT_H_

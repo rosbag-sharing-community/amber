@@ -31,49 +31,44 @@
 #include <string>
 #include <utility>
 
-#include "tf2/time_cache.h"
 #include "tf2/exceptions.h"
+#include "tf2/time_cache.h"
 
 #include "tf2/LinearMath/Transform.h"
 
-bool tf2::StaticCache::getData(
-  tf2::TimePoint time,
-  tf2::TransformStorage & data_out, std::string * error_str)
-{
+bool tf2::StaticCache::getData(tf2::TimePoint time,
+                               tf2::TransformStorage &data_out,
+                               std::string *error_str) {
   (void)error_str;
   data_out = storage_;
   data_out.stamp_ = time;
   return true;
 }
 
-bool tf2::StaticCache::insertData(const tf2::TransformStorage & new_data)
-{
+bool tf2::StaticCache::insertData(const tf2::TransformStorage &new_data) {
   storage_ = new_data;
   return true;
 }
 
 void tf2::StaticCache::clearList() {}
 
-unsigned tf2::StaticCache::getListLength() {return 1;}
+unsigned tf2::StaticCache::getListLength() { return 1; }
 
-tf2::CompactFrameID tf2::StaticCache::getParent(tf2::TimePoint time, std::string * error_str)
-{
+tf2::CompactFrameID tf2::StaticCache::getParent(tf2::TimePoint time,
+                                                std::string *error_str) {
   (void)time;
   (void)error_str;
   return storage_.frame_id_;
 }
 
-tf2::P_TimeAndFrameID tf2::StaticCache::getLatestTimeAndParent()
-{
+tf2::P_TimeAndFrameID tf2::StaticCache::getLatestTimeAndParent() {
   return std::make_pair(TimePoint(), storage_.frame_id_);
 }
 
-tf2::TimePoint tf2::StaticCache::getLatestTimestamp()
-{
+tf2::TimePoint tf2::StaticCache::getLatestTimestamp() {
   return tf2::TimePoint();
 }
 
-tf2::TimePoint tf2::StaticCache::getOldestTimestamp()
-{
+tf2::TimePoint tf2::StaticCache::getOldestTimestamp() {
   return tf2::TimePoint();
 }

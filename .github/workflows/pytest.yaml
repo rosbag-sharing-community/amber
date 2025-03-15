@@ -38,6 +38,8 @@ jobs:
           poetry-version: ${{ matrix.poetry-version }}
       - name: install
         run: poetry install --with=dev
+      - name: build
+        run: poetry build
       - name: test
         run: poetry run task test
         env:

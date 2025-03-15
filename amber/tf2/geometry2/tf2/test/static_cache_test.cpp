@@ -34,14 +34,12 @@
 #include <cmath>
 #include <stdexcept>
 
-void setIdentity(tf2::TransformStorage & stor)
-{
+void setIdentity(tf2::TransformStorage &stor) {
   stor.translation_.setValue(0.0, 0.0, 0.0);
   stor.rotation_.setValue(0.0, 0.0, 0.0, 1.0);
 }
 
-TEST(StaticCache, Repeatability)
-{
+TEST(StaticCache, Repeatability) {
   unsigned int runs = 100;
 
   tf2::StaticCache cache;
@@ -61,8 +59,7 @@ TEST(StaticCache, Repeatability)
   }
 }
 
-TEST(StaticCache, DuplicateEntries)
-{
+TEST(StaticCache, DuplicateEntries) {
   tf2::StaticCache cache;
 
   tf2::TransformStorage stor;
@@ -86,8 +83,7 @@ TEST(StaticCache, DuplicateEntries)
   EXPECT_TRUE(!std::isnan(stor.rotation_.w()));
 }
 
-int main(int argc, char ** argv)
-{
+int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }

@@ -15,18 +15,18 @@
 #ifndef GEOMETRY_MSGS__MSG__QUATERNION_HPP_
 #define GEOMETRY_MSGS__MSG__QUATERNION_HPP_
 
-namespace geometry_msgs
-{
-namespace msg
-{
-struct Quaternion
-{
+namespace geometry_msgs {
+namespace msg {
+struct Quaternion {
   double x = 0;
   double y = 0;
   double z = 0;
   double w = 1;
+
+  Quaternion() : x(0), y(0), z(0), w(1) {}
+  Quaternion(double x, double y, double z, double w) : x(x), y(y), z(z), w(w) {}
 };
 } // namespace msg
 } // namespace geometry_msgs
 
-#endif  // GEOMETRY_MSGS__MSG__QUATERNION_HPP_
+#endif // GEOMETRY_MSGS__MSG__QUATERNION_HPP_

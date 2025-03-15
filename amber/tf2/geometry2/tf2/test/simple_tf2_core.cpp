@@ -38,21 +38,19 @@
 #include "builtin_interfaces/msg/time.hpp"
 #include "geometry_msgs/msg/transform_stamped.hpp"
 
+#include "tf2/LinearMath/Vector3.h"
 #include "tf2/buffer_core.h"
 #include "tf2/convert.h"
-#include "tf2/LinearMath/Vector3.h"
 #include "tf2/exceptions.h"
 #include "tf2/time.h"
 
-TEST(tf2, setTransformFail)
-{
+TEST(tf2, setTransformFail) {
   tf2::BufferCore tfc;
   geometry_msgs::msg::TransformStamped st;
   EXPECT_FALSE(tfc.setTransform(st, "authority1"));
 }
 
-TEST(tf2, setTransformValid)
-{
+TEST(tf2, setTransformValid) {
   tf2::BufferCore tfc;
   geometry_msgs::msg::TransformStamped st;
   st.header.frame_id = "foo";
@@ -64,8 +62,7 @@ TEST(tf2, setTransformValid)
   EXPECT_TRUE(tfc.setTransform(st, "authority1"));
 }
 
-TEST(tf2, setTransformValidWithCallback)
-{
+TEST(tf2, setTransformValidWithCallback) {
   tf2::BufferCore buffer;
 
   // Input
@@ -80,23 +77,21 @@ TEST(tf2, setTransformValidWithCallback)
   bool transform_available = false;
 
   auto cb =
-    [&received_request_handle, &received_target_frame, &received_source_frame, &received_time_point,
-      &transform_available](
-    tf2::TransformableRequestHandle request_handle,
-    const std::string & target_frame,
-    const std::string & source_frame,
-    tf2::TimePoint time,
-    tf2::TransformableResult result)
-    {
-      received_request_handle = request_handle;
-      received_target_frame = target_frame;
-      received_source_frame = source_frame;
-      received_time_point = time;
-      transform_available = tf2::TransformAvailable == result;
-    };
+      [&received_request_handle, &received_target_frame, &received_source_frame,
+       &received_time_point, &transform_available](
+          tf2::TransformableRequestHandle request_handle,
+          const std::string &target_frame, const std::string &source_frame,
+          tf2::TimePoint time, tf2::TransformableResult result) {
+        received_request_handle = request_handle;
+        received_target_frame = target_frame;
+        received_source_frame = source_frame;
+        received_time_point = time;
+        transform_available = tf2::TransformAvailable == result;
+      };
 
-  tf2::TransformableRequestHandle request_handle = buffer.addTransformableRequest(
-    cb, target_frame, source_frame, time_point);
+  tf2::TransformableRequestHandle request_handle =
+      buffer.addTransformableRequest(cb, target_frame, source_frame,
+                                     time_point);
   ASSERT_NE(request_handle, 0u);
 
   geometry_msgs::msg::TransformStamped transform_msg;
@@ -115,8 +110,7 @@ TEST(tf2, setTransformValidWithCallback)
   EXPECT_TRUE(transform_available);
 }
 
-TEST(tf2, setTransformInvalidQuaternion)
-{
+TEST(tf2, setTransformInvalidQuaternion) {
   tf2::BufferCore tfc;
   geometry_msgs::msg::TransformStamped st;
   st.header.frame_id = "foo";
@@ -128,24 +122,20 @@ TEST(tf2, setTransformInvalidQuaternion)
   EXPECT_FALSE(tfc.setTransform(st, "authority1"));
 }
 
-TEST(tf2_lookupTransform, LookupException_Nothing_Exists)
-{
+TEST(tf2_lookupTransform, LookupException_Nothing_Exists) {
   tf2::BufferCore tfc;
   EXPECT_THROW(
-    tfc.lookupTransform(
-      "a", "b", tf2::TimePoint(
-        std::chrono::seconds(
-          1))), tf2::LookupException);
+      tfc.lookupTransform("a", "b", tf2::TimePoint(std::chrono::seconds(1))),
+      tf2::LookupException);
 }
 
-TEST(tf2_canTransform, Nothing_Exists)
-{
+TEST(tf2_canTransform, Nothing_Exists) {
   tf2::BufferCore tfc;
-  EXPECT_FALSE(tfc.canTransform("a", "b", tf2::TimePoint(std::chrono::seconds(1))));
+  EXPECT_FALSE(
+      tfc.canTransform("a", "b", tf2::TimePoint(std::chrono::seconds(1))));
 }
 
-TEST(tf2_lookupTransform, LookupException_One_Exists)
-{
+TEST(tf2_lookupTransform, LookupException_One_Exists) {
   tf2::BufferCore tfc;
   geometry_msgs::msg::TransformStamped st;
   st.header.frame_id = "foo";
@@ -155,15 +145,12 @@ TEST(tf2_lookupTransform, LookupException_One_Exists)
   st.child_frame_id = "child";
   st.transform.rotation.w = 1;
   EXPECT_TRUE(tfc.setTransform(st, "authority1"));
-  EXPECT_THROW(
-    tfc.lookupTransform(
-      "foo", "bar", tf2::TimePoint(
-        std::chrono::seconds(
-          1))), tf2::LookupException);
+  EXPECT_THROW(tfc.lookupTransform("foo", "bar",
+                                   tf2::TimePoint(std::chrono::seconds(1))),
+               tf2::LookupException);
 }
 
-TEST(tf2_canTransform, One_Exists)
-{
+TEST(tf2_canTransform, One_Exists) {
   tf2::BufferCore tfc;
   geometry_msgs::msg::TransformStamped st;
   st.header.frame_id = "foo";
@@ -173,11 +160,11 @@ TEST(tf2_canTransform, One_Exists)
   st.child_frame_id = "child";
   st.transform.rotation.w = 1;
   EXPECT_TRUE(tfc.setTransform(st, "authority1"));
-  EXPECT_FALSE(tfc.canTransform("foo", "bar", tf2::TimePoint(std::chrono::seconds(1))));
+  EXPECT_FALSE(
+      tfc.canTransform("foo", "bar", tf2::TimePoint(std::chrono::seconds(1))));
 }
 
-TEST(tf2_clear, LookUp_Static_Transfrom_Succeed)
-{
+TEST(tf2_clear, LookUp_Static_Transfrom_Succeed) {
   tf2::BufferCore tfc;
   geometry_msgs::msg::TransformStamped st;
   st.header.frame_id = "foo";
@@ -188,13 +175,11 @@ TEST(tf2_clear, LookUp_Static_Transfrom_Succeed)
   st.transform.rotation.w = 1;
   tfc.clear();
   EXPECT_TRUE(tfc.setTransform(st, "authority1", true));
-  EXPECT_NO_THROW(
-    auto trans = tfc.lookupTransform("foo", "bar", tf2::TimePoint(std::chrono::seconds(2)));
-  );
+  EXPECT_NO_THROW(auto trans = tfc.lookupTransform(
+                      "foo", "bar", tf2::TimePoint(std::chrono::seconds(2))););
 }
 
-TEST(tf2_clear, LookUp_Static_Transfrom_Fail)
-{
+TEST(tf2_clear, LookUp_Static_Transfrom_Fail) {
   tf2::BufferCore tfc;
   geometry_msgs::msg::TransformStamped st;
   st.header.frame_id = "foo";
@@ -206,25 +191,22 @@ TEST(tf2_clear, LookUp_Static_Transfrom_Fail)
   EXPECT_TRUE(tfc.setTransform(st, "authority1"));
   tfc.clear();
   EXPECT_TRUE(tfc.setTransform(st, "authority1", true));
-  EXPECT_NO_THROW(
-    auto trans = tfc.lookupTransform("foo", "bar", tf2::TimePoint(std::chrono::seconds(2)));
-  );
+  EXPECT_NO_THROW(auto trans = tfc.lookupTransform(
+                      "foo", "bar", tf2::TimePoint(std::chrono::seconds(2))););
 }
 
-TEST(tf2_time, Display_Time_Point)
-{
+TEST(tf2_time, Display_Time_Point) {
   tf2::TimePoint t = tf2::get_now();
   // Check ability to stringify
   std::string s = tf2::displayTimePoint(t);
 }
 
-TEST(tf2_time, To_From_Sec)
-{
+TEST(tf2_time, To_From_Sec) {
   // Exact representation of a time.
   tf2::TimePoint t1 = tf2::get_now();
 
-  // Approximate representation of the time in seconds as a double (floating point
-  // error introduced).
+  // Approximate representation of the time in seconds as a double (floating
+  // point error introduced).
   double t1_sec = tf2::timeToSec(t1);
 
   // Time point from the t1_sec approximation.
@@ -234,30 +216,31 @@ TEST(tf2_time, To_From_Sec)
   tf2::Duration diff = t2 > t1 ? t2 - t1 : t1 - t2;
   EXPECT_TRUE(diff < tf2::Duration(std::chrono::nanoseconds(200)));
 
-  // No new floating point errors are expected after converting to and from time points.
+  // No new floating point errors are expected after converting to and from time
+  // points.
   double t2_sec = tf2::timeToSec(t2);
   EXPECT_EQ(t1_sec, t2_sec);
   EXPECT_EQ(tf2::timeFromSec(t1_sec), tf2::timeFromSec(t2_sec));
 }
 
-TEST(tf2_time, To_From_Duration)
-{
+TEST(tf2_time, To_From_Duration) {
   tf2::TimePoint t1 = tf2::get_now();
 
   std::vector<double> values = {
-    -0.01, -0.2, -0.5, -0.7, -0.99, -5.7, -1000000, -123456789.123456789,
-    0.01, 0.2, 0.5, 0.7, 0.99, 5.7, 10000000, 123456789.123456789,
-    0.0,
+      -0.01, -0.2, -0.5, -0.7, -0.99, -5.7, -1000000, -123456789.123456789,
+      0.01,  0.2,  0.5,  0.7,  0.99,  5.7,  10000000, 123456789.123456789,
+      0.0,
   };
 
   for (double expected_diff_sec : values) {
-    tf2::TimePoint t2 = tf2::timeFromSec(tf2::timeToSec(t1) + expected_diff_sec);
+    tf2::TimePoint t2 =
+        tf2::timeFromSec(tf2::timeToSec(t1) + expected_diff_sec);
 
     // Check durationToSec.
     tf2::Duration duration1 = t2 - t1;
 
-    // Approximate representation of the duration in seconds as a double (floating point
-    // error introduced).
+    // Approximate representation of the duration in seconds as a double
+    // (floating point error introduced).
     double duration1_sec = tf2::durationToSec(duration1);
 
     // Check that the difference due to duration_sec being approximate is small.
@@ -265,19 +248,21 @@ TEST(tf2_time, To_From_Duration)
     EXPECT_TRUE(std::abs(error_sec) < 200 * 1e-9);
 
     // Check durationFromSec.
-    tf2::Duration duration2 = tf2::durationFromSec(tf2::durationToSec(duration1));
+    tf2::Duration duration2 =
+        tf2::durationFromSec(tf2::durationToSec(duration1));
     tf2::Duration error_duration = duration1 - duration2;
     // Get the absolute difference between Durations.
-    error_duration = error_duration > tf2::Duration(0) ? error_duration : -error_duration;
+    error_duration =
+        error_duration > tf2::Duration(0) ? error_duration : -error_duration;
     // Increased tolerance for larger differences.
     int32_t tol_ns = std::abs(expected_diff_sec) > 100000 ? 10 : 1;
 
-    EXPECT_TRUE(error_duration < tf2::Duration(std::chrono::nanoseconds(tol_ns)));
+    EXPECT_TRUE(error_duration <
+                tf2::Duration(std::chrono::nanoseconds(tol_ns)));
   }
 }
 
-TEST(tf2_convert, Covariance_RowMajor_To_Nested)
-{
+TEST(tf2_convert, Covariance_RowMajor_To_Nested) {
   // test verifies the correct conversion of the flat covariance array to a
   // nested covariance array.
   // create a dummy input with some values
@@ -287,20 +272,20 @@ TEST(tf2_convert, Covariance_RowMajor_To_Nested)
   // setup the expected output
   std::array<std::array<double, 6>, 6> expected;
   double start = 0;
-  for (std::array<double, 6> & ee : expected) {
+  for (std::array<double, 6> &ee : expected) {
     std::iota(ee.begin(), ee.end(), start);
     start += static_cast<double>(ee.size());
   }
 
   // call the tested method
-  const std::array<std::array<double, 6>, 6> result = tf2::covarianceRowMajorToNested(input);
+  const std::array<std::array<double, 6>, 6> result =
+      tf2::covarianceRowMajorToNested(input);
 
   // check the result
   ASSERT_EQ(expected, result);
 }
 
-int main(int argc, char ** argv)
-{
+int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }
