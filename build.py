@@ -31,13 +31,27 @@ def get_poetry_venv_path() -> Path:
 
 
 def build(setup_kwargs: Dict[str, Any]) -> None:
+    venv_path = get_poetry_venv_path()
     """Build C-extensions."""
-    skbuild.setup(**setup_kwargs, script_args=["build_ext"])
+    pybind11_path = (
+        venv_path
+        / "lib"
+        / f"python{sysconfig.get_python_version()}"
+        / "site-packages"
+        / "pybind11"
+        / "share"
+        / "cmake"
+        / "pybind11"
+    )
+    skbuild.setup(
+        **setup_kwargs,
+        script_args=["build_ext"],
+        cmake_args=["-Dpybind11_DIR=" + str(pybind11_path)],
+    )
 
     src_dir = Path(skbuild.constants.CMAKE_INSTALL_DIR())
 
     # Get the installation directory for the Poetry virtual environment
-    venv_path = get_poetry_venv_path()
     dest_dir = (
         venv_path / "lib" / f"python{sysconfig.get_python_version()}" / "site-packages"
     )
