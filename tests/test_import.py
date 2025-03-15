@@ -1,4 +1,5 @@
 from amber.importer.video import VideoImporter, VideoImporterConfig
+from amber.importer.tf import TfImporter, TfImporterConfig
 from pathlib import Path
 import os
 
@@ -12,3 +13,7 @@ def test_video_importer() -> None:
         ),
     )
     importer.write()
+
+
+def test_tf_importer() -> None:
+    pass
