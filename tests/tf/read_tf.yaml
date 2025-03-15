@@ -1,0 +1,4 @@
+topic_name: "/tf"
+static_tf_topic_name: "/tf_static"
+target_frame: base_link
+source_frame: map
