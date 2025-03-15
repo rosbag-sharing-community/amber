@@ -3,6 +3,7 @@ from amber.importer.tf import TfImporter, TfImporterConfig
 from amber.dataset.tf_dataset import TfDataset, ReadTfTopicConfig
 from tf2_amber import TransformStamped
 from pathlib import Path
+from torch.utils.data import DataLoader
 import os
 import copy
 
@@ -26,9 +27,9 @@ def test_tf_importer() -> None:
     sample_data.header.stamp.nanosec = 0
     sample_data.header.stamp.sec = 0
     sample_data.transform.translation.x = 1
-    importer.write(copy.deepcopy(sample_data))
+    importer.write(sample_data)
     sample_data.header.stamp.sec = 10
-    importer.write(copy.deepcopy(sample_data))
+    importer.write(sample_data)
     importer.finish()
 
     current_path = Path(os.path.dirname(os.path.realpath(__file__)))
@@ -36,3 +37,8 @@ def test_tf_importer() -> None:
         str(current_path / "output.mcap"),
         ReadTfTopicConfig.from_yaml_file(str(current_path / "tf" / "read_tf.yaml")),
     )
+    dataloader = DataLoader(dataset, batch_size=1, shuffle=False, num_workers=0)
+    count = 0
+    for i_batch, sample_batched in enumerate(dataloader):
+        for sample in sample_batched:
+            count = count + 1
