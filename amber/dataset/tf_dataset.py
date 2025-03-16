@@ -76,8 +76,8 @@ class TfDataset(Rosbag2Dataset):  # type: ignore
             timestamp_nanosec = Time(float(timestamp), TimeUnit.NANOSECOND)
             try:
                 transform = tf_buffer.lookupTransform(
-                    self.config.target_frame,
                     self.config.source_frame,
+                    self.config.target_frame,
                     timeFromSec(timestamp_nanosec.get(TimeUnit.SECOND)),
                 )
                 self.transforms.append(transform)
