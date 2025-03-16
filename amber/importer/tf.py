@@ -28,7 +28,10 @@ class TfImporter:
         self.file.close()
 
     def write(self, transform: TransformStamped):
-        nanoseconds = int(transform.header.stamp.sec * math.pow(10, 9) + transform.header.stamp.nanosec)
+        nanoseconds = int(
+            transform.header.stamp.sec * math.pow(10, 9)
+            + transform.header.stamp.nanosec
+        )
         self.writer.write_message(
             topic="/tf",
             schema=self.schema,

@@ -299,12 +299,18 @@ def build_message_from_transform_stamped(
     return {
         "header": build_message_from_header(header.stamp, header.frame_id),
         "child_frame_id": child_frame_id,
-        "transform": build_message_from_transform(transform.translation, transform.rotation),
+        "transform": build_message_from_transform(
+            transform.translation, transform.rotation
+        ),
     }
 
 
 def build_message_from_tf(transforms: List[tf2_amber.TransformStamped]):
     ret = {"transforms": []}
     for transform in transforms:
-        ret["transforms"].append(build_message_from_transform_stamped(transform.header, transform.child_frame_id, transform.transform))
+        ret["transforms"].append(
+            build_message_from_transform_stamped(
+                transform.header, transform.child_frame_id, transform.transform
+            )
+        )
     return ret

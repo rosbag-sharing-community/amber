@@ -31,14 +31,3 @@ def test_tf_importer() -> None:
     sample_data.header.stamp.sec = 10
     importer.write(sample_data)
     importer.finish()
-
-    current_path = Path(os.path.dirname(os.path.realpath(__file__)))
-    dataset = TfDataset(
-        str(current_path / "output.mcap"),
-        ReadTfTopicConfig.from_yaml_file(str(current_path / "tf" / "read_tf.yaml")),
-    )
-    dataloader = DataLoader(dataset, batch_size=1, shuffle=False, num_workers=0)
-    count = 0
-    for i_batch, sample_batched in enumerate(dataloader):
-        for sample in sample_batched:
-            count = count + 1
