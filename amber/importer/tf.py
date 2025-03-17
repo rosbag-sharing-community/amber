@@ -28,12 +28,16 @@ class TfImporter:
         self.file.close()
 
     def write(self, transform: TransformStamped):
+        nanoseconds = int(
+            transform.header.stamp.sec * math.pow(10, 9)
+            + transform.header.stamp.nanosec
+        )
         self.writer.write_message(
             topic="/tf",
             schema=self.schema,
             message=build_message_from_tf([transform]),
-            log_time=0,
-            publish_time=0,
+            log_time=nanoseconds,
+            publish_time=nanoseconds,
             sequence=self.index,
         )
         self.index = self.index + 1
@@ -45,4 +49,4 @@ if __name__ == "__main__":
     # importer.write(TransformStamped())
     # importer.write(TransformStamped())
     # importer.write(TransformStamped())
-    # importer.close()
+    # importer.finish()

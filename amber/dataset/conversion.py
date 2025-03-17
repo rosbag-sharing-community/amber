@@ -294,14 +294,23 @@ def build_message_from_transform(
 
 
 def build_message_from_transform_stamped(
-    header: tf2_amber.Header, frame_id: str, transform: tf2_amber.Transform
+    header: tf2_amber.Header, child_frame_id: str, transform: tf2_amber.Transform
 ):
     return {
-        "header": build_message_from_header(header.stamp, header.str),
-        "frame_id": frame_id,
-        "transform": build_message_from_transform(transform),
+        "header": build_message_from_header(header.stamp, header.frame_id),
+        "child_frame_id": child_frame_id,
+        "transform": build_message_from_transform(
+            transform.translation, transform.rotation
+        ),
     }
 
 
-def build_message_from_tf(transforms: List[tf2_amber.Transform]):
-    return {"transforms": transforms}
+def build_message_from_tf(transforms: List[tf2_amber.TransformStamped]):
+    ret = {"transforms": []}
+    for transform in transforms:
+        ret["transforms"].append(
+            build_message_from_transform_stamped(
+                transform.header, transform.child_frame_id, transform.transform
+            )
+        )
+    return ret
