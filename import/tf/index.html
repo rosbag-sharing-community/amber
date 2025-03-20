@@ -6,12 +6,12 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <meta content="Masaya Kataoka" name="author"/>
-<link href="https://rosbag-sharing-community.github.io/amber/sample_applications/sample_applications/" rel="canonical"/>
-<link href="../../import/tf/" rel="prev"/>
-<link href="../image_search/" rel="next"/>
+<link href="https://rosbag-sharing-community.github.io/amber/import/tf/" rel="canonical"/>
+<link href="../video/" rel="prev"/>
+<link href="../../sample_applications/sample_applications/" rel="next"/>
 <link href="../../assets/images/favicon.png" rel="icon"/>
 <meta content="mkdocs-1.5.3, mkdocs-material-9.5.18" name="generator"/>
-<title>Sample Applications - amber</title>
+<title>TF - amber</title>
 <link href="../../assets/stylesheets/main.66ac8b77.min.css" rel="stylesheet"/>
 <link href="../../assets/stylesheets/palette.06af60db.min.css" rel="stylesheet"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -25,7 +25,7 @@
 <input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
 <label class="md-overlay" for="__drawer"></label>
 <div data-md-component="skip">
-<a class="md-skip" href="#image-search">
+<a class="md-skip" href="#tf">
           Skip to content
         </a>
 </div>
@@ -49,7 +49,7 @@
 <div class="md-header__topic" data-md-component="header-topic">
 <span class="md-ellipsis">
             
-              Sample Applications
+              TF
             
           </span>
 </div>
@@ -145,16 +145,16 @@
 
         </a>
 </li>
-<li class="md-tabs__item">
-<a class="md-tabs__link" href="../../import/import/">
+<li class="md-tabs__item md-tabs__item--active">
+<a class="md-tabs__link" href="../import/">
           
   
   Import
 
         </a>
 </li>
-<li class="md-tabs__item md-tabs__item--active">
-<a class="md-tabs__link" href="./">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../sample_applications/sample_applications/">
           
   
   Sample Applications
@@ -336,69 +336,45 @@
 </ul>
 </nav>
 </li>
-<li class="md-nav__item md-nav__item--nested">
-<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_6" type="checkbox"/>
-<label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_6" type="checkbox"/>
+<label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
 <span class="md-ellipsis">
     Import
   </span>
 <span class="md-nav__icon md-icon"></span>
 </label>
-<nav aria-expanded="false" aria-labelledby="__nav_6_label" class="md-nav" data-md-level="1">
+<nav aria-expanded="true" aria-labelledby="__nav_6_label" class="md-nav" data-md-level="1">
 <label class="md-nav__title" for="__nav_6">
 <span class="md-nav__icon md-icon"></span>
             Import
           </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../import/import/">
+<a class="md-nav__link" href="../import/">
 <span class="md-ellipsis">
     Import
   </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../import/video/">
+<a class="md-nav__link" href="../video/">
 <span class="md-ellipsis">
     Video
   </span>
 </a>
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../import/tf/">
-<span class="md-ellipsis">
-    TF
-  </span>
-</a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
-<input checked="" class="md-nav__toggle md-toggle" id="__nav_7" type="checkbox"/>
-<label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
-<span class="md-ellipsis">
-    Sample Applications
-  </span>
-<span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-expanded="true" aria-labelledby="__nav_7_label" class="md-nav" data-md-level="1">
-<label class="md-nav__title" for="__nav_7">
-<span class="md-nav__icon md-icon"></span>
-            Sample Applications
-          </label>
-<ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item md-nav__item--active">
 <input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
 <label class="md-nav__link md-nav__link--active" for="__toc">
 <span class="md-ellipsis">
-    Sample Applications
+    TF
   </span>
 <span class="md-nav__icon md-icon"></span>
 </label>
 <a class="md-nav__link md-nav__link--active" href="./">
 <span class="md-ellipsis">
-    Sample Applications
+    TF
   </span>
 </a>
 <nav aria-label="Table of contents" class="md-nav md-nav--secondary">
@@ -408,17 +384,48 @@
     </label>
 <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#image-search">
+<a class="md-nav__link" href="#how-to-use">
 <span class="md-ellipsis">
-      Image Search
+      How to use
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#view-rosbag-data-in-foxglove">
+<span class="md-ellipsis">
+      View rosbag data in foxglove
     </span>
 </a>
 </li>
 </ul>
 </nav>
 </li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle md-toggle--indeterminate" id="__nav_7" type="checkbox"/>
+<label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+<span class="md-ellipsis">
+    Sample Applications
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_7_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_7">
+<span class="md-nav__icon md-icon"></span>
+            Sample Applications
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../image_search/">
+<a class="md-nav__link" href="../../sample_applications/sample_applications/">
+<span class="md-ellipsis">
+    Sample Applications
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../sample_applications/image_search/">
 <span class="md-ellipsis">
     Image Search
   </span>
@@ -434,12 +441,37 @@
 </div>
 <div class="md-content" data-md-component="content">
 <article class="md-content__inner md-typeset">
-<h1>Sample Applications</h1>
-<p>This page shows a sample implementation of an application that can be developed using <a href="https://github.com/rosbag-sharing-community/amber">amber</a>.</p>
-<h2 id="image-search">Image Search<a class="headerlink" href="#image-search" title="Permanent link">#</a></h2>
-<p>This application supports text search against images with multiple Vison-Language models.
-For more information, click <a href="../image_search">here</a>.</p>
-<iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" frameborder="0" height="315" src="https://www.youtube.com/embed/ryp29wm46TQ?si=ZDRpYwQRO09ogdMZ" title="YouTube video player" width="560"></iframe>
+<h1 id="tf">TF<a class="headerlink" href="#tf" title="Permanent link">#</a></h1>
+<p>TF import tool can write tf2_amber.TransformStamped python object to mcap file as <a href="https://docs.ros2.org/foxy/api/tf2_msgs/msg/TFMessage.html"><code>tf2_msgs/msg/TFMessage</code> in ROS 2.</a></p>
+<h2 id="how-to-use">How to use<a class="headerlink" href="#how-to-use" title="Permanent link">#</a></h2>
+<div class="highlight"><pre><span></span><code><span class="n">config</span> <span class="o">=</span> <span class="n">TfImporterConfig</span><span class="p">()</span>
+<span class="n">config</span><span class="o">.</span><span class="n">rosbag_path</span> <span class="o">=</span> <span class="s2">"output.mcap"</span> <span class="c1"># Path to output mcap rosbag file.</span>
+<span class="n">importer</span> <span class="o">=</span> <span class="n">TfImporter</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+<span class="n">sample_data</span> <span class="o">=</span> <span class="n">TransformStamped</span><span class="p">()</span>
+<span class="n">sample_data</span><span class="o">.</span><span class="n">child_frame_id</span> <span class="o">=</span> <span class="s2">"base_link"</span>
+<span class="n">sample_data</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">frame_id</span> <span class="o">=</span> <span class="s2">"map"</span>
+<span class="n">sample_data</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">stamp</span><span class="o">.</span><span class="n">nanosec</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">sample_data</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">stamp</span><span class="o">.</span><span class="n">sec</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">sample_data</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">translation</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">importer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">sample_data</span><span class="p">)</span>
+<span class="n">sample_data</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">stamp</span><span class="o">.</span><span class="n">sec</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">importer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">sample_data</span><span class="p">)</span>
+<span class="n">importer</span><span class="o">.</span><span class="n">finish</span><span class="p">()</span>
+</code></pre></div>
+<p>Then, run <code>ros2 bag info output.mcap</code></p>
+<div class="highlight"><pre><span></span><code>closing.
+
+Files:<span class="w">             </span>tests/output.mcap
+Bag<span class="w"> </span>size:<span class="w">          </span><span class="m">4</span>.0<span class="w"> </span>KiB
+Storage<span class="w"> </span>id:<span class="w">        </span>mcap
+Duration:<span class="w">          </span><span class="m">10</span>.000000000s
+Start:<span class="w">             </span>Jan<span class="w">  </span><span class="m">1</span><span class="w"> </span><span class="m">1970</span><span class="w"> </span><span class="m">09</span>:00:00.000000000<span class="w"> </span><span class="o">(</span><span class="m">0</span>.000000000<span class="o">)</span>
+End:<span class="w">               </span>Jan<span class="w">  </span><span class="m">1</span><span class="w"> </span><span class="m">1970</span><span class="w"> </span><span class="m">09</span>:00:10.000000000<span class="w"> </span><span class="o">(</span><span class="m">10</span>.000000000<span class="o">)</span>
+Messages:<span class="w">          </span><span class="m">2</span>
+Topic<span class="w"> </span>information:<span class="w"> </span>Topic:<span class="w"> </span>/tf<span class="w"> </span><span class="p">|</span><span class="w"> </span>Type:<span class="w"> </span>tf2_msgs/msg/TFMessage<span class="w"> </span><span class="p">|</span><span class="w"> </span>Count:<span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>Serialization<span class="w"> </span>Format:<span class="w"> </span>cdr
+</code></pre></div>
+<h2 id="view-rosbag-data-in-foxglove">View rosbag data in foxglove<a class="headerlink" href="#view-rosbag-data-in-foxglove" title="Permanent link">#</a></h2>
+<p><img alt="No Image" src="../tf_on_foxglove.png" title="rosbag visualization by foxglove"/></p>
 <aside class="md-source-file">
 <span class="md-source-file__fact">
 <span class="md-icon" title="Last update">
