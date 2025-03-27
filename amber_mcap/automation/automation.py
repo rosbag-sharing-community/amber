@@ -1,18 +1,18 @@
 from typing import Any
 from abc import ABC, abstractmethod
-from amber.dataset.images_dataset import Rosbag2Dataset
+from amber_mcap.dataset.images_dataset import Rosbag2Dataset
 from typing import List, Dict
 import json
 from mcap.reader import NonSeekingReader
 from mcap_ros2.writer import Writer
 from mcap.records import Schema
-from amber.dataset.schema import StringMessageSchema
-from amber.dataset.conversion import decode_message
-from amber.exception import RosbagSchemaError
+from amber_mcap.dataset.schema import StringMessageSchema
+from amber_mcap.dataset.conversion import decode_message
+from amber_mcap.exception import RosbagSchemaError
 from mcap_ros2.decoder import Decoder
 import sys
 import datetime
-from amber.unit.time import Time, TimeUnit
+from amber_mcap.unit.time import Time, TimeUnit
 
 
 class Automation(ABC):

@@ -1,5 +1,5 @@
 import pytest
-from amber.automation.blip2_encoder import Blip2Encoder
+from amber_mcap.automation.blip2_encoder import Blip2Encoder
 from pathlib import Path
 import os
 import torch

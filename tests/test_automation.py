@@ -1,14 +1,14 @@
-from amber.automation.detic_image_labeler import DeticImageLabeler
-from amber.automation.clip_image_annotation_filter import ClipImageAnnotationFilter
-from amber.automation.nerf_3d_reconstruction import Nerf3DReconstruction
+from amber_mcap.automation.detic_image_labeler import DeticImageLabeler
+from amber_mcap.automation.clip_image_annotation_filter import ClipImageAnnotationFilter
+from amber_mcap.automation.nerf_3d_reconstruction import Nerf3DReconstruction
 from pathlib import Path
 import os
-from amber.dataset.images_dataset import ImagesDataset, ReadImagesConfig
-from amber.dataset.images_and_annotations_dataset import (
+from amber_mcap.dataset.images_dataset import ImagesDataset, ReadImagesConfig
+from amber_mcap.dataset.images_and_annotations_dataset import (
     ImagesAndAnnotationsDataset,
     ReadImagesAndAnnotationsConfig,
 )
-from amber.dataset.rosbag2_dataset import download_rosbag
+from amber_mcap.dataset.rosbag2_dataset import download_rosbag
 import torch
 import pytest
 

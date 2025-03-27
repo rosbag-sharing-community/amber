@@ -1,8 +1,8 @@
 import docker
-from amber.automation.automation import Automation
+from amber_mcap.automation.automation import Automation
 import os
-from amber.dataset.images_dataset import ImagesDataset
-from amber.automation.task_description import ColmapPoseEstimationConfig
+from amber_mcap.dataset.images_dataset import ImagesDataset
+from amber_mcap.automation.task_description import ColmapPoseEstimationConfig
 from typing import List
 from torchvision import transforms
 import uuid

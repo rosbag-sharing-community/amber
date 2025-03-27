@@ -1,9 +1,11 @@
-from amber.dataset.images_and_annotations_dataset import ImagesAndAnnotationsDataset
-from amber.automation.automation import Automation
-from amber.automation.annotation import ImageAnnotation, BoundingBoxAnnotation
-from amber.automation.clip_encoder import ClipEncoder
-from amber.automation.sentence_transformer import TextEncoder
-from amber.automation.task_description import (
+from amber_mcap.dataset.images_and_annotations_dataset import (
+    ImagesAndAnnotationsDataset,
+)
+from amber_mcap.automation.automation import Automation
+from amber_mcap.automation.annotation import ImageAnnotation, BoundingBoxAnnotation
+from amber_mcap.automation.clip_encoder import ClipEncoder
+from amber_mcap.automation.sentence_transformer import TextEncoder
+from amber_mcap.automation.task_description import (
     ClipImageAnnotationFilterConfig,
     ClipClassifyMethod,
 )
@@ -11,7 +13,7 @@ from torchvision import transforms
 from typing import List, Dict, Tuple
 from torch.nn.functional import cosine_similarity
 import torch
-from amber.exception import RuntimeError
+from amber_mcap.exception import RuntimeError
 import copy
 
 

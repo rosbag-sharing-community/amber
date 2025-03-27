@@ -1,9 +1,9 @@
-from amber.visualization.clip_embeddings_visualization import (
+from amber_mcap.visualization.clip_embeddings_visualization import (
     ClipEmbeddingsVisualization,
 )
 from pathlib import Path
 import os
-from amber.dataset.images_and_annotations_dataset import (
+from amber_mcap.dataset.images_and_annotations_dataset import (
     ImagesAndAnnotationsDataset,
     ReadImagesAndAnnotationsConfig,
 )

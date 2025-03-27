@@ -2,7 +2,7 @@ import os
 from torch.utils.data import IterableDataset
 from typing import Any, List, Optional
 from yaml import safe_load  # type: ignore
-from amber.exception import CertificationError
+from amber_mcap.exception import CertificationError
 from dataclasses import dataclass
 from dataclass_wizard import JSONWizard
 import glob

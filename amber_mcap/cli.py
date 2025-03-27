@@ -1,17 +1,17 @@
 from argparse import ArgumentParser
-from amber.exception import TaskDescriptionError
+from amber_mcap.exception import TaskDescriptionError
 import os
 from yaml import safe_load  # type: ignore
-from amber.automation.detic_image_labeler import DeticImageLabeler
-from amber.automation.clip_image_annotation_filter import ClipImageAnnotationFilter
-from amber.automation.nerf_3d_reconstruction import Nerf3DReconstruction
-from amber.dataset.images_dataset import ImagesDataset, ReadImagesConfig
-from amber.dataset.images_and_annotations_dataset import (
+from amber_mcap.automation.detic_image_labeler import DeticImageLabeler
+from amber_mcap.automation.clip_image_annotation_filter import ClipImageAnnotationFilter
+from amber_mcap.automation.nerf_3d_reconstruction import Nerf3DReconstruction
+from amber_mcap.dataset.images_dataset import ImagesDataset, ReadImagesConfig
+from amber_mcap.dataset.images_and_annotations_dataset import (
     ImagesAndAnnotationsDataset,
     ReadImagesAndAnnotationsConfig,
 )
-from amber.importer.video import VideoImporter, VideoImporterConfig
-from amber.visualization.clip_embeddings_visualization import (
+from amber_mcap.importer.video import VideoImporter, VideoImporterConfig
+from amber_mcap.visualization.clip_embeddings_visualization import (
     ClipEmbeddingsVisualization,
 )
 from typing import Any, Callable, List

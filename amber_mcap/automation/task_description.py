@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from dataclass_wizard import YAMLWizard
-from amber.exception import TaskDescriptionError
+from amber_mcap.exception import TaskDescriptionError
 from enum import Enum
 from typing import Dict
 import os

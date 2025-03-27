@@ -3,12 +3,12 @@ from mcap.records import Message, Schema
 from mcap_ros2.decoder import Decoder
 from mcap_ros2._dynamic import DecodedMessage
 from pyzstd import decompress, compress
-from amber.exception import MessageDecodingError
+from amber_mcap.exception import MessageDecodingError
 import numpy as np
 import torch
 import torchvision.transforms as transforms
 import numpy
-from amber.unit.time import Time, TimeUnit
+from amber_mcap.unit.time import Time, TimeUnit
 import math
 from sys import byteorder
 from typing import Any, List, Callable

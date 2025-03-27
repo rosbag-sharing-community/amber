@@ -11,7 +11,7 @@ source_frame: map
 ```
 
 ```python
-from amber.dataset.tf_dataset import TfDataset, ReadTfTopicConfig
+from amber_mcap.dataset.tf_dataset import TfDataset, ReadTfTopicConfig
 
 current_path = Path(os.path.dirname(os.path.realpath(__file__)))
 dataset = TfDataset(

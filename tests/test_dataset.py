@@ -1,12 +1,15 @@
-from amber.dataset.images_dataset import ImagesDataset, ReadImagesConfig
-from amber.dataset.images_and_annotations_dataset import (
+from amber_mcap.dataset.images_dataset import ImagesDataset, ReadImagesConfig
+from amber_mcap.dataset.images_and_annotations_dataset import (
     ImagesAndAnnotationsDataset,
     ReadImagesAndAnnotationsConfig,
 )
-from amber.dataset.pointcloud_dataset import PointcloudDataset, ReadPointCloudConfig
-from amber.dataset.tf_dataset import TfDataset, ReadTfTopicConfig
-from amber.dataset.rosbag2_dataset import download_rosbag
-from amber.dataset.conversion import image_to_tensor
+from amber_mcap.dataset.pointcloud_dataset import (
+    PointcloudDataset,
+    ReadPointCloudConfig,
+)
+from amber_mcap.dataset.tf_dataset import TfDataset, ReadTfTopicConfig
+from amber_mcap.dataset.rosbag2_dataset import download_rosbag
+from amber_mcap.dataset.conversion import image_to_tensor
 from torch.utils.data import DataLoader
 import torch
 import tests

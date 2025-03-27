@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "amber"
+name = "amber_mcap"
 version = "0.0.1"
 description = "Annotation and Multimodal Bag Extraction for Robotics"
 authors = ["Masaya Kataoka <ms.kataoka@gmail.com>"]
@@ -8,15 +8,15 @@ license = "Apache 2.0"
 include = [
     # Source files for C extensions must be included in the source distribution.
     { path = "CMakeLists.txt", format = "sdist" },
-    { path = "amber/**/*.cpp", format = "sdist" },
+    { path = "amber_mcap/**/*.cpp", format = "sdist" },
     # C extensions must be included in the wheel distribution.
-    { path = "amber/**/*.pyd", format = "wheel" },
-    { path = "amber/**/*.so", format = "wheel" },
+    { path = "amber_mcap/**/*.pyd", format = "wheel" },
+    { path = "amber_mcap/**/*.so", format = "wheel" },
 ]
 exclude = [
-    "amber/**/*.cpp",
-    "amber/**/*.pyd",
-    "amber/**/*.so",
+    "amber_mcap/**/*.cpp",
+    "amber_mcap/**/*.pyd",
+    "amber_mcap/**/*.so",
 ]
 
 [tool.poetry.build]
@@ -97,7 +97,7 @@ plantuml-markdown = "^3.9.2"
 plantuml = "^0.3.0"
 
 [tool.poetry.scripts]
-amber = "amber.cli:main"
+amber = "amber_mcap.cli:main"
 
 [[tool.poetry.source]]
 name = "torch_cu124"

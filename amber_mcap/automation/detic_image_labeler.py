@@ -1,21 +1,21 @@
 import os
 
-from amber.dataset.images_dataset import ImagesDataset
-from amber.automation.automation import Automation
-from amber.automation.clip_encoder import ClipEncoder
+from amber_mcap.dataset.images_dataset import ImagesDataset
+from amber_mcap.automation.automation import Automation
+from amber_mcap.automation.clip_encoder import ClipEncoder
 
-import amber
-from amber.automation.task_description import (
+import amber_mcap
+from amber_mcap.automation.task_description import (
     DeticImageLabalerConfig,
 )
-from amber.automation.annotation import ImageAnnotation, BoundingBoxAnnotation
+from amber_mcap.automation.annotation import ImageAnnotation, BoundingBoxAnnotation
 
 
-from amber.util.lvis.lvis_v1_categories import (
+from amber_mcap.util.lvis.lvis_v1_categories import (
     LVIS_CATEGORIES as LVIS_V1_CATEGORIES,
 )
-from amber.util.imagenet_21k.in21k_categories import IN21K_CATEGORIES
-from amber.util.color import color_brightness, random_color
+from amber_mcap.util.imagenet_21k.in21k_categories import IN21K_CATEGORIES
+from amber_mcap.util.color import color_brightness, random_color
 
 import os
 from torchvision import transforms
@@ -48,7 +48,7 @@ class DeticImageLabeler(Automation):  # type: ignore
         model: str,
         base_url: str = "https://storage.googleapis.com/ailia-models/detic/",
     ) -> str:
-        download_directory = os.path.join(amber.__path__[0], "automation", "onnx")
+        download_directory = os.path.join(amber_mcap.__path__[0], "automation", "onnx")
         weight_path = os.path.join(download_directory, model)
         if not os.path.exists(weight_path):
             download(base_url + model, weight_path)

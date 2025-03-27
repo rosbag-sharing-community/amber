@@ -1,8 +1,10 @@
-from amber.automation.clip_encoder import ClipEncoder
+from amber_mcap.automation.clip_encoder import ClipEncoder
 from PIL import Image
-from amber.automation.annotation import ImageAnnotation, BoundingBoxAnnotation
+from amber_mcap.automation.annotation import ImageAnnotation, BoundingBoxAnnotation
 from typing import List
-from amber.dataset.images_and_annotations_dataset import ImagesAndAnnotationsDataset
+from amber_mcap.dataset.images_and_annotations_dataset import (
+    ImagesAndAnnotationsDataset,
+)
 import torch
 from torchvision import transforms
 import tensorboardX
