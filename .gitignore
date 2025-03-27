@@ -4,6 +4,7 @@ poetry.lock
 __pycache__
 .coverage
 requirements.txt
+amber_mcap/tf2_amber.cpython-310-x86_64-linux-gnu.so
 
 # output data
 output.mcap

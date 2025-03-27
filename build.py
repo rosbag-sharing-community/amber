@@ -65,6 +65,7 @@ def build(setup_kwargs: Dict[str, Any]) -> None:
     # Copy built C-extensions back to the Poetry virtual environment.
     copy_files(src_dir, dest_dir, "**/*.pyd")
     copy_files(src_dir, dest_dir, "**/*.so")
+    copy_files(src_dir, Path("amber_mcap"), "**/*.so")
 
 
 def remove_files(target_dir: Path, pattern: str) -> None:

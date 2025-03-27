@@ -13,11 +13,6 @@ include = [
     { path = "amber_mcap/**/*.pyd", format = "wheel" },
     { path = "amber_mcap/**/*.so", format = "wheel" },
 ]
-exclude = [
-    "amber_mcap/**/*.cpp",
-    "amber_mcap/**/*.pyd",
-    "amber_mcap/**/*.so",
-]
 
 [tool.poetry.build]
 generate-setup-file = false

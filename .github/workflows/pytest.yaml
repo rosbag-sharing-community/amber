@@ -3,7 +3,7 @@ on:
   pull_request:
     paths:
       - .github/workflows/pytest.yaml
-      - amber/**
+      - amber_mcap/**
       - tests/**
       - pyproject.toml
   push:
