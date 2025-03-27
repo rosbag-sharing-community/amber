@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.22)
 
-project(amber)
+project(amber_mcap)
 find_package(PythonExtensions REQUIRED)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -11,11 +11,11 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
                       -Woverloaded-virtual)
 endif()
 
-set(MESSAGES_DIR amber/tf2/messages)
-set(ROSIDL_RUNTIME_CPP_DIR amber/tf2/rosidl_runtime_cpp)
-set(CONSOLE_BRIDGE_DIR amber/tf2/console_bridge)
-set(TF2_DIR amber/tf2/geometry2/tf2)
-set(TF2_PY_DIR amber/tf2/geometry2/tf2_py)
+set(MESSAGES_DIR amber_mcap/tf2/messages)
+set(ROSIDL_RUNTIME_CPP_DIR amber_mcap/tf2/rosidl_runtime_cpp)
+set(CONSOLE_BRIDGE_DIR amber_mcap/tf2/console_bridge)
+set(TF2_DIR amber_mcap/tf2/geometry2/tf2)
+set(TF2_PY_DIR amber_mcap/tf2/geometry2/tf2_py)
 
 find_package(pybind11 REQUIRED)
 pybind11_add_module(
