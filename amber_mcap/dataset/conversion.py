@@ -16,7 +16,7 @@ import cv2
 import io
 import open3d
 from struct import unpack
-import tf2_amber
+import amber_mcap.tf2_amber
 
 
 def compress_message(message: Message) -> Message:
