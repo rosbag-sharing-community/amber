@@ -48,7 +48,7 @@ class DeticImageLabeler(Automation):  # type: ignore
         model: str,
         base_url: str = "https://storage.googleapis.com/ailia-models/detic/",
     ) -> str:
-        download_directory = os.path.join(amber.__path__[0], "automation", "onnx")
+        download_directory = os.path.join(amber_mcap.__path__[0], "automation", "onnx")
         weight_path = os.path.join(download_directory, model)
         if not os.path.exists(weight_path):
             download(base_url + model, weight_path)
