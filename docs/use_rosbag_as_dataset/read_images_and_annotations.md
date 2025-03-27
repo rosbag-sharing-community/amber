@@ -11,7 +11,7 @@ compressed: false
 ```
 
 ```python
-from amber.dataset.images_and_annotations_dataset import (
+from amber_mcap.dataset.images_and_annotations_dataset import (
     ImagesAndAnnotationsDataset,
     ReadImagesAndAnnotationsConfig,
 )

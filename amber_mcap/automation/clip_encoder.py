@@ -1,8 +1,8 @@
 import torch
 from transformers import CLIPProcessor, CLIPModel
-from amber.automation.annotation import ImageAnnotation
+from amber_mcap.automation.annotation import ImageAnnotation
 from typing import Tuple, List, Optional
-from amber.util.lvis.lvis_v1_categories import (
+from amber_mcap.util.lvis.lvis_v1_categories import (
     LVIS_CATEGORIES as LVIS_V1_CATEGORIES,
 )
 from PIL.Image import Image

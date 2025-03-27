@@ -1,6 +1,6 @@
-from amber.importer.video import VideoImporter, VideoImporterConfig
-from amber.importer.tf import TfImporter, TfImporterConfig
-from amber.dataset.tf_dataset import TfDataset, ReadTfTopicConfig
+from amber_mcap.importer.video import VideoImporter, VideoImporterConfig
+from amber_mcap.importer.tf import TfImporter, TfImporterConfig
+from amber_mcap.dataset.tf_dataset import TfDataset, ReadTfTopicConfig
 from tf2_amber import TransformStamped
 from pathlib import Path
 from torch.utils.data import DataLoader

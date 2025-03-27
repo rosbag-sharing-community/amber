@@ -10,7 +10,7 @@ compressed: false
 ```
 
 ```python
-from amber.dataset.pointcloud_dataset import PointcloudDataset, ReadPointCloudConfig
+from amber_mcap.dataset.pointcloud_dataset import PointcloudDataset, ReadPointCloudConfig
 
 dataset = PointcloudDataset(
   "(path to rosbag .mcap file)",

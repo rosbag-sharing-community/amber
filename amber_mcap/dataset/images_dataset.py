@@ -1,22 +1,19 @@
-from amber.dataset.rosbag2_dataset import Rosbag2Dataset, MessageMetaData
-from amber.automation.annotation import BoundingBoxAnnotation, ImageAnnotation
-from amber.dataset.topic_config import ImageTopicConfig
+from amber_mcap.dataset.rosbag2_dataset import Rosbag2Dataset, MessageMetaData
+from amber_mcap.dataset.topic_config import ImageTopicConfig
 import torch
 from dataclasses import dataclass, field
 from dataclass_wizard import YAMLWizard
-from amber.unit.time import Time, TimeUnit
-from amber.dataset.conversion import decode_image_message, decode_message
-from typing import Any, List, Dict, Tuple
-from amber.dataset.rosbag2_dataset import Rosbag2Dataset
+from amber_mcap.dataset.conversion import decode_image_message
+from typing import Any, List
+from amber_mcap.dataset.rosbag2_dataset import Rosbag2Dataset
 from mcap.reader import NonSeekingReader
-import json
+from amber_mcap.unit.time import Time, TimeUnit
 import datetime
 
 
 @dataclass
-class ReadImagesAndAnnotationsConfig(YAMLWizard):  # type: ignore
+class ReadImagesConfig(YAMLWizard):  # type: ignore
     image_topics: List[ImageTopicConfig] = field(default_factory=list)
-    annotation_topic: str = ""
     compressed: bool = True
 
     def get_image_topics(self) -> List[str]:
@@ -26,18 +23,19 @@ class ReadImagesAndAnnotationsConfig(YAMLWizard):  # type: ignore
         return topics
 
 
-class ImagesAndAnnotationsDataset(Rosbag2Dataset):  # type: ignore
+class ImagesDataset(Rosbag2Dataset):  # type: ignore
+    # images: List[torch.Tensor] = []
     num_images = 0
-    annotations: Dict[int, ImageAnnotation] = {}
-    config = ReadImagesAndAnnotationsConfig()
+    config: ReadImagesConfig = ReadImagesConfig()
 
     def __init__(
         self,
         rosbag_path: str,
-        config: ReadImagesAndAnnotationsConfig,
+        config: ReadImagesConfig,
         transform: Any = None,
         target_transform: Any = None,
-    ):
+    ) -> None:
+        # self.images.clear()
         self.config = config
         print(self.config)
         super().__init__(
@@ -47,9 +45,9 @@ class ImagesAndAnnotationsDataset(Rosbag2Dataset):  # type: ignore
             target_transform,
         )
         self.count_images()
-        self.read_annotations()
 
     def count_images(self) -> None:
+        self.num_images = 0
         for rosbag_file in self.rosbag_files:
             reader = NonSeekingReader(rosbag_file)
             for schema, channel, message in reader.iter_messages():
@@ -70,29 +68,12 @@ class ImagesAndAnnotationsDataset(Rosbag2Dataset):  # type: ignore
                         )
                     )
 
-    def read_annotations(self) -> None:
-        for rosbag_file in self.rosbag_files:
-            reader = NonSeekingReader(rosbag_file)
-            for schema, channel, message in reader.iter_messages():
-                if channel.topic in self.config.annotation_topic:
-                    annotation_json = decode_message(
-                        message, schema, self.config.compressed
-                    )
-                    for annotation in json.loads(annotation_json.data):
-                        annotation = ImageAnnotation.from_json(annotation)
-                        self.annotations[annotation.image_index] = annotation
-
     def __len__(self) -> int:
         return self.num_images
 
-    def __iter__(self):
-        current_index = 0
+    def __iter__(self) -> torch.Tensor:
         for rosbag_file in self.rosbag_files:
             reader = NonSeekingReader(rosbag_file)
             for schema, channel, message in reader.iter_messages():
                 if channel.topic in self.config.get_image_topics():
-                    current_index = current_index + 1
-                    yield (
-                        decode_image_message(message, schema, self.config.compressed),
-                        self.annotations[current_index - 1],
-                    )
+                    yield decode_image_message(message, schema, self.config.compressed)

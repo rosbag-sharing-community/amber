@@ -1,4 +1,4 @@
-from amber.unit.time import Time, TimeUnit
+from amber_mcap.unit.time import Time, TimeUnit
 from pytest import approx
 
 

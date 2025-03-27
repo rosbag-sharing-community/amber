@@ -1,6 +1,6 @@
-from amber.automation.blip2_encoder import Blip2Encoder
-from amber.automation.clip_encoder import ClipEncoder
-from amber.dataset.images_dataset import ImagesDataset, ReadImagesConfig
+from amber_mcap.automation.blip2_encoder import Blip2Encoder
+from amber_mcap.automation.clip_encoder import ClipEncoder
+from amber_mcap.dataset.images_dataset import ImagesDataset, ReadImagesConfig
 from glob import glob
 from pathlib import Path
 from qdrant_client import QdrantClient

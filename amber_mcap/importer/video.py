@@ -1,7 +1,7 @@
 import cv2
-from amber.dataset.schema import ImageMessageSchema
-from amber.unit.time import Time, TimeUnit
-from amber.dataset.conversion import build_message_from_image
+from amber_mcap.dataset.schema import ImageMessageSchema
+from amber_mcap.unit.time import Time, TimeUnit
+from amber_mcap.dataset.conversion import build_message_from_image
 from mcap_ros2.writer import Writer as McapWriter
 from tqdm import tqdm
 import math
