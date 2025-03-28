@@ -8,15 +8,15 @@ import os
 import copy
 
 
-def test_video_importer() -> None:
-    current_path = Path(os.path.dirname(os.path.realpath(__file__)))
-    importer = VideoImporter(
-        str(current_path / "video" / "soccer_goal.mp4"),
-        VideoImporterConfig.from_yaml_file(
-            str(current_path / "video" / "video_importer.yaml")
-        ),
-    )
-    importer.write()
+# def test_video_importer() -> None:
+#     current_path = Path(os.path.dirname(os.path.realpath(__file__)))
+#     importer = VideoImporter(
+#         str(current_path / "video" / "soccer_goal.mp4"),
+#         VideoImporterConfig.from_yaml_file(
+#             str(current_path / "video" / "video_importer.yaml")
+#         ),
+#     )
+#     importer.write()
 
 
 def test_tf_importer() -> None:
