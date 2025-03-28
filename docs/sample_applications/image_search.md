@@ -2,6 +2,12 @@
 
 This application compares the image embedding calculated from the images in the rosbag with the text embedding calculated from the prompts entered by the user using various Vision&Language models, and presents the closest result as the search result.
 
+In order to use this application, please setup amber with 
+
+```bash
+poetry install --with apps
+```
+
 This application uses [qdrant](https://qdrant.tech/), a type of vector search engine, for searching.
 
 ```plantuml format="svg"
