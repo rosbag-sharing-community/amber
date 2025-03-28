@@ -5,7 +5,12 @@ from amber_mcap.unit.time import Time, TimeUnit
 from dataclass_wizard import YAMLWizard
 from dataclasses import dataclass
 from mcap.reader import NonSeekingReader
-from tf2_amber import BufferCore, timeFromSec, durationFromSec, TransformStamped
+from amber_mcap.tf2_amber import (
+    BufferCore,
+    timeFromSec,
+    durationFromSec,
+    TransformStamped,
+)
 import sys
 import torch
 from typing import List
