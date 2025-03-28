@@ -22,9 +22,10 @@ from amber_mcap.tf2_amber import (
     Vector3,
     Transform,
     Quaternion,
-    Time,
     Header,
 )
+
+from amber_mcap.tf2_amber import Time as TFTime
 
 
 def compress_message(message: Message) -> Message:
@@ -247,7 +248,7 @@ def build_transform_stamped_message(
     for message in tf_messages.transforms:
         tf_amber_message = TransformStamped(
             Header(
-                Time(message.header.stamp.sec, message.header.stamp.nanosec),
+                TfTime(message.header.stamp.sec, message.header.stamp.nanosec),
                 message.header.frame_id,
             ),
             message.child_frame_id,
