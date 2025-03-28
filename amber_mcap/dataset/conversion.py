@@ -16,16 +16,7 @@ import cv2
 import io
 import open3d
 from struct import unpack
-from amber_mcap.tf2_amber import (
-    TransformStamped,
-    Header,
-    Vector3,
-    Transform,
-    Quaternion,
-    Header,
-)
-
-from amber_mcap.tf2_amber import Time as TFTime
+import amber_mcap.tf2_amber
 
 
 def compress_message(message: Message) -> Message:
@@ -242,23 +233,25 @@ def build_message_from_image(
 
 def build_transform_stamped_message(
     message: Message, schema: Schema, decompress: bool
-) -> List[TransformStamped]:
+) -> List[amber_mcap.tf2_amber.TransformStamped]:
     tf_messages: Any = decode_message(message, schema, decompress)
-    tf_amber_messages: List[TransformStamped] = []
+    tf_amber_messages: List[amber_mcap.tf2_amber.TransformStamped] = []
     for message in tf_messages.transforms:
-        tf_amber_message = TransformStamped(
-            Header(
-                TfTime(message.header.stamp.sec, message.header.stamp.nanosec),
+        tf_amber_message = amber_mcap.tf2_amber.TransformStamped(
+            amber_mcap.tf2_amber.Header(
+                amber_mcap.tf2_amber.Time(
+                    message.header.stamp.sec, message.header.stamp.nanosec
+                ),
                 message.header.frame_id,
             ),
             message.child_frame_id,
-            Transform(
-                Vector3(
+            amber_mcap.tf2_amber.Transform(
+                amber_mcap.tf2_amber.Vector3(
                     message.transform.translation.x,
                     message.transform.translation.y,
                     message.transform.translation.z,
                 ),
-                Quaternion(
+                amber_mcap.tf2_amber.Quaternion(
                     message.transform.rotation.x,
                     message.transform.rotation.y,
                     message.transform.rotation.z,
@@ -274,7 +267,7 @@ def build_message_from_time(sec: int, nanosec: int):
     return {"sec": sec, "nanosec": nanosec}
 
 
-def build_message_from_header(stamp: Time, frame_id: str):
+def build_message_from_header(stamp: amber_mcap.tf2_amber.Time, frame_id: str):
     return {
         "stamp": build_message_from_time(stamp.sec, stamp.nanosec),
         "frame_id": frame_id,
@@ -289,7 +282,9 @@ def build_message_from_quaternion(x: float, y: float, z: float, w: float):
     return {"x": x, "y": y, "z": z, "w": w}
 
 
-def build_message_from_transform(translation: Vector3, rotation: Quaternion):
+def build_message_from_transform(
+    translation: amber_mcap.tf2_amber.Vector3, rotation: amber_mcap.tf2_amber.Quaternion
+):
     return {
         "translation": build_message_from_vector3(
             translation.x, translation.y, translation.z
@@ -301,7 +296,9 @@ def build_message_from_transform(translation: Vector3, rotation: Quaternion):
 
 
 def build_message_from_transform_stamped(
-    header: Header, child_frame_id: str, transform: Transform
+    header: amber_mcap.tf2_amber.Header,
+    child_frame_id: str,
+    transform: amber_mcap.tf2_amber.Transform,
 ):
     return {
         "header": build_message_from_header(header.stamp, header.frame_id),
@@ -312,7 +309,7 @@ def build_message_from_transform_stamped(
     }
 
 
-def build_message_from_tf(transforms: List[TransformStamped]):
+def build_message_from_tf(transforms: List[amber_mcap.tf2_amber.TransformStamped]):
     ret = {"transforms": []}
     for transform in transforms:
         ret["transforms"].append(
