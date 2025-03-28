@@ -137,7 +137,7 @@ addopts = [
     "--cov-report=html",
     "--cov-report=xml",
     "--cov-report=term",
-    "--cov=amber",
+    "--cov=amber_mcap",
     "--doctest-modules",
     "--ignore=_skbuild",
     "--ignore=build.py",

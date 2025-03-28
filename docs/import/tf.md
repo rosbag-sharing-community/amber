@@ -1,6 +1,6 @@
 # TF
 
-TF import tool can write tf2_amber.TransformStamped python object to mcap file as [`tf2_msgs/msg/TFMessage` in ROS 2.](https://docs.ros2.org/foxy/api/tf2_msgs/msg/TFMessage.html)
+TF import tool can write amber_mcap.tf2_amber.TransformStamped python object to mcap file as [`tf2_msgs/msg/TFMessage` in ROS 2.](https://docs.ros2.org/foxy/api/tf2_msgs/msg/TFMessage.html)
 
 ## How to use
 
