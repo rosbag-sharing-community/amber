@@ -9,7 +9,7 @@ from amber_mcap.dataset.rosbag2_dataset import Rosbag2Dataset
 from mcap.reader import NonSeekingReader
 from amber_mcap.unit.time import Time, TimeUnit
 import datetime
-from amber_mcap.exception import TaskDescriptionError
+from amber_mcap.exception import TaskDescriptionError, RuntimeError
 
 
 @dataclass
@@ -99,6 +99,25 @@ class ImagesDataset(Rosbag2Dataset):  # type: ignore
             for schema, channel, message in reader.iter_messages():
                 if channel.topic in self.config.get_camera_info_topics():
                     return decode_message(message, schema, self.config.compressed)
+
+    def get_camera_image_by_index(self, index: int):
+        if index >= self.num_images or index < 0:
+            raise RuntimeError("Index of the image was invalid. Index : " + str(index))
+        current_index = 0
+        for rosbag_file in self.rosbag_files:
+            reader = NonSeekingReader(rosbag_file)
+            for schema, channel, message in reader.iter_messages():
+                if channel.topic in self.config.get_image_topics():
+                    if current_index == index:
+                        return decode_image_message(
+                            message, schema, self.config.compressed
+                        )
+                    current_index = current_index + 1
+        raise RuntimeError(
+            "Failed to get camera image by index. Index "
+            + str(index)
+            + " was not found."
+        )
 
 
 if __name__ == "__main__":
