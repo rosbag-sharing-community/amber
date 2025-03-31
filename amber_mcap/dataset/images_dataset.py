@@ -1,21 +1,29 @@
+from amber_mcap.dataset.conversion import decode_image_message, decode_message
 from amber_mcap.dataset.rosbag2_dataset import Rosbag2Dataset, MessageMetaData
 from amber_mcap.dataset.topic_config import ImageTopicConfig
-import torch
-from dataclasses import dataclass, field
-from dataclass_wizard import YAMLWizard
-from amber_mcap.dataset.conversion import decode_image_message, decode_message
-from typing import Any, List
-from amber_mcap.dataset.rosbag2_dataset import Rosbag2Dataset
-from mcap.reader import NonSeekingReader
-from amber_mcap.unit.time import Time, TimeUnit
-import datetime
 from amber_mcap.exception import TaskDescriptionError, RuntimeError
+from amber_mcap.unit.time import Time, TimeUnit
+from amber_mcap.util.geometry import project_3d_points_to_image
+from amber_mcap.tf2_amber import (
+    BufferCore,
+    timeFromSec,
+    durationFromSec,
+    TransformStamped,
+)
+from dataclass_wizard import YAMLWizard
+from dataclasses import dataclass, field
+from mcap.reader import NonSeekingReader
+from typing import Any, List
+import datetime
+import torch
 
 
 @dataclass
 class ReadImagesConfig(YAMLWizard):  # type: ignore
     image_topics: List[ImageTopicConfig] = field(default_factory=list)
     compressed: bool = True
+    tf_topic = "/tf"
+    tf_static_topic = "/tf_static"
 
     def get_image_topics(self) -> List[str]:
         topics: List[str] = []
@@ -35,6 +43,7 @@ class ImagesDataset(Rosbag2Dataset):  # type: ignore
     # images: List[torch.Tensor] = []
     num_images = 0
     config: ReadImagesConfig = ReadImagesConfig()
+    tf_buffer: Optional[BufferCore] = None
 
     def __init__(
         self,
@@ -118,6 +127,9 @@ class ImagesDataset(Rosbag2Dataset):  # type: ignore
             + str(index)
             + " was not found."
         )
+
+    def transform_3d_point_to_image_coordinate(self, index: int):
+        self.get_metadata(index).publish_time
 
 
 if __name__ == "__main__":
