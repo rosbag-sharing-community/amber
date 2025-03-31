@@ -45,7 +45,7 @@ class TfDataset(Rosbag2Dataset):  # type: ignore
             rosbag_path,
             self.config.compressed,
         )
-        tf_buffer = build_tf_buffer(
+        tf_buffer, first_timestamp, last_timestamp = build_tf_buffer(
             [rosbag_path], self.config.tf_topic, self.config.compressed
         )
         sampled_timestamps = self.get_sampled_timestamps(

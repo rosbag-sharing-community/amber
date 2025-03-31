@@ -61,7 +61,7 @@ class ImagesDataset(Rosbag2Dataset):  # type: ignore
             transform,
             target_transform,
         )
-        self.tf_buffer = build_tf_buffer(
+        self.tf_buffer, _, _ = build_tf_buffer(
             self.rosbag_files, self.config.tf_topic, self.config.compressed
         )
         self.count_images()
@@ -131,8 +131,17 @@ class ImagesDataset(Rosbag2Dataset):  # type: ignore
             + " was not found."
         )
 
-    def transform_3d_point_to_image_coordinate(self, index: int):
-        self.get_metadata(index).publish_time
+    def transform_3d_point_to_image_coordinate(
+        self, index: int, map_frame_id: str = "map"
+    ):
+        camera_info = self.get_camera_info()
+        transform = self.tf_buffer.lookupTransform(
+            map_frame_id,
+            camera_info.header.frame_id,
+            timeFromSec(self.get_metadata(index).publish_time.timestamp()),
+        )
+        # transform = tf_buffer.lookupTransform()
+        # timeFromSec()
 
 
 if __name__ == "__main__":

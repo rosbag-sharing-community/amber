@@ -10,14 +10,14 @@ from amber_mcap.tf2_amber import (
 )
 from amber_mcap.dataset.topic_config import TfTopicConfig
 from amber_mcap.dataset.conversion import build_transform_stamped_message
-from typing import List
+from typing import List, Tuple, Optional
 
 
 def build_tf_buffer(
     rosbag_files: List[str],
     topic_config: TfTopicConfig = TfTopicConfig(),
     compressed=False,
-):
+) -> Tuple[BufferCore, Optional[float], Optional[float]]:
     first_timestamp = None
     last_timestamp = None
     tf_buffer = BufferCore(durationFromSec(sys.float_info.max))
@@ -45,6 +45,7 @@ def build_tf_buffer(
                     tf_buffer.setTransform(
                         tf_amber_message, "Authority undetectable", True
                     )
+    return (tf_buffer, first_timestamp, last_timestamp)
 
 
 def project_3d_points_to_image(
