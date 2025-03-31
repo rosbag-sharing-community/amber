@@ -1,4 +1,3 @@
-from amber_mcap.dataset.conversion import build_transform_stamped_message
 from amber_mcap.dataset.rosbag2_dataset import Rosbag2Dataset, MessageMetaData
 from amber_mcap.dataset.topic_config import TfTopicConfig
 from amber_mcap.unit.time import Time, TimeUnit

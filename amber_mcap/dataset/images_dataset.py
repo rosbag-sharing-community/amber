@@ -1,9 +1,10 @@
 from amber_mcap.dataset.conversion import decode_image_message, decode_message
 from amber_mcap.dataset.rosbag2_dataset import Rosbag2Dataset, MessageMetaData
-from amber_mcap.dataset.topic_config import ImageTopicConfig
+from amber_mcap.dataset.topic_config import ImageTopicConfig, TfTopicConfig
 from amber_mcap.exception import TaskDescriptionError, RuntimeError
 from amber_mcap.unit.time import Time, TimeUnit
 from amber_mcap.util.geometry import project_3d_points_to_image
+from amber_mcap.util.geometry import build_tf_buffer
 from amber_mcap.tf2_amber import (
     BufferCore,
     timeFromSec,
@@ -13,7 +14,7 @@ from amber_mcap.tf2_amber import (
 from dataclass_wizard import YAMLWizard
 from dataclasses import dataclass, field
 from mcap.reader import NonSeekingReader
-from typing import Any, List
+from typing import Any, List, Optional
 import datetime
 import torch
 
@@ -22,8 +23,7 @@ import torch
 class ReadImagesConfig(YAMLWizard):  # type: ignore
     image_topics: List[ImageTopicConfig] = field(default_factory=list)
     compressed: bool = True
-    tf_topic = "/tf"
-    tf_static_topic = "/tf_static"
+    tf_topic: TfTopicConfig = TfTopicConfig()
 
     def get_image_topics(self) -> List[str]:
         topics: List[str] = []
@@ -60,6 +60,9 @@ class ImagesDataset(Rosbag2Dataset):  # type: ignore
             self.config.compressed,
             transform,
             target_transform,
+        )
+        self.tf_buffer = build_tf_buffer(
+            [rosbag_path], self.config.tf_topic, self.config.compressed
         )
         self.count_images()
 

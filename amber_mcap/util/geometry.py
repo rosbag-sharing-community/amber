@@ -1,13 +1,15 @@
 import numpy as np
 import cv2
-from amber_mcap.dataset.topic_config import TfTopicConfig
-
+import sys
+from mcap.reader import NonSeekingReader
 from amber_mcap.tf2_amber import (
     BufferCore,
     timeFromSec,
     durationFromSec,
     TransformStamped,
 )
+from amber_mcap.dataset.topic_config import TfTopicConfig
+from amber_mcap.dataset.conversion import build_transform_stamped_message
 from typing import List
 
 
