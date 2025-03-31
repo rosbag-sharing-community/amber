@@ -62,7 +62,7 @@ class ImagesDataset(Rosbag2Dataset):  # type: ignore
             target_transform,
         )
         self.tf_buffer = build_tf_buffer(
-            [rosbag_path], self.config.tf_topic, self.config.compressed
+            self.rosbag_files, self.config.tf_topic, self.config.compressed
         )
         self.count_images()
 
