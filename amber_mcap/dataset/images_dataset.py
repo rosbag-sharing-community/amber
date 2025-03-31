@@ -3,12 +3,13 @@ from amber_mcap.dataset.topic_config import ImageTopicConfig
 import torch
 from dataclasses import dataclass, field
 from dataclass_wizard import YAMLWizard
-from amber_mcap.dataset.conversion import decode_image_message
+from amber_mcap.dataset.conversion import decode_image_message, decode_message
 from typing import Any, List
 from amber_mcap.dataset.rosbag2_dataset import Rosbag2Dataset
 from mcap.reader import NonSeekingReader
 from amber_mcap.unit.time import Time, TimeUnit
 import datetime
+from amber_mcap.exception import TaskDescriptionError
 
 
 @dataclass
@@ -20,6 +21,13 @@ class ReadImagesConfig(YAMLWizard):  # type: ignore
         topics: List[str] = []
         for topic in self.image_topics:
             topics.append(topic.topic_name)
+        return topics
+
+    def get_camera_info_topics(self) -> List[str]:
+        topics: List[str] = []
+        for topic in self.image_topics:
+            if topic.camera_info_topic_name != None:
+                topics.append(topic.camera_info_topic_name)
         return topics
 
 
@@ -77,3 +85,21 @@ class ImagesDataset(Rosbag2Dataset):  # type: ignore
             for schema, channel, message in reader.iter_messages():
                 if channel.topic in self.config.get_image_topics():
                     yield decode_image_message(message, schema, self.config.compressed)
+
+    def get_camera_info(self):
+        if (
+            len(self.config.get_image_topics()) != 1
+            or len(self.config.get_camera_info_topics()) != 1
+        ):
+            raise TaskDescriptionError(
+                "Multiple camera with camera_info does not supported."
+            )
+        for rosbag_file in self.rosbag_files:
+            reader = NonSeekingReader(rosbag_file)
+            for schema, channel, message in reader.iter_messages():
+                if channel.topic in self.config.get_camera_info_topics():
+                    return decode_message(message, schema, self.config.compressed)
+
+
+if __name__ == "__main__":
+    pass
