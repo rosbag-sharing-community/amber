@@ -11,9 +11,9 @@ from amber_mcap.tf2_amber import (
 from amber_mcap.dataset.topic_config import TfTopicConfig
 from amber_mcap.dataset.conversion import build_transform_stamped_message
 from amber_mcap.exception import TaskDescriptionError
-from typing import List, Tuple, Optional
+from typing import List, Tuple, Optional, Dict
 from pathlib import Path
-from urdfpy import URDF
+import xml.etree.ElementTree as ET
 
 
 def build_tf_buffer(
@@ -21,8 +21,37 @@ def build_tf_buffer(
     topic_config: TfTopicConfig = TfTopicConfig(),
     compressed=False,
 ) -> Tuple[BufferCore, Optional[float], Optional[float]]:
-    def load_static_tf_from_urdf_file(urdf_path: Path):
-        robot = URDF.load(urdf_path)
+    def load_static_tf_from_urdf_string(urdf: str):
+        class Origin:
+            rpy: Tuple[float, float, float] = (0.0, 0.0, 0.0)
+            xyz: Tuple[float, float, float] = (0.0, 0.0, 0.0)
+
+        class FixedJoint:
+            origin: Origin = Origin()
+            parent: str
+            child: str
+
+        def get_fixed_joint(xml: ET) -> FixedJoint:
+            joint = FixedJoint()
+            for child in xml:
+                if child.tag == "origin":
+                    if "rpy" in child.attrib:
+                        joint.origin.rpy = tuple(child.attrib["rpy"].split(" "))
+                    if "xyz" in child.attrib:
+                        joint.origin.xyz = tuple(child.attrib["xyz"].split(" "))
+                if child.tag == "parent":
+                    joint.parent = child.attrib["link"]
+                if child.tag == "child":
+                    joint.child = child.attrib["link"]
+            return joint
+
+
+        joints = ET.fromstring(urdf).findall(".//joint")
+        for joint in joints:
+            if joint.attrib["type"] == "fixed":
+                fixed_joint = get_fixed_joint(joint)
+                # print(joint.attrib)
+        raise RuntimeError("Hoge")
 
     if topic_config.urdf_path and topic_config.robot_description_topic:
         raise TaskDescriptionError(
@@ -33,7 +62,8 @@ def build_tf_buffer(
     tf_buffer = BufferCore(durationFromSec(sys.float_info.max))
 
     if topic_config.urdf_path:
-        load_static_tf_from_urdf_file(Path(topic_config.urdf_path))
+        with open(topic_config.urdf_path, "r", encoding="utf-8") as f:
+            load_static_tf_from_urdf_string(f.read())
 
     for rosbag_file in rosbag_files:
         reader = NonSeekingReader(rosbag_file)
@@ -61,9 +91,7 @@ def build_tf_buffer(
                     )
 
             if channel.topic == topic_config.robot_description_topic:
-                with open("/tmp/amber_mcap.urdf", "w") as f:
-                    f.write(message.data)
-                load_static_tf_from_urdf_file(Path("/tmp/amber_mcap.urdf"))
+                load_static_tf_from_urdf_string(message.data)
     return (tf_buffer, first_timestamp, last_timestamp)
 
 
