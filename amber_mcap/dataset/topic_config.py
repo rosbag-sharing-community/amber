@@ -25,3 +25,5 @@ class PointcloudTopicConfig(YAMLWizard):  # type: ignore
 class TfTopicConfig(YAMLWizard):  # type: ignore
     topic_name: str = "/tf"
     static_tf_topic_name: str = "/tf_static"
+    robot_description_topic: Optional[str] = None
+    urdf_path: Optional[str] = None

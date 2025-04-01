@@ -10,7 +10,10 @@ from amber_mcap.tf2_amber import (
 )
 from amber_mcap.dataset.topic_config import TfTopicConfig
 from amber_mcap.dataset.conversion import build_transform_stamped_message
+from amber_mcap.exception import TaskDescriptionError
 from typing import List, Tuple, Optional
+from pathlib import Path
+from urdfpy import URDF
 
 
 def build_tf_buffer(
@@ -18,9 +21,20 @@ def build_tf_buffer(
     topic_config: TfTopicConfig = TfTopicConfig(),
     compressed=False,
 ) -> Tuple[BufferCore, Optional[float], Optional[float]]:
+    def load_static_tf_from_urdf_file(urdf_path: Path):
+        robot = URDF.load(urdf_path)
+
+    if topic_config.urdf_path and topic_config.robot_description_topic:
+        raise TaskDescriptionError(
+            "Do not specidy urdf and robot_description topic at the same time."
+        )
     first_timestamp = None
     last_timestamp = None
     tf_buffer = BufferCore(durationFromSec(sys.float_info.max))
+
+    if topic_config.urdf_path:
+        load_static_tf_from_urdf_file(Path(topic_config.urdf_path))
+
     for rosbag_file in rosbag_files:
         reader = NonSeekingReader(rosbag_file)
         for schema, channel, message in reader.iter_messages():
@@ -45,6 +59,11 @@ def build_tf_buffer(
                     tf_buffer.setTransform(
                         tf_amber_message, "Authority undetectable", True
                     )
+
+            if channel.topic == topic_config.robot_description_topic:
+                with open("/tmp/amber_mcap.urdf", "w") as f:
+                    f.write(message.data)
+                load_static_tf_from_urdf_file(Path("/tmp/amber_mcap.urdf"))
     return (tf_buffer, first_timestamp, last_timestamp)
 
 
