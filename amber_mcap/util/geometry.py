@@ -29,7 +29,7 @@ def build_tf_buffer(
         def to_tf_message(
             self,
             timestamp: int,
-        ) -> List[amber_mcap.tf2_amber.TransformStamped]:
+        ) -> amber_mcap.tf2_amber.TransformStamped:
             quat = quaternion.from_rotation_vector(
                 np.array(
                     [
@@ -56,7 +56,7 @@ def build_tf_buffer(
                     amber_mcap.tf2_amber.Quaternion(quat.x, quat.y, quat.z, quat.real),
                 ),
             )
-            return [tf_amber_message]
+            return tf_amber_message
 
     def load_static_tf_from_urdf_string(
         tf_buffer: amber_mcap.tf2_amber.BufferCore, urdf: str, timestamp: int
@@ -78,7 +78,11 @@ def build_tf_buffer(
         joints = ET.fromstring(urdf).findall(".//joint")
         for joint in joints:
             if joint.attrib["type"] == "fixed":
-                tf_messages = get_fixed_joint(joint).to_tf_message(timestamp)
+                tf_buffer.setTransform(
+                    get_fixed_joint(joint).to_tf_message(timestamp),
+                    "Authority undetectable",
+                    True,
+                )
 
     if topic_config.urdf_path and topic_config.robot_description_topic:
         raise TaskDescriptionError(
