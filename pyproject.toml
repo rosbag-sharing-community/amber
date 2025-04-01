@@ -53,6 +53,7 @@ torchaudio = {version = "2.5.0+cu124", source = "torch_cu124"}
 torchvision = {version = "0.20.0+cu124", source = "torch_cu124"}
 transformers = ">=4.25.0,<4.27"
 urllib3 = "^1.26.0"
+urdfpy = "^0.0.22"
 
 [tool.poetry.group.dev]
 optional = true
