@@ -15,6 +15,7 @@ from dataclass_wizard import YAMLWizard
 from dataclasses import dataclass, field
 from mcap.reader import NonSeekingReader
 from typing import Any, List, Optional
+import numpy as np
 import datetime
 import torch
 
@@ -132,7 +133,7 @@ class ImagesDataset(Rosbag2Dataset):  # type: ignore
         )
 
     def transform_3d_point_to_image_coordinate(
-        self, index: int, map_frame_id: str = "map"
+        self, index: int, points_3d: np.ndarray, map_frame_id: str = "map"
     ):
         camera_info = self.get_camera_info()
         transform = self.tf_buffer.lookupTransform(
@@ -140,10 +141,19 @@ class ImagesDataset(Rosbag2Dataset):  # type: ignore
             camera_info.header.frame_id,
             timeFromSec(self.get_metadata(index).publish_time.timestamp()),
         )
-        # transform = tf_buffer.lookupTransform()
-        # timeFromSec()
+        print(np.array(camera_info.k, dtype=float).reshape(3, 3))
+        print(np.array(camera_info.d, dtype=float))
+        print(
+            np.array(
+                [
+                    transform.transform.translation.x,
+                    transform.transform.translation.y,
+                    transform.transform.translation.z,
+                ],
+                dtype=float,
+            )
+        )
 
 
 if __name__ == "__main__":
-
     pass
