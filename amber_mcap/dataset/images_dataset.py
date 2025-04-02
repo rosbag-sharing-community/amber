@@ -146,66 +146,36 @@ class ImagesDataset(Rosbag2Dataset):  # type: ignore
             camera_info.header.frame_id,
             timeFromSec(self.get_metadata(index).publish_time.timestamp()),
         )
-        transformed_point = -quaternion.rotate_vectors(
-            np.quaternion(
-                transform.transform.rotation.w,
-                transform.transform.rotation.x,
-                transform.transform.rotation.y,
-                transform.transform.rotation.z,
-            ),
-            np.array(
-                [
-                    point_3d[0],
-                    point_3d[1],
-                    point_3d[2],
-                ],
-                dtype=float,
-            ).reshape(3),
-        ) + quaternion.rotate_vectors(
-            np.quaternion(
-                transform.transform.rotation.w,
-                transform.transform.rotation.x,
-                transform.transform.rotation.y,
-                transform.transform.rotation.z,
-            ),
-            np.array(
-                [
-                    transform.transform.translation.x,
-                    transform.transform.translation.y,
-                    transform.transform.translation.z,
-                ],
-                dtype=float,
-            ).reshape(3),
-        )
-        print(
-            (
+        rotation_quaternion = np.quaternion(
+            transform.transform.rotation.w,
+            transform.transform.rotation.x,
+            transform.transform.rotation.y,
+            transform.transform.rotation.z,
+        ).conjugate()
+        translation_vector = np.array(
+            [
                 transform.transform.translation.x,
                 transform.transform.translation.y,
                 transform.transform.translation.z,
-            )
+            ],
+            dtype=float,
+        ).reshape(3)
+        rotated_point = -quaternion.rotate_vectors(
+            rotation_quaternion, np.array(point_3d, dtype=float).reshape(3)
         )
-        print(point_3d)
-        print("=====================")
-        print(transformed_point)
-        # See also https://github.com/ros-perception/vision_opencv/blob/27de9ecf9862e6fba509b7e49e3c2511c7d11627/image_geometry/src/pinhole_camera_model.cpp#L299-L308
-        print(np.array(camera_info.k, dtype=float).reshape(3, 3))
+        rotated_translation = quaternion.rotate_vectors(
+            rotation_quaternion, translation_vector
+        )
+        transformed_point = rotated_point + rotated_translation
+        # # See also https://github.com/ros-perception/vision_opencv/blob/27de9ecf9862e6fba509b7e49e3c2511c7d11627/image_geometry/src/pinhole_camera_model.cpp#L299-L308
         fx = np.array(camera_info.p, dtype=float).reshape(3, 4)[0][0]
         fy = np.array(camera_info.p, dtype=float).reshape(3, 4)[1][1]
         cx = np.array(camera_info.p, dtype=float).reshape(3, 4)[0][2]
         cy = np.array(camera_info.p, dtype=float).reshape(3, 4)[1][2]
-        print("fx =" + str(fx))
-        print("fy =" + str(fy))
-        print("cx =" + str(cx))
-        print("cy =" + str(cy))
         tx = np.array(camera_info.p, dtype=float).reshape(3, 4)[0][3]
         ty = np.array(camera_info.p, dtype=float).reshape(3, 4)[1][3]
-        # print(tx)
-        # print(ty)
-
-        ux = (fx * transformed_point[1] + tx) / transformed_point[0] + cx
+        ux = (fx * -transformed_point[1] + tx) / transformed_point[0] + cx
         uy = (fy * transformed_point[2] + ty) / transformed_point[0] + cy
-        print(ux)
-        print(uy)
 
 
 if __name__ == "__main__":
