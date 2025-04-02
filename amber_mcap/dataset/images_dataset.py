@@ -14,7 +14,7 @@ from amber_mcap.tf2_amber import (
 from dataclass_wizard import YAMLWizard
 from dataclasses import dataclass, field
 from mcap.reader import NonSeekingReader
-from typing import Any, List, Optional
+from typing import Any, List, Optional, Tuple
 import numpy as np
 import datetime
 import quaternion
@@ -134,7 +134,10 @@ class ImagesDataset(Rosbag2Dataset):  # type: ignore
         )
 
     def transform_3d_point_to_image_coordinate(
-        self, index: int, points_3d: np.ndarray, map_frame_id: str = "map"
+        self,
+        index: int,
+        point_3d: Tuple[float, float, float],
+        map_frame_id: str = "map",
     ):
         camera_info = self.get_camera_info()
         transform = self.tf_buffer.lookupTransform(
@@ -143,26 +146,53 @@ class ImagesDataset(Rosbag2Dataset):  # type: ignore
             timeFromSec(self.get_metadata(index).publish_time.timestamp()),
         )
 
-        quat = np.quaternion(
-            transform.transform.rotation.w,
-            transform.transform.rotation.x,
-            transform.transform.rotation.y,
-            transform.transform.rotation.z,
-        )
-        return project_3d_points_to_image(
-            points_3d,
-            np.array(camera_info.k, dtype=float).reshape(3, 3),
-            np.array(camera_info.d, dtype=float),
-            quaternion.as_rotation_vector(quat).reshape(3, 1),
+        transformed_point = np.dot(
+            quaternion.as_rotation_matrix(
+                np.quaternion(
+                    transform.transform.rotation.w,
+                    transform.transform.rotation.x,
+                    transform.transform.rotation.y,
+                    transform.transform.rotation.z,
+                )
+            ),
             np.array(
                 [
-                    transform.transform.translation.x,
-                    transform.transform.translation.y,
-                    transform.transform.translation.z,
+                    point_3d[0],
+                    point_3d[1],
+                    point_3d[2],
                 ],
                 dtype=float,
             ).reshape(3, 1),
+        ) + np.array(
+            [
+                transform.transform.translation.x,
+                transform.transform.translation.y,
+                transform.transform.translation.z,
+            ],
+            dtype=float,
+        ).reshape(
+            3, 1
         )
+        print(transformed_point)
+
+        print(np.array(camera_info.k, dtype=float).reshape(3, 3))
+        fx = np.array(camera_info.p, dtype=float).reshape(3, 4)[0][0]
+        fy = np.array(camera_info.p, dtype=float).reshape(3, 4)[1][1]
+        cx = np.array(camera_info.p, dtype=float).reshape(3, 4)[0][2]
+        cy = np.array(camera_info.p, dtype=float).reshape(3, 4)[1][2]
+        print(fx)
+        print(fy)
+        print(cx)
+        print(cy)
+        tx = np.array(camera_info.p, dtype=float).reshape(3, 4)[0][3]
+        ty = np.array(camera_info.p, dtype=float).reshape(3, 4)[1][3]
+        print(tx)
+        print(ty)
+
+        ux = (fx * transformed_point[0] + tx) / transformed_point[2] + cx
+        uy = (fy * transformed_point[1] + ty) / transformed_point[2] + cy
+        print(ux)
+        print(uy)
 
 
 if __name__ == "__main__":
