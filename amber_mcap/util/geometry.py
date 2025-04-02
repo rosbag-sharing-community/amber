@@ -30,7 +30,7 @@ def build_tf_buffer(
             self,
             timestamp: int,
         ) -> amber_mcap.tf2_amber.TransformStamped:
-            quat = quaternion.from_rotation_vector(
+            quat = quaternion.from_euler_angles(
                 np.array(
                     [
                         float(self.origin.rpy[0]),

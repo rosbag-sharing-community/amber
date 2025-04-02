@@ -17,6 +17,7 @@ from mcap.reader import NonSeekingReader
 from typing import Any, List, Optional
 import numpy as np
 import datetime
+import quaternion
 import torch
 
 
@@ -138,12 +139,21 @@ class ImagesDataset(Rosbag2Dataset):  # type: ignore
         camera_info = self.get_camera_info()
         transform = self.tf_buffer.lookupTransform(
             map_frame_id,
+            # "camera0/camera_link",
             camera_info.header.frame_id,
             timeFromSec(self.get_metadata(index).publish_time.timestamp()),
         )
-        print(np.array(camera_info.k, dtype=float).reshape(3, 3))
-        print(np.array(camera_info.d, dtype=float))
-        print(
+        quat = np.quaternion(
+            transform.transform.rotation.x,
+            transform.transform.rotation.y,
+            transform.transform.rotation.z,
+            transform.transform.rotation.w,
+        )
+        return project_3d_points_to_image(
+            points_3d,
+            np.array(camera_info.k, dtype=float).reshape(3, 3),
+            np.array(camera_info.d, dtype=float),
+            quaternion.as_rotation_vector(quat).reshape(3, 1),
             np.array(
                 [
                     transform.transform.translation.x,
@@ -151,7 +161,7 @@ class ImagesDataset(Rosbag2Dataset):  # type: ignore
                     transform.transform.translation.z,
                 ],
                 dtype=float,
-            )
+            ).reshape(3, 1),
         )
 
 
