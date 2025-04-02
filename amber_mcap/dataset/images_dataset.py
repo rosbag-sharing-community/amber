@@ -8,6 +8,7 @@ from amber_mcap.util.geometry import build_tf_buffer
 from amber_mcap.tf2_amber import (
     BufferCore,
     timeFromSec,
+    displayTimePoint,
     durationFromSec,
     TransformStamped,
 )
@@ -139,21 +140,19 @@ class ImagesDataset(Rosbag2Dataset):  # type: ignore
         point_3d: Tuple[float, float, float],
         map_frame_id: str = "map",
     ):
+        # print(self.get_metadata(index).publish_time.timestamp())
         camera_info = self.get_camera_info()
         transform = self.tf_buffer.lookupTransform(
-            camera_info.header.frame_id,
             map_frame_id,
+            camera_info.header.frame_id,
             timeFromSec(self.get_metadata(index).publish_time.timestamp()),
         )
-
-        transformed_point = np.dot(
-            quaternion.as_rotation_matrix(
-                np.quaternion(
-                    transform.transform.rotation.w,
-                    transform.transform.rotation.x,
-                    transform.transform.rotation.y,
-                    transform.transform.rotation.z,
-                )
+        transformed_point = -quaternion.rotate_vectors(
+            np.quaternion(
+                transform.transform.rotation.w,
+                transform.transform.rotation.x,
+                transform.transform.rotation.y,
+                transform.transform.rotation.z,
             ),
             np.array(
                 [
@@ -162,32 +161,38 @@ class ImagesDataset(Rosbag2Dataset):  # type: ignore
                     point_3d[2],
                 ],
                 dtype=float,
-            ).reshape(3, 1),
-        ) + np.array(
-            [
-                transform.transform.translation.x,
-                transform.transform.translation.y,
-                transform.transform.translation.z,
-            ],
-            dtype=float,
-        ).reshape(
-            3, 1
+            ).reshape(3),
+        ) + quaternion.rotate_vectors(
+            np.quaternion(
+                transform.transform.rotation.w,
+                transform.transform.rotation.x,
+                transform.transform.rotation.y,
+                transform.transform.rotation.z,
+            ),
+            np.array(
+                [
+                    transform.transform.translation.x,
+                    transform.transform.translation.y,
+                    transform.transform.translation.z,
+                ],
+                dtype=float,
+            ).reshape(3),
         )
         print(transformed_point)
 
-        print(np.array(camera_info.k, dtype=float).reshape(3, 3))
+        # print(np.array(camera_info.k, dtype=float).reshape(3, 3))
         fx = np.array(camera_info.p, dtype=float).reshape(3, 4)[0][0]
         fy = np.array(camera_info.p, dtype=float).reshape(3, 4)[1][1]
         cx = np.array(camera_info.p, dtype=float).reshape(3, 4)[0][2]
         cy = np.array(camera_info.p, dtype=float).reshape(3, 4)[1][2]
-        print(fx)
-        print(fy)
-        print(cx)
-        print(cy)
+        print("fx =" + str(fx))
+        print("fx =" + str(fy))
+        print("fx =" + str(cx))
+        print("fx =" + str(cy))
         tx = np.array(camera_info.p, dtype=float).reshape(3, 4)[0][3]
         ty = np.array(camera_info.p, dtype=float).reshape(3, 4)[1][3]
-        print(tx)
-        print(ty)
+        # print(tx)
+        # print(ty)
 
         ux = (fx * transformed_point[0] + tx) / transformed_point[2] + cx
         uy = (fy * transformed_point[1] + ty) / transformed_point[2] + cy
