@@ -140,7 +140,6 @@ class ImagesDataset(Rosbag2Dataset):  # type: ignore
         point_3d: Tuple[float, float, float],
         map_frame_id: str = "map",
     ):
-        # print(self.get_metadata(index).publish_time.timestamp())
         camera_info = self.get_camera_info()
         transform = self.tf_buffer.lookupTransform(
             map_frame_id,
@@ -178,24 +177,33 @@ class ImagesDataset(Rosbag2Dataset):  # type: ignore
                 dtype=float,
             ).reshape(3),
         )
+        print(
+            (
+                transform.transform.translation.x,
+                transform.transform.translation.y,
+                transform.transform.translation.z,
+            )
+        )
+        print(point_3d)
+        print("=====================")
         print(transformed_point)
-
-        # print(np.array(camera_info.k, dtype=float).reshape(3, 3))
+        # See also https://github.com/ros-perception/vision_opencv/blob/27de9ecf9862e6fba509b7e49e3c2511c7d11627/image_geometry/src/pinhole_camera_model.cpp#L299-L308
+        print(np.array(camera_info.k, dtype=float).reshape(3, 3))
         fx = np.array(camera_info.p, dtype=float).reshape(3, 4)[0][0]
         fy = np.array(camera_info.p, dtype=float).reshape(3, 4)[1][1]
         cx = np.array(camera_info.p, dtype=float).reshape(3, 4)[0][2]
         cy = np.array(camera_info.p, dtype=float).reshape(3, 4)[1][2]
         print("fx =" + str(fx))
-        print("fx =" + str(fy))
-        print("fx =" + str(cx))
-        print("fx =" + str(cy))
+        print("fy =" + str(fy))
+        print("cx =" + str(cx))
+        print("cy =" + str(cy))
         tx = np.array(camera_info.p, dtype=float).reshape(3, 4)[0][3]
         ty = np.array(camera_info.p, dtype=float).reshape(3, 4)[1][3]
         # print(tx)
         # print(ty)
 
-        ux = (fx * transformed_point[0] + tx) / transformed_point[2] + cx
-        uy = (fy * transformed_point[1] + ty) / transformed_point[2] + cy
+        ux = (fx * transformed_point[1] + tx) / transformed_point[0] + cx
+        uy = (fy * transformed_point[2] + ty) / transformed_point[0] + cy
         print(ux)
         print(uy)
 

@@ -237,18 +237,6 @@ def build_transform_stamped_message(
     tf_messages: Any = decode_message(message, schema, decompress)
     tf_amber_messages: List[amber_mcap.tf2_amber.TransformStamped] = []
     for message in tf_messages.transforms:
-        if message.child_frame_id == "base_link":
-            if 1698287079 == message.header.stamp.sec:
-                print(message.header.frame_id + "=>" + message.child_frame_id)
-                # print(message.header.stamp.sec * 10 ^ 9 + message.header.stamp.nanosec)
-                print(
-                    (
-                        message.transform.translation.x,
-                        message.transform.translation.y,
-                        message.transform.translation.z,
-                    )
-                )
-                print()
         tf_amber_message = amber_mcap.tf2_amber.TransformStamped(
             amber_mcap.tf2_amber.Header(
                 amber_mcap.tf2_amber.Time(
