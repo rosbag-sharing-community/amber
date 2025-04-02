@@ -138,16 +138,16 @@ class ImagesDataset(Rosbag2Dataset):  # type: ignore
     ):
         camera_info = self.get_camera_info()
         transform = self.tf_buffer.lookupTransform(
-            map_frame_id,
-            # "camera0/camera_link",
             camera_info.header.frame_id,
+            map_frame_id,
             timeFromSec(self.get_metadata(index).publish_time.timestamp()),
         )
+
         quat = np.quaternion(
+            transform.transform.rotation.w,
             transform.transform.rotation.x,
             transform.transform.rotation.y,
             transform.transform.rotation.z,
-            transform.transform.rotation.w,
         )
         return project_3d_points_to_image(
             points_3d,
