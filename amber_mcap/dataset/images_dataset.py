@@ -139,7 +139,7 @@ class ImagesDataset(Rosbag2Dataset):  # type: ignore
         index: int,
         point_3d: Tuple[float, float, float],
         map_frame_id: str = "map",
-    ):
+    ) -> Tuple[float, float]:
         camera_info = self.get_camera_info()
         transform = self.tf_buffer.lookupTransform(
             map_frame_id,
@@ -176,6 +176,7 @@ class ImagesDataset(Rosbag2Dataset):  # type: ignore
         ty = np.array(camera_info.p, dtype=float).reshape(3, 4)[1][3]
         ux = (fx * -transformed_point[1] + tx) / transformed_point[0] + cx
         uy = (fy * transformed_point[2] + ty) / transformed_point[0] + cy
+        return (ux, uy)
 
 
 if __name__ == "__main__":
