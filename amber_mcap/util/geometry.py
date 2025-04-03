@@ -5,8 +5,8 @@ from mcap.reader import NonSeekingReader
 import amber_mcap.tf2_amber
 from amber_mcap.dataset.topic_config import TfTopicConfig
 from amber_mcap.dataset.conversion import build_transform_stamped_message
-from amber_mcap.exception import TaskDescriptionError
-from typing import List, Tuple, Optional, Dict
+from amber_mcap.exception import TaskDescriptionError, RuntimeError
+from typing import List, Tuple, Optional, Dict, cast
 from pathlib import Path
 import xml.etree.ElementTree as ET
 import quaternion
@@ -15,7 +15,7 @@ import quaternion
 def build_tf_buffer(
     rosbag_files: List[str],
     topic_config: TfTopicConfig = TfTopicConfig(),
-    compressed=False,
+    compressed: bool = False,
 ) -> Tuple[amber_mcap.tf2_amber.BufferCore, Optional[float], Optional[float]]:
     class Origin:
         rpy: Tuple[float, float, float] = (0.0, 0.0, 0.0)
@@ -60,15 +60,21 @@ def build_tf_buffer(
 
     def load_static_tf_from_urdf_string(
         tf_buffer: amber_mcap.tf2_amber.BufferCore, urdf: str, timestamp: int
-    ):
-        def get_fixed_joint(xml: ET) -> FixedJoint:
+    ) -> None:
+        def get_fixed_joint(xml: ET.Element) -> FixedJoint:
             joint = FixedJoint()
             for child in xml:
                 if child.tag == "origin":
                     if "rpy" in child.attrib:
-                        joint.origin.rpy = tuple(child.attrib["rpy"].split(" "))
+                        joint.origin.rpy = cast(
+                            Tuple[float, float, float],
+                            tuple(map(float, child.attrib["rpy"].split(" "))),
+                        )
                     if "xyz" in child.attrib:
-                        joint.origin.xyz = tuple(child.attrib["xyz"].split(" "))
+                        joint.origin.xyz = cast(
+                            Tuple[float, float, float],
+                            tuple(map(float, child.attrib["xyz"].split(" "))),
+                        )
                 if child.tag == "parent":
                     joint.parent = child.attrib["link"]
                 if child.tag == "child":
@@ -88,9 +94,9 @@ def build_tf_buffer(
         raise TaskDescriptionError(
             "Do not specidy urdf and robot_description topic at the same time."
         )
-    first_timestamp = None
-    last_timestamp = None
-    urdf_string = None
+    first_timestamp: Optional[int] = None
+    last_timestamp: Optional[int] = None
+    urdf_string: Optional[str] = None
     tf_buffer = amber_mcap.tf2_amber.BufferCore(
         amber_mcap.tf2_amber.durationFromSec(sys.float_info.max)
     )
@@ -114,7 +120,7 @@ def build_tf_buffer(
                     )
             if channel.topic == topic_config.static_tf_topic_name:
                 for tf_amber_message in build_transform_stamped_message(
-                    message, schema, ompressed
+                    message, schema, compressed
                 ):
                     tf_buffer.setTransform(
                         tf_amber_message, "Authority undetectable", True
@@ -128,6 +134,11 @@ def build_tf_buffer(
             urdf_string = f.read()
 
     if urdf_string:
-        load_static_tf_from_urdf_string(tf_buffer, urdf_string, first_timestamp)
+        if first_timestamp:
+            load_static_tf_from_urdf_string(tf_buffer, urdf_string, first_timestamp)
+        else:
+            raise RuntimeError(
+                "Failed to get first timestmp. Please check tf data in rosbag data is exist or not."
+            )
 
     return (tf_buffer, first_timestamp, last_timestamp)
