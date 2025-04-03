@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "amber_mcap"
-version = "0.4.3"
+version = "0.5.1"
 description = "Annotation and Multimodal Bag Extraction for Robotics"
 authors = ["Masaya Kataoka <ms.kataoka@gmail.com>"]
 license = "Apache 2.0"
