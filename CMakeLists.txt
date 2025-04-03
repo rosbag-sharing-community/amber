@@ -20,15 +20,15 @@ set(TF2_PY_DIR amber_mcap/tf2/geometry2/tf2_py)
 find_package(pybind11 REQUIRED)
 pybind11_add_module(
   tf2_amber
-  ${TF2_DIR}/src/time.cpp 
+  ${TF2_DIR}/src/time.cpp
   ${TF2_DIR}/src/cache.cpp
-  ${TF2_DIR}/src/static_cache.cpp 
+  ${TF2_DIR}/src/static_cache.cpp
   ${TF2_DIR}/src/buffer_core.cpp
   ${TF2_DIR}/src/pybind.cpp
   ${CONSOLE_BRIDGE_DIR}/src/console.cpp)
 
 target_include_directories(
   tf2_amber PUBLIC ${TF2_DIR}/include ${ROSIDL_RUNTIME_CPP_DIR}/include
-             ${CONSOLE_BRIDGE_DIR}/include ${MESSAGES_DIR})
+                   ${CONSOLE_BRIDGE_DIR}/include ${MESSAGES_DIR})
 
 install(TARGETS tf2_amber LIBRARY DESTINATION .)

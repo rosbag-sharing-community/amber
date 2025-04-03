@@ -33,8 +33,8 @@ The output tensor has 7 dimensions.
 
 ```python
 torch.Tensor([
-    transform.translation.x, 
-    transform.translation.y, 
+    transform.translation.x,
+    transform.translation.y,
     transform.translation.z
     transform.rotation.x,
     transform.rotation.y

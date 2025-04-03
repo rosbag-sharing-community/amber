@@ -1,7 +1,7 @@
-from amber_mcap.dataset.conversion import build_transform_stamped_message
 from amber_mcap.dataset.rosbag2_dataset import Rosbag2Dataset, MessageMetaData
 from amber_mcap.dataset.topic_config import TfTopicConfig
 from amber_mcap.unit.time import Time, TimeUnit
+from amber_mcap.util.geometry import build_tf_buffer
 from dataclass_wizard import YAMLWizard
 from dataclasses import dataclass
 from mcap.reader import NonSeekingReader
@@ -45,33 +45,9 @@ class TfDataset(Rosbag2Dataset):  # type: ignore
             rosbag_path,
             self.config.compressed,
         )
-        first_timestamp = None
-        last_timestamp = None
-        tf_buffer = BufferCore(durationFromSec(sys.float_info.max))
-        for rosbag_file in self.rosbag_files:
-            reader = NonSeekingReader(rosbag_file)
-            for schema, channel, message in reader.iter_messages():
-                timestamp = message.log_time
-
-                if first_timestamp is None or timestamp < first_timestamp:
-                    first_timestamp = timestamp
-                if last_timestamp is None or timestamp > last_timestamp:
-                    last_timestamp = timestamp
-
-                if channel.topic in [self.config.get_tf_topic()]:
-                    for tf_amber_message in build_transform_stamped_message(
-                        message, schema, self.config.compressed
-                    ):
-                        tf_buffer.setTransform(
-                            tf_amber_message, "Authority undetectable", False
-                        )
-                if channel.topic in [self.config.get_static_tf_topic()]:
-                    for tf_amber_message in build_transform_stamped_message(
-                        message, schema, self.config.compressed
-                    ):
-                        tf_buffer.setTransform(
-                            tf_amber_message, "Authority undetectable", True
-                        )
+        tf_buffer, first_timestamp, last_timestamp = build_tf_buffer(
+            [rosbag_path], self.config.tf_topic, self.config.compressed
+        )
         sampled_timestamps = self.get_sampled_timestamps(
             Time(float(first_timestamp), TimeUnit.NANOSECOND),
             Time(float(last_timestamp), TimeUnit.NANOSECOND),
