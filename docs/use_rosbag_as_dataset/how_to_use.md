@@ -23,8 +23,8 @@ If you want to know wahat types of task `amber` supports, please check below.
 
 ## Sampling data from dataset.
 
-The rosbags record a variety of time series data, but when inputting this data into machine learning, you may want to sample based on conditions rather than inputting everything.  
+The rosbags record a variety of time series data, but when inputting this data into machine learning, you may want to sample based on conditions rather than inputting everything.
 Amber implements samplers for rosbags to make it easier to perform time series processing.
 
-Currently, only timestamp sampler supports.  
+Currently, only timestamp sampler supports.
 If you want to know details, see [documentation](../timestamp_sampler).
