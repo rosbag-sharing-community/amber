@@ -3,7 +3,6 @@ from amber_mcap.dataset.rosbag2_dataset import Rosbag2Dataset, MessageMetaData
 from amber_mcap.dataset.topic_config import ImageTopicConfig, TfTopicConfig
 from amber_mcap.exception import TaskDescriptionError, RuntimeError
 from amber_mcap.unit.time import Time, TimeUnit
-from amber_mcap.util.geometry import project_3d_points_to_image
 from amber_mcap.util.geometry import build_tf_buffer
 from amber_mcap.tf2_amber import (
     BufferCore,

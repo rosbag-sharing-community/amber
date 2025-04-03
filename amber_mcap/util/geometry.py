@@ -131,30 +131,3 @@ def build_tf_buffer(
         load_static_tf_from_urdf_string(tf_buffer, urdf_string, first_timestamp)
 
     return (tf_buffer, first_timestamp, last_timestamp)
-
-
-def project_3d_points_to_image(
-    points_3d: np.ndarray,
-    camera_matrix: np.ndarray,
-    dist_coeffs: np.ndarray,
-    rvec: np.ndarray,
-    tvec: np.ndarray,
-):
-    """
-    Projects 3D points to the image coordinate system.
-
-    Args:
-        points_3d (numpy.ndarray): 3D coordinates of the points (N x 3)
-        camera_matrix (numpy.ndarray): Camera intrinsic matrix (3 x 3)
-        dist_coeffs (numpy.ndarray): Lens distortion coefficients (1 x 5 or 1 x 8)
-        rvec (numpy.ndarray): Rotation vector (3 x 1)
-        tvec (numpy.ndarray): Translation vector (3 x 1)
-
-    Returns:
-        numpy.ndarray: Projected 2D coordinates of the points (N x 2)
-    """
-
-    image_points, _ = cv2.projectPoints(
-        points_3d, rvec, tvec, camera_matrix, dist_coeffs
-    )
-    return image_points.reshape(-1, 2)
