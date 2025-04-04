@@ -8,7 +8,8 @@ from torchvision import transforms
 from PIL import Image
 import torch.nn.functional as F
 from lavis.models import load_model_and_preprocess
-from typing import Optional
+from typing import Optional, Tuple
+from transformers.tokenization_utils_base import BatchEncoding
 
 
 class Blip2ImageProcessor(BlipImageBaseProcessor):  # type: ignore
@@ -41,7 +42,9 @@ class Blip2Encoder:
         )
         self.image_processor = Blip2ImageProcessor(image_size=224)
 
-    def encode_image(self, image: torch.Tensor) -> torch.Tensor:
+    def preprocess_image_embeddings(
+        self, image: torch.Tensor
+    ) -> Tuple[torch.Tensor, torch.Tensor]:
         image = self.image_processor(image)
         assert image.dim() == 3
         image = image.unsqueeze(0).to(self.device)
@@ -51,6 +54,41 @@ class Blip2Encoder:
         image_atts = torch.ones(image_embeds.size()[:-1], dtype=torch.long).to(
             image.device
         )
+        return (image_embeds, image_atts)
+
+    # https://github.com/salesforce/LAVIS/blob/506965b9c4a18c1e565bd32acaccabe0198433f7/lavis/models/blip2_models/blip2_image_text_matching.py#L71-L89
+    def get_itm_score(self, image: torch.Tensor, text: str) -> float:
+        image_embeds, image_atts = self.preprocess_image_embeddings(image)
+        text_tensor: torch.Tensor = self.get_text_tensor(text)
+        query_tokens = self.model.query_tokens.expand(image_embeds.shape[0], -1, -1)
+        query_atts = torch.ones(query_tokens.size()[:-1], dtype=torch.long).to(
+            text_tensor["input_ids"].device
+        )
+        attention_mask = torch.cat([query_atts, text_tensor.attention_mask], dim=1)
+        output_itm = self.model.Qformer.bert(
+            text_tensor.input_ids,
+            query_embeds=query_tokens,
+            attention_mask=attention_mask,
+            encoder_hidden_states=image_embeds,
+            encoder_attention_mask=image_atts,
+            return_dict=True,
+        )
+        itm_embeddings = output_itm.last_hidden_state[:, : query_tokens.size(1), :]
+        itm_logit = self.model.itm_head(itm_embeddings)
+        itm_logit = itm_logit.mean(dim=1)
+        return float(itm_logit[:, 1].item())
+
+    def get_text_tensor(self, text: str) -> BatchEncoding:
+        text_tensor: BatchEncoding = self.model.tokenizer(
+            text,
+            truncation=True,
+            max_length=self.model.max_txt_len,
+            return_tensors="pt",
+        ).to(self.device)
+        return text_tensor
+
+    def encode_image(self, image: torch.Tensor) -> torch.Tensor:
+        image_embeds, image_atts = self.preprocess_image_embeddings(image)
         query_tokens = self.model.query_tokens.expand(image_embeds.shape[0], -1, -1)
         query_output = self.model.Qformer.bert(
             query_embeds=query_tokens,
@@ -63,12 +101,7 @@ class Blip2Encoder:
         )
 
     def encode_text(self, text: str) -> torch.Tensor:
-        text_tensor: torch.Tensor = self.model.tokenizer(
-            text,
-            truncation=True,
-            max_length=self.model.max_txt_len,
-            return_tensors="pt",
-        ).to(self.device)
+        text_tensor: torch.Tensor = self.get_text_tensor(text)
         text_output = self.model.Qformer.bert(
             text_tensor.input_ids,
             attention_mask=text_tensor.attention_mask,
