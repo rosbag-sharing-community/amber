@@ -1,5 +1,6 @@
-from amber_mcap.automation.detic_image_labeler import DeticImageLabeler
+from amber_mcap.automation.blip2_encoder import Blip2Encoder
 from amber_mcap.automation.clip_image_annotation_filter import ClipImageAnnotationFilter
+from amber_mcap.automation.detic_image_labeler import DeticImageLabeler
 from amber_mcap.automation.nerf_3d_reconstruction import Nerf3DReconstruction
 from pathlib import Path
 import os
@@ -10,7 +11,9 @@ from amber_mcap.dataset.images_and_annotations_dataset import (
 )
 from amber_mcap.dataset.rosbag2_dataset import download_rosbag
 import torch
+from torchvision import transforms
 import pytest
+from PIL import Image
 
 
 def test_detic_image_labeler() -> None:
@@ -109,3 +112,21 @@ def test_nerf_3d_reconstruction() -> None:
         ),
     )
     labeler.inference(dataset)
+
+
+def test_blip2_encoder() -> None:
+    current_path = Path(os.path.dirname(os.path.realpath(__file__)))
+    enc = Blip2Encoder()
+    itm_score_negative = enc.get_itm_score(
+        transforms.ToTensor()(
+            Image.open(str(current_path / "images" / "ford" / "28.png"))
+        ),
+        "Hoge",
+    )
+    itm_score_positive = enc.get_itm_score(
+        transforms.ToTensor()(
+            Image.open(str(current_path / "images" / "ford" / "28.png"))
+        ),
+        "A white car is on the left lane.",
+    )
+    assert itm_score_positive > itm_score_negative
