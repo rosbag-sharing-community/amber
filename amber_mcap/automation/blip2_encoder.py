@@ -9,6 +9,7 @@ from transformers import AutoProcessor, Blip2ForImageTextRetrieval
 from torchvision import transforms
 
 
+# See also https://github.com/huggingface/transformers/blob/a91020aed0b15794d0842e5799ec9d360e939f4e/src/transformers/models/blip_2/modeling_blip_2.py#L2590C13-L2618
 class Blip2Encoder:
     def __init__(self) -> None:
         self.device = torch.device("cuda") if torch.cuda.is_available() else "cpu"
@@ -44,10 +45,49 @@ class Blip2Encoder:
         inputs = self.processor(images=image_fp32, return_tensors="pt").to(
             self.device, torch.float32
         )
-        itc_out = self.model(**inputs, use_image_text_matching_head=False)
-        if not itc_out.image_embeds:
-            raise Exception("Failed to get image embeddings")
-        return itc_out.image_embeds
+
+        output_attentions = False
+        if "output_attentions" in inputs.keys():
+            output_attentions = True
+        else:
+            output_attentions = self.model.config.output_attentions
+
+        output_hidden_states = False
+        if "output_hidden_states" in inputs.keys():
+            output_hidden_states = True
+        else:
+            output_hidden_states = self.model.config.output_hidden_states
+
+        return_dict = False
+        if "return_dict" in inputs.keys():
+            return_dict = True
+        else:
+            return_dict = self.model.config.output_hidden_states
+
+        vision_outputs = self.model.vision_model(
+            pixel_values=inputs["pixel_values"],
+            output_attentions=output_attentions,
+            output_hidden_states=output_hidden_states,
+            return_dict=return_dict,
+        )
+
+        image_embeds = vision_outputs[0]
+        image_attention_mask = torch.ones(
+            image_embeds.size()[:-1], dtype=torch.long, device=image_embeds.device
+        )
+        query_tokens = self.model.query_tokens.expand(image_embeds.shape[0], -1, -1)
+        query_outputs = self.model.qformer(
+            query_embeds=query_tokens,
+            encoder_hidden_states=image_embeds,
+            encoder_attention_mask=image_attention_mask,
+            return_dict=return_dict,
+        )
+        image_embeds = (
+            query_outputs[0] if not return_dict else query_outputs.last_hidden_state
+        )
+        return torch.nn.functional.normalize(
+            self.model.vision_projection(image_embeds), dim=-1
+        )
 
     def encode_image_from_file(self, image_path: Path) -> torch.Tensor:
         return self.encode_image(transforms.ToTensor()(Image.open(image_path)))
@@ -55,8 +95,8 @@ class Blip2Encoder:
     def get_cosine_similarity_from_image_and_text(
         self, image: torch.Tensor, text: str
     ) -> float:
-        text_embedding = self.encode_text(text)
         image_embedding = self.encode_image(image)
+        text_embedding = self.encode_text(text)
         sim: float = 0.0
         sim, _ = torch.max(
             torch.bmm(image_embedding, text_embedding.unsqueeze(-1)), dim=1

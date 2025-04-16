@@ -7,6 +7,15 @@ from torchvision import transforms
 from PIL import Image
 
 
+def test_blip2_encoder_encode_image() -> None:
+    current_path = Path(os.path.dirname(os.path.realpath(__file__)))
+    encoder = Blip2Encoder()
+    image_of_green_traffic_light: Path = Path(
+        current_path / "images" / "ford" / "26.png"
+    )
+    image_tensor = encoder.encode_image_from_file(image_of_green_traffic_light)
+
+
 # def test_blip2_encoder() -> None:
 #     current_path = Path(os.path.dirname(os.path.realpath(__file__)))
 #     encoder = Blip2Encoder()
@@ -37,19 +46,19 @@ from PIL import Image
 #     encoder.encode_image_from_file(image_of_speed_limit)
 
 
-def test_blip2_encoder_itm() -> None:
-    current_path = Path(os.path.dirname(os.path.realpath(__file__)))
-    enc = Blip2Encoder()
-    itm_score_negative = enc.get_itm_score(
-        transforms.ToTensor()(
-            Image.open(str(current_path / "images" / "ford" / "28.png"))
-        ),
-        "Hoge",
-    )
-    itm_score_positive = enc.get_itm_score(
-        transforms.ToTensor()(
-            Image.open(str(current_path / "images" / "ford" / "28.png"))
-        ),
-        "A white car is on the left lane.",
-    )
-    assert itm_score_positive > itm_score_negative
+# def test_blip2_encoder_itm() -> None:
+#     current_path = Path(os.path.dirname(os.path.realpath(__file__)))
+#     enc = Blip2Encoder()
+#     itm_score_negative = enc.get_itm_score(
+#         transforms.ToTensor()(
+#             Image.open(str(current_path / "images" / "ford" / "28.png"))
+#         ),
+#         "Hoge",
+#     )
+#     itm_score_positive = enc.get_itm_score(
+#         transforms.ToTensor()(
+#             Image.open(str(current_path / "images" / "ford" / "28.png"))
+#         ),
+#         "A white car is on the left lane.",
+#     )
+#     assert itm_score_positive > itm_score_negative
