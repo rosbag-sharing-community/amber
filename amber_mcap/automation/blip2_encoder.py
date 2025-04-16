@@ -13,15 +13,15 @@ class Blip2Encoder:
     def __init__(self) -> None:
         self.device = torch.device("cuda") if torch.cuda.is_available() else "cpu"
         self.model = Blip2ForImageTextRetrieval.from_pretrained(
-            "Salesforce/blip2-itm-vit-g", torch_dtype=torch.float16
+            "Salesforce/blip2-itm-vit-g", torch_dtype=torch.float32
         )
         self.model.to(self.device)
         self.processor = AutoProcessor.from_pretrained("Salesforce/blip2-itm-vit-g")
 
     def get_itm_score(self, image: torch.Tensor, text: str) -> float:
-        image_fp16 = image.new_tensor(image, dtype=torch.float16, device=self.device)
-        inputs = self.processor(images=image_fp16, text=text, return_tensors="pt").to(
-            self.device, torch.float16
+        image_fp32 = image.new_tensor(image, dtype=torch.float32, device=self.device)
+        inputs = self.processor(images=image_fp32, text=text, return_tensors="pt").to(
+            self.device, torch.float32
         )
         itm_out = self.model(**inputs, use_image_text_matching_head=True)
         return float(
@@ -32,7 +32,7 @@ class Blip2Encoder:
 
     def encode_text(self, text: str) -> torch.Tensor:
         inputs = self.processor(text=text, return_tensors="pt").to(
-            self.device, torch.float16
+            self.device, torch.float32
         )
         itc_out = self.model(**inputs, use_image_text_matching_head=False)
         if not itc_out.text_embeds:
@@ -40,9 +40,9 @@ class Blip2Encoder:
         return itc_out.text_embeds
 
     def encode_image(self, image: torch.Tensor) -> torch.Tensor:
-        image_fp16 = image.new_tensor(image, dtype=torch.float16, device=self.device)
-        inputs = self.processor(images=image_fp16, return_tensors="pt").to(
-            self.device, torch.float16
+        image_fp32 = image.new_tensor(image, dtype=torch.float32, device=self.device)
+        inputs = self.processor(images=image_fp32, return_tensors="pt").to(
+            self.device, torch.float32
         )
         itc_out = self.model(**inputs, use_image_text_matching_head=False)
         if not itc_out.image_embeds:
