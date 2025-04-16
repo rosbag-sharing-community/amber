@@ -42,7 +42,7 @@ def build_tf_buffer(
             tf_amber_message = amber_mcap.tf2_amber.TransformStamped(
                 amber_mcap.tf2_amber.Header(
                     amber_mcap.tf2_amber.Time(
-                        timestamp // 10 ** 9, timestamp % 10 ** 9
+                        timestamp // 10**9, timestamp % 10**9
                     ),
                     self.parent,
                 ),

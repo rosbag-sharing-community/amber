@@ -4,12 +4,11 @@ from torchvision.io import read_image
 from torchvision import transforms
 from PIL import Image
 import torch.nn.functional as F
-from typing import Optional, Tuple
-from transformers.tokenization_utils_base import BatchEncoding
-
+from typing import Optional, Tupl
 import torch
 from PIL import Image
 from transformers import AutoProcessor, Blip2ForImageTextRetrieval
+from torchvision import transforms
 
 
 class Blip2Encoder:
@@ -70,7 +69,7 @@ class Blip2Encoder:
         self, image_path: Path, text: str
     ) -> float:
         return self.get_cosine_similarity_from_image_and_text(
-            self.image_processor(transforms.ToTensor()(Image.open(image_path))), text
+            transforms.ToTensor()(Image.open(image_path)), text
         )
 
 

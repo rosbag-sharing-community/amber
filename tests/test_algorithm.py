@@ -3,6 +3,7 @@ from amber_mcap.automation.blip2_encoder import Blip2Encoder
 from pathlib import Path
 import os
 import torch
+from torchvision import transforms
 
 
 def test_blip2_encoder() -> None:
