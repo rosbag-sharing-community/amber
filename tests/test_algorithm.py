@@ -33,3 +33,21 @@ def test_blip2_encoder() -> None:
         image_of_speed_limit, "The speed limit is 50."
     )
     encoder.encode_image_from_file(image_of_speed_limit)
+
+
+def test_blip2_encoder_itm() -> None:
+    current_path = Path(os.path.dirname(os.path.realpath(__file__)))
+    enc = Blip2Encoder()
+    itm_score_negative = enc.get_itm_score(
+        transforms.ToTensor()(
+            Image.open(str(current_path / "images" / "ford" / "28.png"))
+        ),
+        "Hoge",
+    )
+    itm_score_positive = enc.get_itm_score(
+        transforms.ToTensor()(
+            Image.open(str(current_path / "images" / "ford" / "28.png"))
+        ),
+        "A white car is on the left lane.",
+    )
+    assert itm_score_positive > itm_score_negative
