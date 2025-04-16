@@ -26,7 +26,7 @@ class Blip2Encoder:
         inputs = self.processor(images=image_fp16, text=text, return_tensors="pt").to(
             self.device, torch.float16
         )
-        itm_out = model(**inputs, use_image_text_matching_head=True)
+        itm_out = self.model(**inputs, use_image_text_matching_head=True)
         return (
             torch.nn.functional.softmax(itm_out.logits_per_image, dim=1)
             .softmax(dim=1)[0][1]
@@ -37,7 +37,7 @@ class Blip2Encoder:
         inputs = processor(text=texts, return_tensors="pt").to(
             self.device, torch.float16
         )
-        itc_out = model(**inputs, use_image_text_matching_head=False)
+        itc_out = self.model(**inputs, use_image_text_matching_head=False)
         if not itc_out.text_embeds:
             raise Exception("Failed to get text embeddings")
         return itc_out.text_embeds
@@ -47,7 +47,7 @@ class Blip2Encoder:
         inputs = processor(images=image_fp16, return_tensors="pt").to(
             self.device, torch.float16
         )
-        itc_out = model(**inputs, use_image_text_matching_head=False)
+        itc_out = self.model(**inputs, use_image_text_matching_head=False)
         if not itc_out.image_embeds:
             raise Exception("Failed to get image embeddings")
         return itc_out.image_embeds
