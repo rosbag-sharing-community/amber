@@ -68,7 +68,7 @@ class Blip2Encoder:
         )
         return torch.nn.functional.normalize(
             self.model.text_projection(question_embeds[:, 0, :]), dim=-1
-        )
+        ).squeeze(0)
 
     def encode_image(self, image: torch.Tensor) -> torch.Tensor:
         image_fp32 = image.new_tensor(image, dtype=torch.float32, device=self.device)
@@ -117,7 +117,7 @@ class Blip2Encoder:
         )
         return torch.nn.functional.normalize(
             self.model.vision_projection(image_embeds), dim=-1
-        )
+        ).squeeze(0)
 
     def encode_image_from_file(self, image_path: Path) -> torch.Tensor:
         return self.encode_image(transforms.ToTensor()(Image.open(image_path)))
@@ -125,13 +125,12 @@ class Blip2Encoder:
     def get_cosine_similarity_from_image_and_text(
         self, image: torch.Tensor, text: str
     ) -> float:
-        image_embedding = self.encode_image(image)
-        text_embedding = self.encode_text(text)
-        sim: float = 0.0
-        sim, _ = torch.max(
-            torch.bmm(image_embedding, text_embedding.unsqueeze(-1)), dim=1
+        image_embeds = self.encode_image(image)
+        text_embeds = self.encode_text(text)
+        cosine_similarity = torch.matmul(image_embeds, text_embeds.T) / (
+            torch.norm(image_embeds) * torch.norm(text_embeds)
         )
-        return sim
+        return float(cosine_similarity.max().item())
 
     def get_cosine_similarity_from_image_file_and_text(
         self, image_path: Path, text: str
