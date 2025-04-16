@@ -26,7 +26,6 @@ datetime = "^5.3"
 docker = "^6.1.2"
 download = "^0.3.5"
 ftfy = "^6.1.1"
-huggingface-hub = "0.25.2"
 mcap-ros2-support= "^0.3.0"
 numpy= "1.26.4" # This version comes from Genesis. https://github.com/Genesis-Embodied-AI/Genesis/blob/163e4138d32df139d83fb9dee927f3418fe67ee0/pyproject.toml#L18
 onnxruntime-gpu = "^1.15.1"
@@ -40,7 +39,6 @@ python = ">=3.10,<3.13"
 pyyaml = "^6.0.0"
 pyzstd = "^0.16.2"
 regex = "^2023.3.23"
-salesforce-lavis = "^1.0.2"
 scikit-learn = "^1.6.0"
 scipy="^1.9.0"
 sentence-transformers = "^2.2.2"
@@ -51,9 +49,11 @@ threadpoolctl = "^3.2.0"
 torch = {version = "2.5.0+cu124", source = "torch_cu124"}
 torchaudio = {version = "2.5.0+cu124", source = "torch_cu124"}
 torchvision = {version = "0.20.0+cu124", source = "torch_cu124"}
-transformers = ">=4.25.0,<4.27"
 urllib3 = "^1.26.0"
 numpy-quaternion = "^2024.0.8"
+transformers = "^4.51.3"
+huggingface-hub = "^0.30.2"
+opencv-python = "^4.11.0.86"
 
 [tool.poetry.group.dev]
 optional = true
