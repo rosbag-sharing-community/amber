@@ -35,10 +35,40 @@ class Blip2Encoder:
         inputs = self.processor(text=text, return_tensors="pt").to(
             self.device, torch.float32
         )
-        itc_out = self.model(**inputs, use_image_text_matching_head=False)
-        if not itc_out.text_embeds:
-            raise Exception("Failed to get text embeddings")
-        return itc_out.text_embeds
+
+        output_attentions = False
+        if "output_attentions" in inputs.keys():
+            output_attentions = True
+        else:
+            output_attentions = self.model.config.output_attentions
+
+        output_hidden_states = False
+        if "output_hidden_states" in inputs.keys():
+            output_hidden_states = True
+        else:
+            output_hidden_states = self.model.config.output_hidden_states
+
+        return_dict = False
+        if "return_dict" in inputs.keys():
+            return_dict = True
+        else:
+            return_dict = self.model.config.output_hidden_states
+
+        query_embeds = self.model.embeddings(
+            input_ids=inputs["input_ids"],
+        )
+        text_outputs = self.model.qformer(
+            query_embeds=query_embeds,
+            query_length=0,
+            attention_mask=inputs["attention_mask"],
+            return_dict=return_dict,
+        )
+        question_embeds = (
+            text_outputs[0] if not return_dict else text_outputs.last_hidden_state
+        )
+        return torch.nn.functional.normalize(
+            self.model.text_projection(question_embeds[:, 0, :]), dim=-1
+        )
 
     def encode_image(self, image: torch.Tensor) -> torch.Tensor:
         image_fp32 = image.new_tensor(image, dtype=torch.float32, device=self.device)

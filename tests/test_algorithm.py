@@ -16,6 +16,11 @@ def test_blip2_encoder_encode_image() -> None:
     image_tensor = encoder.encode_image_from_file(image_of_green_traffic_light)
 
 
+def test_blip2_encoder_encode_text() -> None:
+    encoder = Blip2Encoder()
+    encoder.encode_text("The color of traffic light is green.")
+
+
 # def test_blip2_encoder() -> None:
 #     current_path = Path(os.path.dirname(os.path.realpath(__file__)))
 #     encoder = Blip2Encoder()
