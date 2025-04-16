@@ -2,9 +2,7 @@ import torch
 from pathlib import Path
 from torchvision.io import read_image
 from torchvision import transforms
-from PIL import Image
 import torch.nn.functional as F
-from typing import Optional, Tupl
 import torch
 from PIL import Image
 from transformers import AutoProcessor, Blip2ForImageTextRetrieval
@@ -26,14 +24,14 @@ class Blip2Encoder:
             self.device, torch.float16
         )
         itm_out = self.model(**inputs, use_image_text_matching_head=True)
-        return (
+        return float(
             torch.nn.functional.softmax(itm_out.logits_per_image, dim=1)
             .softmax(dim=1)[0][1]
             .item()
         )
 
     def encode_text(self, text: str) -> torch.Tensor:
-        inputs = processor(text=texts, return_tensors="pt").to(
+        inputs = self.processor(text=text, return_tensors="pt").to(
             self.device, torch.float16
         )
         itc_out = self.model(**inputs, use_image_text_matching_head=False)
@@ -43,7 +41,7 @@ class Blip2Encoder:
 
     def encode_image(self, image: torch.Tensor) -> torch.Tensor:
         image_fp16 = image.new_tensor(image, dtype=torch.float16, device=self.device)
-        inputs = processor(images=image_fp16, return_tensors="pt").to(
+        inputs = self.processor(images=image_fp16, return_tensors="pt").to(
             self.device, torch.float16
         )
         itc_out = self.model(**inputs, use_image_text_matching_head=False)
