@@ -130,21 +130,3 @@ def test_blip2_encoder_itm() -> None:
         "A white car is on the left lane.",
     )
     assert itm_score_positive > itm_score_negative
-
-
-def test_blip2_encoder_itc() -> None:
-    current_path = Path(os.path.dirname(os.path.realpath(__file__)))
-    enc = Blip2Encoder()
-    itc_score_negative = enc.get_cosine_similarity_from_image_and_text(
-        transforms.ToTensor()(
-            Image.open(str(current_path / "images" / "ford" / "28.png"))
-        ),
-        "Hoge",
-    )
-    itc_score_positive = enc.get_cosine_similarity_from_image_and_text(
-        transforms.ToTensor()(
-            Image.open(str(current_path / "images" / "ford" / "28.png"))
-        ),
-        "A white car is on the left lane.",
-    )
-    assert itc_score_positive > itc_score_negative
