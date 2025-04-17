@@ -2,7 +2,6 @@ import torch
 from pathlib import Path
 from torchvision.io import read_image
 from torchvision import transforms
-import torch.nn.functional as F
 import torch
 from PIL import Image
 from transformers import AutoProcessor, Blip2ForImageTextRetrieval
