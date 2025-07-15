@@ -45,9 +45,9 @@ setuptools= "58.2.0"
 tensorboard = "^2.14.0"
 tensorboardx = "^2.6.2.2"
 threadpoolctl = "^3.2.0"
-torch = {version = "2.5.0+cu124", source = "torch_cu124"}
-torchaudio = {version = "2.5.0+cu124", source = "torch_cu124"}
-torchvision = {version = "0.20.0+cu124", source = "torch_cu124"}
+torch = {version = "2.6.0+cu124", source = "torch_cu124"}
+torchaudio = {version = "2.6.0+cu124", source = "torch_cu124"}
+torchvision = {version = "0.21.0+cu124", source = "torch_cu124"}
 urllib3 = "^1.26.0"
 numpy-quaternion = "^2024.0.8"
 transformers = "^4.51.3"
